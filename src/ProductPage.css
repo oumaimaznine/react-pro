@@ -1,0 +1,57 @@
+/* Style de la page produits */
+.products {
+    padding: 40px;
+    background-color: #f4f4f4;
+    text-align: center;
+  }
+  
+  /* Liste des produits */
+  .product-list {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    gap: 20px;
+  }
+  
+  /* Style de chaque produit */
+  .product {
+    background-color: #fff;
+    padding: 20px;
+    width: 30%;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    transition: transform 0.3s ease;
+  }
+  
+  .product img {
+    width: 100%;
+    height: auto;
+    border-radius: 10px;
+  }
+  
+  .product h3 {
+    margin-top: 20px;
+    color: #333;
+  }
+  
+  .product p {
+    margin: 10px 0;
+    color: #666;
+  }
+  
+  .product .btn-primary {
+    padding: 10px 20px;
+    background-color: #c47f18;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+  }
+  
+  .product .btn-primary:hover {
+    background-color: #a57217;
+  }
+  
+  .product:hover {
+    transform: translateY(-10px); /* Effet de levée */
+  }
+  
