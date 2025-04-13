@@ -1,0 +1,92 @@
+/* Style du lien Retour à l'Accueil */
+.return-home {
+    display: block;
+    font-size: 16px;
+    color: #191821;  /* Couleur orange */
+    text-decoration: none;  /* Retirer la ligne sous le lien */
+    font-weight: bold;
+    text-align: left;  /* Aligné à gauche sous le logo */
+    margin-top: 20px;   /* Ajouter un peu de marge */
+    margin-left: 20px; /* Ajouter de l'espace à gauche */
+    /* Suppression de la ligne sous le texte */
+}
+
+.return-home:hover {
+    color: #5118c4;  /* Changer la couleur au survol */
+}
+
+/* Section Contacte page */
+.contacte-page {
+    max-width: 600px;
+    margin: 50px auto;
+    padding: 30px;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+/* Style du titre Contactez-nous */
+.contacte-page h2 {
+    color: #c47f18; /* Couleur rose */
+    margin-bottom: 15px;
+}
+
+/* Description sous le titre Contactez-nous */
+.contacte-page p {
+    font-size: 1em;
+    color: #555;
+    margin-bottom: 20px;
+    line-height: 1.5;
+}
+
+.contact-form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.contact-form label {
+    font-weight: bold;
+    color: #333;
+}
+
+/* Style des champs du formulaire */
+.contact-form input,
+.contact-form textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 1em;
+    outline: none;
+    transition: border 0.3s ease;
+}
+
+.contact-form input[type="text"]:focus,
+.contact-form input[type="email"]:focus,
+.contact-form textarea:focus {
+    border: 1px solid #c47f18; /* Effet de focus */
+}
+
+.contact-form textarea {
+    resize: none;
+    height: 100px;
+}
+
+/* Style du bouton d'envoi */
+.contact-form button {
+    background-color: #c47f18; /* Couleur rose */
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    font-size: 1em;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+.contact-form button:hover {
+    background-color: #c47f18; 
+}

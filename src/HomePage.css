@@ -1,64 +1,3 @@
-/* ================= HEADER ================= */
-
-/* Style général de l'en-tête */
-.header {
-  background-color: #000; /* Fond noir */
-  color: white; /* Texte blanc */
-  padding: 15px 30px; /* Espacement intérieur */
-}
-
-/* Conteneur flex pour aligner les éléments horizontalement dans le header */
-.container {
-  display: flex; /* Alignement horizontal */
-  align-items: center; /* Alignement vertical centré */
-  justify-content: space-between; /* Espacement entre les éléments */
-  flex-wrap: wrap; /* Permet de passer à la ligne si nécessaire */
-}
-
-/* Taille du logo */
-.logo {
-  height: 60px;
-}
-
-/* Style de la barre de recherche */
-.search-bar {
-  display: flex;
-  align-items: center;
-  gap: 10px; /* Espace entre l’input et le bouton */
-}
-
-/* Champ de texte de recherche */
-.search-bar input {
-  padding: 10px;
-  border-radius: 20px; /* Coins arrondis */
-  border: none;
-  width: 250px; /* Largeur fixe */
-}
-
-/* Bouton de recherche */
-.search-bar button {
-  padding: 10px 15px;
-  background-color: #c47f18; /* Couleur de fond orangée */
-  color: white;
-  border: none;
-  border-radius: 20px;
-  cursor: pointer; /* Curseur pointeur */
-}
-
-/* Liste de navigation (menu) */
-nav ul {
-  list-style: none; /* Supprime les puces */
-  display: flex;
-  gap: 20px; /* Espace entre les éléments */
-}
-
-/* Liens de navigation */
-nav ul li a {
-  color: white;
-  text-decoration: none; /* Supprime le soulignement */
-  font-weight: bold;
-}
-
 /* ================= DESCRIPTION ================= */
 
 /* Section de bienvenue */
@@ -75,94 +14,14 @@ nav ul li a {
   margin: 20px 0;
 }
 
-/* ================= FOOTER ================= */
-
-/* Pied de page global */
-footer {
-  background-color: #000; /* Fond noir */
-  color: #fff; /* Texte blanc */
-  padding: 20px 20px;
-  margin-top: 20px;
-}
-
-/* Conteneur footer organisé en colonnes */
-footer .container {
-  display: flex;
-  justify-content: space-between;
-  flex-wrap: wrap; /* Responsive : passe à la ligne si nécessaire */
-  max-width: 1200px;
-  margin: 0 auto;
-}
-
-/* Chaque bloc dans le footer (à propos, newsletter, contact) */
-footer .footer-content,
-footer .footer-newsletter,
-footer .footer-contacter {
-  flex: 1 1 300px; /* Largeur minimale de 300px, s’adapte sinon */
-  margin: 10px;
-}
-
-/* Titres dans le footer */
-footer h3 {
-  margin-bottom: 15px;
-  color: #c47f18; /* Couleur orangée */
-}
-
-/* Paragraphe dans le footer */
-footer p {
-  margin-bottom: 10px;
-}
-
-/* ✅ Formulaire de newsletter (email + bouton) */
-footer form {
-  display: flex;
-  gap: 10px; /* Espace entre l’input et le bouton */
-  flex-wrap: wrap; /* Adapté aux petits écrans */
-}
-
-/* Champ email du formulaire */
-footer form input {
-  padding: 10px;
-  flex: 1; /* Prend la place disponible */
-  min-width: 200px;
-  border: none;
-  border-radius: 5px;
-  outline: none;
-}
-
-/* Bouton du formulaire newsletter */
-footer form button {
-  padding: 10px 15px;
-  background-color: #c47f18;
-  border: none;
-  color: #fff;
-  border-radius: 5px;
-  cursor: pointer;
-}
-
-/* Effet au survol du bouton newsletter */
-footer form button:hover {
-  background-color: #a57217;
-}
-
-/* Bas du footer : mentions légales */
-footer .footer-foot {
-  text-align: center;
-  margin-top: 20px;
-  border-top: 1px solid #444;
-  padding-top: 10px;
-  font-size: 0.9em;
-  color: #aaa;
-}
-
 /* ================= SECTION PRODUITS ================= */
 
 /* Conteneur des cartes produits */
 .products {
   display: flex;
   justify-content: space-between;
-  gap: 20px; /* Espace entre les produits */
-  margin: 40px 0;
+  gap: 50px; /* Espace entre les produits */
+  margin: 50px 0;
 }
 
 /* Style de chaque carte produit */

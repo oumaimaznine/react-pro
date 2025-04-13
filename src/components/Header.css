@@ -1,0 +1,61 @@
+/* ================= HEADER ================= */
+
+/* Style général de l'en-tête */
+.header {
+    background-color: #000; /* Fond noir */
+    color: white; /* Texte blanc */
+    padding: 15px 30px; /* Espacement intérieur */
+  }
+  
+  /* Conteneur flex pour aligner les éléments horizontalement dans le header */
+  .container {
+    display: flex; /* Alignement horizontal */
+    align-items: center; /* Alignement vertical centré */
+    justify-content: space-between; /* Espacement entre les éléments */
+    flex-wrap: wrap; /* Permet de passer à la ligne si nécessaire */
+  }
+  
+  /* Taille du logo */
+  .logo {
+    height: 60px;
+  }
+  
+  /* Style de la barre de recherche */
+  .search-bar {
+    display: flex;
+    align-items: center;
+    gap: 10px; /* Espace entre l’input et le bouton */
+  }
+  
+  /* Champ de texte de recherche */
+  .search-bar input {
+    padding: 10px;
+    border-radius: 20px; /* Coins arrondis */
+    border: none;
+    width: 250px; /* Largeur fixe */
+  }
+  
+  /* Bouton de recherche */
+  .search-bar button {
+    padding: 10px 15px;
+    background-color: #c47f18; /* Couleur de fond orangée */
+    color: white;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer; /* Curseur pointeur */
+  }
+  
+  /* Liste de navigation (menu) */
+  nav ul {
+    list-style: none; /* Supprime les puces */
+    display: flex;
+    gap: 20px; /* Espace entre les éléments */
+  }
+  
+  /* Liens de navigation */
+  nav ul li a {
+    color: white;
+    text-decoration: none; /* Supprime le soulignement */
+    font-weight: bold;
+  }
+  

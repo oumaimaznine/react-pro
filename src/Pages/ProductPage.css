@@ -1,0 +1,119 @@
+/* ================= PRODUCT PAGE ================= */
+
+/* 🌐 Conteneur principal de la page des produits */
+.product-page {
+  padding: 20px; /* Ajoute un espacement intérieur autour du contenu */
+}
+
+/* 🔍 Conteneur des filtres (ex: catégories, tri...) */
+.filters {
+  display: flex;         /* Affiche les éléments en ligne */
+  gap: 20px;             /* Espace entre chaque filtre */
+  margin-bottom: 20px;   /* Espace en dessous du bloc filtres */
+}
+
+/* 🎛️ Style de chaque menu déroulant (select) dans les filtres */
+.filters select {
+  padding: 10px;         /* Espace intérieur dans le champ */
+  border-radius: 5px;    /* Coins arrondis */
+  border: 1px solid #ccc;/* Bordure grise */
+  font-size: 16px;       /* Taille de police plus lisible */
+}
+
+  /* Grille de produits : 3 par ligne avec espaces */
+.product-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 50px;
+  justify-content: space-between;
+}
+
+
+/* 🛒 Carte d'un produit individuel */
+.product {
+  background-color: #f4f4f4;        /* Couleur de fond claire */
+  padding: 20px;                    /* Espace intérieur */
+  border-radius: 10px;              /* Coins arrondis */
+  width: 22%;                       /* Prend 22% de la largeur totale */
+  text-align: center;              /* Centre le contenu dans la carte */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Ombre douce autour de la carte */
+}
+
+/* 📸 Image du produit */
+.product img {
+  width: 100%;            /* Prend toute la largeur de la carte */
+  height: auto;           /* Hauteur automatique pour garder les proportions */
+  border-radius: 10px;    /* Coins arrondis pour l’image */
+}
+
+/* 🏷️ Titre du produit */
+.product h3 {
+  color: #333;            /* Couleur gris foncé pour le texte */
+  margin-top: 10px;       /* Espace au-dessus du titre */
+}
+
+/* 📝 Description ou prix du produit */
+.product p {
+  color: #666;            /* Couleur gris clair pour le texte */
+}
+
+/* 🔘 Bouton "Voir le produit" */
+.product .btn-secondary {
+  display: inline-block;           /* Permet de fixer la taille et marges */
+  padding: 10px 20px;              /* Espace intérieur (haut/bas et gauche/droite) */
+  background-color: #c47f18;       /* Couleur orange foncé */
+  color: white;                    /* Texte blanc */
+  text-decoration: none;           /* Supprime le soulignement du lien */
+  border-radius: 5px;              /* Coins arrondis */
+  margin-top: 10px;                /* Espace au-dessus du bouton */
+  transition: background-color 0.3s ease; /* Animation douce au survol */
+}
+
+/* 🎨 Effet de survol pour le bouton "Voir le produit" */
+.product .btn-secondary:hover {
+  background-color: #a57217; /* Couleur plus foncée au survol */
+}
+
+/* 🟩 Bouton "Ajouter au panier" */
+.product .btn-add-to-cart {
+  padding: 10px 20px;              /* Espace intérieur */
+  background-color: #4CAF50;       /* Vert vif */
+  color: white;                    /* Texte blanc */
+  border: none;                    /* Pas de bordure */
+  border-radius: 5px;              /* Coins arrondis */
+  margin-top: 10px;                /* Espace au-dessus du bouton */
+  cursor: pointer;                 /* Curseur main au survol */
+}
+
+/* 🟩 Effet de survol pour "Ajouter au panier" */
+.product .btn-add-to-cart:hover {
+  background-color: #45a049; /* Vert légèrement plus foncé au survol */
+}
+
+/* 📄 Conteneur des boutons de pagination */
+.pagination {
+  display: flex;           /* Les boutons sont affichés en ligne */
+  justify-content: center;/* Centrer horizontalement */
+  gap: 10px;               /* Espace entre les boutons */
+  margin-top: 20px;        /* Espace au-dessus du bloc pagination */
+}
+
+/* 🔘 Style des boutons de pagination */
+.pagination button {
+  padding: 10px 15px;         /* Taille du bouton */
+  background-color: #c47f18;  /* Couleur orange */
+  color: white;               /* Texte blanc */
+  border: none;               /* Pas de bordure */
+  border-radius: 5px;         /* Coins arrondis */
+  cursor: pointer;            /* Curseur en main */
+}
+
+/* 🟧 Survol des boutons de pagination */
+.pagination button:hover {
+  background-color: #a57217; /* Changement de couleur au survol */
+}
+
+/* 🔴 Bouton actif (page actuelle) */
+.pagination button.active {
+  background-color: #e91e63; /* Couleur rose pour indiquer la page sélectionnée */
+}

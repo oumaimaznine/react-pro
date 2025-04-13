@@ -1,57 +1,96 @@
-/* Style de la page produits */
-.products {
-    padding: 40px;
-    background-color: #f4f4f4;
-    text-align: center;
-  }
-  
-  /* Liste des produits */
-  .product-list {
-    display: flex;
-    justify-content: space-around;
-    flex-wrap: wrap;
-    gap: 20px;
-  }
-  
-  /* Style de chaque produit */
-  .product {
-    background-color: #fff;
-    padding: 20px;
-    width: 30%;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    border-radius: 10px;
-    transition: transform 0.3s ease;
-  }
-  
-  .product img {
-    width: 100%;
-    height: auto;
-    border-radius: 10px;
-  }
-  
-  .product h3 {
-    margin-top: 20px;
-    color: #333;
-  }
-  
-  .product p {
-    margin: 10px 0;
-    color: #666;
-  }
-  
-  .product .btn-primary {
-    padding: 10px 20px;
-    background-color: #c47f18;
-    color: white;
-    text-decoration: none;
-    border-radius: 5px;
-  }
-  
-  .product .btn-primary:hover {
-    background-color: #a57217;
-  }
-  
-  .product:hover {
-    transform: translateY(-10px); /* Effet de levée */
-  }
-  
+/* Conteneur principal de la page des produits */
+.product-page {
+  padding: 20px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px; /* Espace entre les produits */
+  justify-content: space-between; /* Espacement égal entre les produits */
+}
+
+/* Liste des produits */
+.product-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: space-between;
+  width: 100%; /* S'assurer que le conteneur prend toute la largeur */
+}
+
+.product {
+  background-color: #f4f4f4;
+  padding: 20px;
+  border-radius: 10px;
+  width: 23%; /* Réduire la largeur pour ajuster 4 produits par ligne */
+  text-align: center;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  margin-bottom: 20px; /* Ajouter un petit espace entre les lignes */
+}
+
+.product img {
+  width: 100%;
+  height: auto;
+  border-radius: 10px;
+}
+
+.product h3 {
+  color: #333;
+  margin-top: 10px;
+}
+
+.product p {
+  color: #666;
+}
+
+.product .btn-secondary {
+  display: inline-block;
+  padding: 10px 20px;
+  background-color: #c47f18;
+  color: white;
+  text-decoration: none;
+  border-radius: 5px;
+  margin-top: 10px;
+  transition: background-color 0.3s ease;
+}
+
+.product .btn-secondary:hover {
+  background-color: #a57217;
+}
+
+.product .btn-add-to-cart {
+  padding: 10px 20px;
+  background-color: #4CAF50; /* Vert pour le bouton */
+  color: white;
+  border: none;
+  border-radius: 5px;
+  margin-top: 10px;
+  cursor: pointer;
+}
+
+.product .btn-add-to-cart:hover {
+  background-color: #45a049;
+}
+
+/* Pagination */
+.pagination {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.pagination button {
+  padding: 10px 15px;
+  background-color: #c47f18;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.pagination button:hover {
+  background-color: #a57217;
+}
+
+.pagination button.active {
+  background-color: #e91e63;
+}
