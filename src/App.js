@@ -6,7 +6,6 @@ import HomePage from './Pages/HomePage'; // Page d'accueil
 import ProductPage from './Pages/ProductPage'; // Page des produits
 import PagePannier from './Pages/PagePannier'; // Importation de la page Panier
 import ContactPage from './Pages/ContactPage'; // Importation de la page Contact
-import LoginPage from './Pages/LoginPage'; // Importation de la page Connexio
 
 function App() {
   return (
