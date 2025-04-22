@@ -8,6 +8,7 @@ import LoginPage from './Pages/LoginPage'; // Importation de la page Connexion
 import RegisterPage from './Pages/RegisterPage';
 import AlimentationChats from './produits/AlimentationChats';
 import ProductDetails from './produits/ProductDetails';
+import Updateprofil from './Pages/Updateprofil'; 
 
 function App() {
   return (
@@ -24,6 +25,7 @@ function App() {
         <Route path="/register" element={<RegisterPage />} />
         <Route path="/alimentationChats" element={<AlimentationChats />} />
         <Route path="/product/:id" element={<ProductDetails />} />
+        <Route path="/updateprofil" element={<Updateprofil />} />
 
         {/* Ajoutez d'autres routes ici */}
       </Routes>
