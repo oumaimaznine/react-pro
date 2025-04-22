@@ -18,7 +18,7 @@ function LoginPage() {
       alert('Connexion réussie');
       console.log(response.data);
 
-      // ✅ التخزين + التوجيه
+      
       localStorage.setItem('user', JSON.stringify(response.data.user));
       window.location.href = "/personnels";
     } catch (error) {
