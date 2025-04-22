@@ -27,7 +27,7 @@ function LoginPage() {
         alert("Erreur Laravel : " + JSON.stringify(error.response.data));
       } else if (error.request) {
         console.error('Pas de réponse du serveur:', error.request);
-        alert("Aucune réponse du serveur");
+        alert("Aucune réponse ");
       } else {
         console.error('Erreur inconnue:', error.message);
         alert("Erreur : " + error.message);
