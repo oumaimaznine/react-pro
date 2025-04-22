@@ -1,99 +1,70 @@
-/* Style de la page de connexion */
 .login-container {
     display: flex;
-    flex-direction: column;
     justify-content: center;
     align-items: center;
-    background-color: #f5f5f5;  /* Fond gris clair */
-    min-height: 100vh;
-    color: #333;  /* Couleur du texte sombre pour plus de contraste */
-}
-
-.login-form {
-    background-color: #333;
-    padding: 40px;
-    border-radius: 10px;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-    text-align: center;
+    min-height: 80vh;
+    background-color: #f5f5f5;
+  }
+  
+  .login-form {
+    background-color: #fff;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.05);
     width: 100%;
     max-width: 400px;
-}
-
-.login-form h2 {
-    color: #c47f18;
+    text-align: center;
+  }
+  
+  .login-form h2 {
     margin-bottom: 20px;
-    font-size: 28px; /* Taille de police plus grande pour le titre */
-}
-
-.login-form label {
-    font-size: 16px;
-    color: #fff;
-    display: block;
-    margin-bottom: 8px;
-    text-align: left;
-}
-
-.login-form input {
+    color: #222;
+  }
+  
+  .login-form input {
     width: 100%;
     padding: 12px;
-    margin-bottom: 20px;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    font-size: 16px;
-    outline: none;
-    background-color: #222;
-    color: #fff;
-}
-
-.login-form input:focus {
-    border-color: #c47f18;
-    background-color: #333;  /* Couleur de fond différente quand un champ est actif */
-}
-
-/* Style du bouton d'envoi */
-.login-form button {
-    width: 100%;
-    padding: 12px;
-    background-color: #c47f18;
-    color: white;
+    margin-bottom: 15px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    font-size: 15px;
+  }
+  
+  .forgot-password {
+    background: none;
     border: none;
-    border-radius: 5px;
-    font-size: 18px;
+    color: #333;
+    text-decoration: underline;
     cursor: pointer;
-    transition: background-color 0.3s ease;
-}
-
-.login-form button:hover {
-    background-color: #c21818; /* Changement de couleur au survol */
-}
-
-/* Style du lien "Créer un compte" */
-.register-link {
-    margin-top: 10px;
-}
-
-.register-link a {
-    color: #c47f18;
+    font-size: 13px;
+    margin-bottom: 15px;
+    display: block;
+    text-align: left;
+  }
+  
+  .green-btn {
+    width: 150px;
+    padding: 10px;
+    background-color:  #3BD6F3;
+    color: white;
     font-size: 16px;
-    text-decoration: none;
-    font-weight: bold;
-}
-
-.register-link a:hover {
-    color: #c21818;
-    text-decoration: underline;  /* Souligner le lien au survol */
-}
-
-/* Amélioration pour les petits écrans */
-@media (max-width: 768px) {
-    .login-form {
-        padding: 20px;
-        width: 80%;
-    }
-    .login-form h2 {
-        font-size: 24px;  /* Réduire la taille du titre pour les petits écrans */
-    }
-    .login-form input {
-        font-size: 14px;  /* Réduire la taille de police des champs */
-    }
-}
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    margin: 20px auto;
+  }
+  
+  .green-btn:hover {
+    background-color:  #A3B18A;
+  }
+  
+  .link-register {
+    margin-top: 10px;
+    font-size: 14px;
+  }
+  
+  .link-register a {
+    text-decoration: underline;
+    color: #333;
+  }
+  

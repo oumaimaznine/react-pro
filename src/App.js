@@ -3,10 +3,11 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Header from './components/Header'; // Importation du Header
 import Footer from './components/Footer'; // Importation du Footer
 import HomePage from './Pages/HomePage'; // Page d'accueil
-import ProductPage from './Pages/ProductPage'; // Page des produits
 import PagePannier from './Pages/PagePannier'; // Importation de la page Panier
-import ContactPage from './Pages/ContactPage'; // Importation de la page Contact
 import LoginPage from './Pages/LoginPage'; // Importation de la page Connexion
+import RegisterPage from './Pages/RegisterPage';
+import ProductList from './produits/ProductList';
+import ProductDetails from './produits/ProductDetails';
 
 function App() {
   return (
@@ -17,10 +18,12 @@ function App() {
       {/* Définir les différentes routes pour naviguer entre les pages */}
       <Routes>
         <Route path="/" element={<HomePage />} />  {/* Route pour la page d'accueil */}
-        <Route path="/produits" element={<ProductPage />} />  {/* Route pour la page des produits */}
+        
         <Route path="/panier" element={<PagePannier />} />  {/* Route pour la page Panier */}
-        <Route path="/contact" element={<ContactPage />} />  {/* Route pour la page Contact */}
         <Route path="/connexion" element={<LoginPage />} />  {/* Route pour la page Connexion */}
+        <Route path="/register" element={<RegisterPage />} />
+        <Route path="/ProductList" element={<ProductList />} />
+        <Route path="/product/:id" element={<ProductDetails />} />
 
         {/* Ajoutez d'autres routes ici */}
       </Routes>

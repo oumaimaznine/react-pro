@@ -2,79 +2,78 @@
 
 /* Pied de page global */
 footer {
-    background-color: #000; /* Fond noir */
-    color: #fff; /* Texte blanc */
-    padding: 20px 20px;
-    margin-top: 20px;
-  }
-  
-  /* Conteneur footer organisé en colonnes */
-  footer .container {
-    display: flex;
-    justify-content: space-between;
-    flex-wrap: wrap; /* Responsive : passe à la ligne si nécessaire */
-    max-width: 1200px;
-    margin: 0 auto;
-  }
-  
-  /* Chaque bloc dans le footer (à propos, newsletter, contact) */
-  footer .footer-content,
-  footer .footer-newsletter,
-  footer .footer-contacter {
-    flex: 1 1 300px; /* Largeur minimale de 300px, s’adapte sinon */
-    margin: 10px;
-  }
-  
-  /* Titres dans le footer */
-  footer h3 {
-    margin-bottom: 15px;
-    color: #c47f18; /* Couleur orangée */
-  }
-  
-  /* Paragraphe dans le footer */
-  footer p {
-    margin-bottom: 10px;
-  }
-  
-  /* ✅ Formulaire de newsletter (email + bouton) */
-  footer form {
-    display: flex;
-    gap: 10px; /* Espace entre l’input et le bouton */
-    flex-wrap: wrap; /* Adapté aux petits écrans */
-  }
-  
-  /* Champ email du formulaire */
-  footer form input {
-    padding: 10px;
-    flex: 1; /* Prend la place disponible */
-    min-width: 200px;
-    border: none;
-    border-radius: 5px;
-    outline: none;
-  }
-  
-  /* Bouton du formulaire newsletter */
-  footer form button {
-    padding: 10px 15px;
-    background-color: #c47f18;
-    border: none;
-    color: #fff;
-    border-radius: 5px;
-    cursor: pointer;
-  }
-  
-  /* Effet au survol du bouton newsletter */
-  footer form button:hover {
-    background-color: #a57217;
-  }
-  
-  /* Bas du footer : mentions légales */
-  footer .footer-foot {
-    text-align: center;
-    margin-top: 20px;
-    border-top: 1px solid #444;
-    padding-top: 10px;
-    font-size: 0.9em;
-    color: #aaa;
-  }
-  
+  background-color: #3F3F3F;
+  color: #fff; /* Texte blanc */
+  padding: 20px 20px;
+  margin-top: 20px;
+}
+
+/* Conteneur footer organisé en colonnes */
+footer .container {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap; /* Responsive : passe à la ligne si nécessaire */
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* Chaque bloc dans le footer (à propos, newsletter, contact) */
+footer .footer-content,
+footer .footer-newsletter,
+footer .footer-contacter {
+  flex: 1 1 300px; /* Largeur minimale de 300px, s’adapte sinon */
+  margin: 10px;
+}
+
+/* Titres dans le footer */
+footer h3 {
+  margin-bottom: 15px;
+  color: #A3B18A; /* Couleur orangée */
+}
+
+/* Paragraphe dans le footer */
+footer p {
+  margin-bottom: 10px;
+}
+
+/* ✅ Formulaire de newsletter (email + bouton) */
+footer form {
+  display: flex;
+  gap: 10px; /* Espace entre l’input et le bouton */
+  flex-wrap: wrap; /* Adapté aux petits écrans */
+}
+
+/* Champ email du formulaire */
+footer form input {
+  padding: 10px;
+  flex: 1; /* Prend la place disponible */
+  min-width: 200px;
+  border: none;
+  border-radius: 5px;
+  outline: none;
+}
+
+/* Bouton du formulaire newsletter */
+footer form button {
+  padding: 10px 15px;
+  background-color: #3BD6F3;
+  border: none;
+  color: #fff;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+/* Effet au survol du bouton newsletter */
+footer form button:hover {
+  background-color: #A3B18A;
+}
+
+/* Bas du footer : mentions légales */
+footer .footer-foot {
+  text-align: center;
+  margin-top: 20px;
+  border-top: 1px solid #3F3F3F;
+  padding-top: 10px;
+  font-size: 0.9em;
+  color: #aaa;
+}

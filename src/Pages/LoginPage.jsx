@@ -1,86 +1,76 @@
 import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';  // Pour la navigation
-import './LoginPage.css';  // Assurez-vous d'avoir ce fichier CSS
+import axios from 'axios';
+import './LoginPage.css';
 
-const LoginPage = () => {
+function LoginPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [errorMessage, setErrorMessage] = useState(''); // Pour gérer les erreurs
-  const [loading, setLoading] = useState(false); // Pour gérer l'état de chargement
-  const navigate = useNavigate(); // Pour naviguer après la connexion réussie
 
-  // Validation de l'email
-  const validateEmail = (email) => {
-    const re = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
-    return re.test(email);
-  };
-
-  // Soumission du formulaire
-  const handleSubmit = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
 
-    if (!validateEmail(email)) {
-      setErrorMessage('Veuillez entrer un email valide.');
-      return;
+    try {
+      const response = await axios.post('http://localhost:8000/api/login', {
+        email,
+        password
+      });
+
+      alert('Connexion réussie');
+      console.log(response.data);
+
+      // ✅ التخزين + التوجيه
+      localStorage.setItem('user', JSON.stringify(response.data.user));
+      window.location.href = "/personnels";
+    } catch (error) {
+      if (error.response) {
+        console.error('Erreur Laravel:', error.response.data);
+        alert("Erreur Laravel : " + JSON.stringify(error.response.data));
+      } else if (error.request) {
+        console.error('Pas de réponse du serveur:', error.request);
+        alert("Aucune réponse du serveur (peut-être Laravel n'est pas lancé)");
+      } else {
+        console.error('Erreur inconnue:', error.message);
+        alert("Erreur : " + error.message);
+      }
     }
-
-    if (password.length < 6) {
-      setErrorMessage('Le mot de passe doit contenir au moins 6 caractères.');
-      return;
-    }
-
-    setErrorMessage(''); // Réinitialiser le message d'erreur
-    setLoading(true); // Démarrer le chargement
-
-    // Simulation de connexion avec une API ou une authentification
-    setTimeout(() => {
-      console.log('Email:', email, 'Mot de passe:', password);
-      // Vous pouvez intégrer une authentification ici, par exemple avec Firebase ou un backend
-      setLoading(false); // Arrêter le chargement
-      navigate('/dashboard'); // Rediriger vers le tableau de bord ou autre page
-    }, 2000);
+    
   };
 
   return (
     <div className="login-container">
-      <div className="login-form">
-        <h2>Connexion:</h2>
-        
-        {/* Affichage du message d'erreur si nécessaire */}
-        {errorMessage && <div className="error-message">{errorMessage}</div>}
-        
-        <form onSubmit={handleSubmit}>
-          <label htmlFor="email">Email :</label>
-          <input
-            type="email"
-            id="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-            placeholder="Votre email"
-          />
-          
-          <label htmlFor="password">Mot de passe :</label>
-          <input
-            type="password"
-            id="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-            placeholder="Votre mot de passe"
-          />
+      <form className="login-form" onSubmit={handleLogin}>
+        <h2>Connexion</h2>
 
-          <button type="submit" disabled={loading}>
-            {loading ? 'Chargement...' : 'Se connecter'}
-          </button>
-        </form>
+        <input
+          type="email"
+          placeholder="E-mail"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+        />
 
-        <div className="register-link">
-          <Link to="/register">Créer un compte</Link>
-        </div>
-      </div>
+        <input
+          type="password"
+          placeholder="Mot de passe"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+        />
+
+        <button
+          type="button"
+          className="forgot-password"
+          onClick={() => alert('Lien de réinitialisation bientôt dispo')}
+        >
+          Mot de passe oublié ?
+        </button>
+
+        <button type="submit" className="green-btn">Connexion</button>
+
+        <p className="link-register">
+          Vous n'avez pas de compte ? <a href="/register">Créer un compte</a>
+        </p>
+      </form>
     </div>
   );
-};
+}
 
 export default LoginPage;
