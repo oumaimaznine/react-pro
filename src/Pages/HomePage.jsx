@@ -1,6 +1,6 @@
 import React from 'react';
 import './HomePage.css';
-
+import { Link } from 'react-router-dom';
 const HomePage = () => {
   const products = [
     {
@@ -76,18 +76,24 @@ const HomePage = () => {
 
       {/* Catégories pour Chats */}
       <section className="categories-section">
-        <h2>Catégories pour Chats</h2>
-        <div className="categories-grid">
-          <div className="category-item"><img src="/images/10.jpg" alt="Alimentation" /><p>Alimentation CHATS</p></div>
-          <div className="category-item"><img src="/images/11.jpg" alt="Gamelles" /><p>Gamelles et distributeurs</p></div>
-          <div className="category-item"><img src="/images/h.jpg" alt="Hygiène" /><p>Hygiène et soin</p></div>
-          <div className="category-item"><img src="/images/c.jpg" alt="Habitat" /><p>Habitat et Couchage</p></div>
-          <div className="category-item"><img src="/images/a.jpg" alt="Accessoires" /><p>Accessoires</p></div>
-          <div className="category-item"><img src="/images/l.jpg" alt="Litière" /><p>Litières et bacs à litière</p></div>
-          <div className="category-item"><img src="/images/j.jpg" alt="Jouets" /><p>Jouets</p></div>
-          <div className="category-item"><img src="/images/t.jpg" alt="Transport" /><p>Transport</p></div>
-        </div>
-      </section>
+  <h2>Catégories pour Chats</h2>
+  <div className="categories-grid">
+    <div className="category-item">
+      <Link to="/AlimentationChats">
+        <img src="/images/10.jpg" alt="Alimentation chats" />
+        <p>Alimentation CHATS</p>
+      </Link>
+    </div>
+    <div className="category-item"><img src="/images/11.jpg" alt="Gamelles" /><p>Gamelles et distributeurs</p></div>
+    <div className="category-item"><img src="/images/h.jpg" alt="Hygiène" /><p>Hygiène et soin</p></div>
+    <div className="category-item"><img src="/images/c.jpg" alt="Habitat" /><p>Habitat et Couchage</p></div>
+    <div className="category-item"><img src="/images/a.jpg" alt="Accessoires" /><p>Accessoires</p></div>
+    <div className="category-item"><img src="/images/l.jpg" alt="Litière" /><p>Litières et bacs à litière</p></div>
+    <div className="category-item"><img src="/images/j.jpg" alt="Jouets" /><p>Jouets</p></div>
+    <div className="category-item"><img src="/images/t.jpg" alt="Transport" /><p>Transport</p></div>
+  </div>
+</section>
+
 
       {/* Catégories pour Chiens */}
       <section className="categories-section">

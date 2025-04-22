@@ -1,7 +1,9 @@
 // Importation des hooks et styles
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom'; // Pour naviguer entre les pages sans recharger
-import './ProductList.css'; // Fichier de styles associé
+import './AlimentationPage.css'; 
+;
+ // Fichier de styles associé
 
 //  Création d'un tableau de 152 produits fictifs avec des propriétés générées dynamiquement
 const products = Array.from({ length: 152}, (_, index) => ({

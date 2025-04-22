@@ -57,7 +57,7 @@ const Header = () => {
               <span>CHATS ▾</span>
               {hoveredMenu === 'chats' && (
                 <div className="submenu">
-                  <Link to="/chats/alimentation">Alimentation chats</Link>
+                  <Link to="/AlimentationChats">Alimentation chats</Link>
                   <Link to="/chats/litiere">Gamelles et distributeurs</Link>
                   <Link to="/chats/jouets">Hygiène et soin chats</Link>
                   <Link to="/chats/accessoires">Accessoires</Link>

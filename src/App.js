@@ -6,7 +6,7 @@ import HomePage from './Pages/HomePage'; // Page d'accueil
 import PagePannier from './Pages/PagePannier'; // Importation de la page Panier
 import LoginPage from './Pages/LoginPage'; // Importation de la page Connexion
 import RegisterPage from './Pages/RegisterPage';
-import ProductList from './produits/ProductList';
+import AlimentationChats from './produits/AlimentationChats';
 import ProductDetails from './produits/ProductDetails';
 
 function App() {
@@ -22,7 +22,7 @@ function App() {
         <Route path="/panier" element={<PagePannier />} />  {/* Route pour la page Panier */}
         <Route path="/connexion" element={<LoginPage />} />  {/* Route pour la page Connexion */}
         <Route path="/register" element={<RegisterPage />} />
-        <Route path="/ProductList" element={<ProductList />} />
+        <Route path="/alimentationChats" element={<AlimentationChats />} />
         <Route path="/product/:id" element={<ProductDetails />} />
 
         {/* Ajoutez d'autres routes ici */}
