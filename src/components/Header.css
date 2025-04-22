@@ -32,7 +32,7 @@
 
 .header-search-bar button {
   padding: 10px 15px;
-  background-color:#3BD6F3;
+  background-color: #3BD6F3;
   color: #FDF6ED;
   border: none;
   border-radius: 20px;
@@ -57,11 +57,12 @@
   text-decoration: none;
   font-weight: bold;
   cursor: pointer;
+  padding: 6px 6px;
 }
 
 .header-nav ul li a:hover,
 .header-nav ul li span:hover {
-  color: #FDF6ED;
+  color: #3BD6F3;
   text-decoration: underline;
 }
 
@@ -72,32 +73,27 @@
   top: 100%;
   left: 0;
   display: flex;
-  background-color: #3BD6F3;
-  padding: 15px 25px;
+  flex-direction: column;
+  background-color: #A3B18A;
+  padding: 10px 10px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
   z-index: 999;
-  border-radius: 0 0 10px 10px;
+  min-width: 160px;
 }
 
-.submenu-column {
-  display: flex;
-  flex-direction: column;
-}
-
-.submenu-column a {
-  color: #000;
-  background-color: #3BD6F3;
-  padding: 8px 12px;
-  margin: 5px 0;
-  border-radius: 6px;
+.submenu a {
+  color: #FDF6ED;
+  background-color: transparent;
+  padding: 8px 8px;
+  margin: 4px 0;
   font-size: 14px;
   font-weight: 500;
   text-decoration: none;
   transition: 0.3s ease;
 }
 
-.submenu-column a:hover {
-  background-color: #3F3F3F;
-  color:#FDF6ED;
+.submenu a:hover {
+  background-color:#FDF6ED;
+  color: #FDF6ED;
   font-weight: bold;
 }

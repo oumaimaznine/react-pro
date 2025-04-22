@@ -1,3 +1,4 @@
+/* === Container Principal === */
 .product-details-container {
   display: flex;
   flex-wrap: wrap;
@@ -10,6 +11,7 @@
   box-shadow: 0 2px 15px rgba(0, 0, 0, 0.05);
 }
 
+/* === Section Image === */
 .detail-image-section {
   flex: 1 1 400px;
   display: flex;
@@ -25,6 +27,7 @@
   margin-bottom: 15px;
 }
 
+/* === Miniatures === */
 .image-gallery {
   display: flex;
   gap: 10px;
@@ -50,6 +53,7 @@
   border-color: #FDF6ED;
 }
 
+/* === Infos produit === */
 .detail-info {
   flex: 1 1 500px;
   display: flex;
@@ -62,6 +66,7 @@
   font-size: 26px;
   font-weight: bold;
   margin-bottom: 10px;
+  text-align: center; 
 }
 
 .price {
@@ -70,6 +75,7 @@
   margin-bottom: 5px;
 }
 
+/* === Quantité === */
 .quantity-section {
   display: flex;
   flex-direction: column;
@@ -91,6 +97,7 @@
   cursor: pointer;
 }
 
+/* === Boutons Action === */
 .add-to-cart,
 .buy-now {
   padding: 10px 20px;
@@ -118,6 +125,7 @@
   background-color: #FDF6ED;
 }
 
+/* === Description === */
 .detail-info p {
   line-height: 1.7;
   font-size: 15px;
@@ -154,13 +162,19 @@
 
 .related-item {
   flex: 0 0 auto;
-  width: 160px;
+  width: 220px;
   text-align: center;
   position: relative;
-  background-color: #f9f9f9;
+  background-color: #fff;
   border-radius: 10px;
   padding: 10px;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+  box-shadow:0 0 0 rgba(0, 0, 0, 0);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.related-item:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
 }
 
 .related-item img {
@@ -172,8 +186,8 @@
 .related-name {
   font-size: 14px;
   font-weight: 500;
+  color: #011f07;
   margin-bottom: 4px;
-  color: #333;
 }
 
 .related-price {
@@ -187,4 +201,20 @@
   text-decoration: line-through;
   margin-top: -4px;
 }
+
+/* === Caractéristiques du Produit === */
+.product-features-container {
+  padding: 20px;
+  background-color: #fff;
+  margin-top: 30px;
+}
+
+.features-list {
+  list-style: disc;
+  padding-left: 20px;
+  color: #444;
+  font-size: 15px;
+  margin-bottom: 20px;
+}
+
 

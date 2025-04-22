@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import './Header.css';
 
 const Header = () => {
-  const [showSubMenu, setShowSubMenu] = useState(false);
+  const [hoveredMenu, setHoveredMenu] = useState(null);
 
   return (
     <header className="header-container">
@@ -30,17 +30,41 @@ const Header = () => {
             <li><Link to="/connexion">Connexion / Inscription</Link></li>
 
             <li
+              onMouseEnter={() => setHoveredMenu('chiens')}
+              onMouseLeave={() => setHoveredMenu(null)}
               className="dropdown"
-              onMouseEnter={() => setShowSubMenu(true)}
-              onMouseLeave={() => setShowSubMenu(false)}
             >
-              <span>Boutique ▾</span>
-              {showSubMenu && (
+              <span>CHIENS ▾</span>
+              {hoveredMenu === 'chiens' && (
                 <div className="submenu">
-                  <div className="submenu-column">
-                    <Link to="/boutique/chiens"> Chiens</Link>
-                    <Link to="/boutique/chats"> Chats</Link>
-                  </div>
+                  <Link to="/chiens/alimentation">Alimentation CHIENS</Link>
+                  <Link to="/chiens/gamelles">Gamelles et distributeurs</Link>
+                  <Link to="/chiens/hygiene">Hygiène et soin chiens</Link>
+                  <Link to="/chiens/accessoires">Accessoires chiens</Link>
+                  <Link to="/chiens/habitat">Habitat et couchage</Link>
+                  <Link to="/chiens/vetements">Vêtements chiens</Link>
+                  <Link to="/chiens/jouets">Jouets</Link>
+                  <Link to="/chiens/transport">Transport chiens</Link>
+                </div>
+              )}
+            </li>
+
+            <li
+              onMouseEnter={() => setHoveredMenu('chats')}
+              onMouseLeave={() => setHoveredMenu(null)}
+              className="dropdown"
+            >
+              <span>CHATS ▾</span>
+              {hoveredMenu === 'chats' && (
+                <div className="submenu">
+                  <Link to="/chats/alimentation">Alimentation chats</Link>
+                  <Link to="/chats/litiere">Gamelles et distributeurs</Link>
+                  <Link to="/chats/jouets">Hygiène et soin chats</Link>
+                  <Link to="/chats/accessoires">Accessoires</Link>
+                  <Link to="/chats/arbre">Habitat et couchage</Link>
+                  <Link to="/chats/soin">Vêtements chats</Link>
+                  <Link to="/chats/arbre">Jouets</Link>
+                  <Link to="/chats/soin">Transport chats</Link>
                 </div>
               )}
             </li>
