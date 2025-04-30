@@ -1,17 +1,38 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import './Header.css';
+import { FiUser, FiChevronDown, FiShoppingCart } from 'react-icons/fi';
+import { FaDog, FaCat } from 'react-icons/fa';
 
 const Header = () => {
   const [hoveredMenu, setHoveredMenu] = useState(null);
   const [categories, setCategories] = useState([]);
+  const [user, setUser] = useState(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     axios.get('http://127.0.0.1:8000/api/categories')
       .then(response => setCategories(response.data))
       .catch(error => console.error('Erreur lors du chargement des catégories:', error));
+
+    const storedUser = localStorage.getItem('user');
+    if (storedUser) {
+      setUser(JSON.parse(storedUser));
+    }
   }, []);
+
+  const handleLogout = () => {
+    const token = localStorage.getItem('token');
+    axios.post('http://127.0.0.1:8000/api/logout', {}, {
+      headers: { Authorization: `Bearer ${token}` }
+    }).then(() => {
+      localStorage.removeItem('token');
+      localStorage.removeItem('user');
+      setUser(null);
+      navigate('/connexion');
+    }).catch(err => console.error("Erreur logout:", err));
+  };
 
   const chiensCategories = categories.filter(cat => cat.parent_category_id === 1);
   const chatsCategories = categories.filter(cat => cat.parent_category_id === 10);
@@ -37,46 +58,80 @@ const Header = () => {
 
         <nav className="header-nav">
           <ul>
-            <li><Link to="/">Accueil</Link></li>
-            <li><Link to="/connexion">Connexion / Inscription</Link></li>
+            <li><Link to="/" className="nav-item">Accueil</Link></li>
 
-         
+            {/* DROPDOWN UTILISATEUR */}
+            <li className="dropdown">
+              <span
+                onClick={() => setHoveredMenu(hoveredMenu === 'user' ? null : 'user')}
+                className="nav-item"
+              >
+                <FiUser className="header-icon" />
+                {user ? `Bonjour, ${user.name}` : 'Se connecter'}
+                <FiChevronDown className="header-icon" />
+              </span>
+
+              {hoveredMenu === 'user' && (
+                <div className="submenu">
+                  {user ? (
+                    <>
+                      <Link to="/profil">Votre compte</Link>
+                      <Link to="/commandes">Vos commandes</Link>
+                      <button onClick={handleLogout} className="logout-button">Se déconnecter</button>
+                    </>
+                  ) : (
+                    <>
+                      <Link to="/connexion" className="main-connect-btn">Se connecter</Link>
+                      <Link to="/profil">Votre compte</Link>
+                      <Link to="/commandes">Vos commandes</Link>
+                    </>
+                  )}
+                </div>
+              )}
+            </li>
+
+            {/* CHIENS */}
             <li
               onMouseEnter={() => setHoveredMenu('chiens')}
               onMouseLeave={() => setHoveredMenu(null)}
               className="dropdown"
             >
-              <span>CHIENS ▾</span>
+              <span className="nav-item">
+                <FaDog className="header-icon" /> Chiens <FiChevronDown className="header-icon" />
+              </span>
               {hoveredMenu === 'chiens' && (
                 <div className="submenu">
                   {chiensCategories.map(cat => (
-                    <Link key={cat.id} to={`/category/${cat.id}`}>
-                      {cat.name}
-                    </Link>
+                    <Link key={cat.id} to={`/category/${cat.id}`}>{cat.name}</Link>
                   ))}
                 </div>
               )}
             </li>
 
-            {/* Menu CHATS */}
+            {/* CHATS */}
             <li
               onMouseEnter={() => setHoveredMenu('chats')}
               onMouseLeave={() => setHoveredMenu(null)}
               className="dropdown"
             >
-              <span>CHATS ▾</span>
+              <span className="nav-item">
+                <FaCat className="header-icon" /> Chats <FiChevronDown className="header-icon" />
+              </span>
               {hoveredMenu === 'chats' && (
                 <div className="submenu">
                   {chatsCategories.map(cat => (
-                    <Link key={cat.id} to={`/category/${cat.id}`}>
-                      {cat.name}
-                    </Link>
+                    <Link key={cat.id} to={`/category/${cat.id}`}>{cat.name}</Link>
                   ))}
                 </div>
               )}
             </li>
 
-            <li><Link to="/panier">Panier</Link></li>
+            {/* PANIER */}
+            <li>
+              <Link to="/panier" className="nav-item">
+                <FiShoppingCart className="header-icon" /> Panier
+              </Link>
+            </li>
           </ul>
         </nav>
 
