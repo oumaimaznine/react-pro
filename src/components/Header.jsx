@@ -13,7 +13,6 @@ const Header = () => {
       .catch(error => console.error('Erreur lors du chargement des catégories:', error));
   }, []);
 
-  // نفيترو الكاتيجوريات حسب النوع (مثلا parent_category_id ديال CHIENS هو 1)
   const chiensCategories = categories.filter(cat => cat.parent_category_id === 1);
   const chatsCategories = categories.filter(cat => cat.parent_category_id === 10);
 
@@ -41,7 +40,7 @@ const Header = () => {
             <li><Link to="/">Accueil</Link></li>
             <li><Link to="/connexion">Connexion / Inscription</Link></li>
 
-            {/* Menu CHIENS */}
+         
             <li
               onMouseEnter={() => setHoveredMenu('chiens')}
               onMouseLeave={() => setHoveredMenu(null)}
