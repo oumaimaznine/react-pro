@@ -1,36 +1,34 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import Header from './components/Header'; // Importation du Header
-import Footer from './components/Footer'; // Importation du Footer
-import HomePage from './Pages/HomePage'; // Page d'accueil
-import PagePannier from './Pages/PagePannier'; // Importation de la page Panier
-import LoginPage from './Pages/LoginPage'; // Importation de la page Connexion
+import Header from './components/Header';
+import Footer from './components/Footer';
+import HomePage from './Pages/HomePage';
+import CartPage from './Pages/CartPage';
+import LoginPage from './Pages/LoginPage';
 import RegisterPage from './Pages/RegisterPage';
-import AlimentationChats from './produits/AlimentationChats';
 import ProductDetails from './produits/ProductDetails';
-import Updateprofil from './Pages/Updateprofil'; 
+import CategoryProducts from './Pages/CategoryProducts';
+import ProfilePage from './Pages/ProfilePage';
+import  EditProfilePage from'./produits/EditProfilePage';
+
+import axios from 'axios';
+axios.defaults.baseURL = 'http://localhost:8000';
 
 function App() {
   return (
     <Router>
-      {/* Affiche le Header sur toutes les pages */}
       <Header />
-
-      {/* Définir les différentes routes pour naviguer entre les pages */}
       <Routes>
-        <Route path="/" element={<HomePage />} />  {/* Route pour la page d'accueil */}
-        
-        <Route path="/panier" element={<PagePannier />} />  {/* Route pour la page Panier */}
-        <Route path="/connexion" element={<LoginPage />} />  {/* Route pour la page Connexion */}
+        <Route path="/" element={<HomePage />} />
+        <Route path="/cartPage" element={<CartPage />} />
+        <Route path="/connexion" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
-        <Route path="/alimentationChats" element={<AlimentationChats />} />
         <Route path="/product/:id" element={<ProductDetails />} />
-        <Route path="/updateprofil" element={<Updateprofil />} />
+        <Route path="/category/:id" element={<CategoryProducts />} />
+        <Route path="/ProfilePage" element={<ProfilePage/>} />
+        <Route path="/ EditProfilePage" element={< EditProfilePage/>}/>
 
-        {/* Ajoutez d'autres routes ici */}
       </Routes>
-
-      {/* Affiche le Footer sur toutes les pages */}
       <Footer />
     </Router>
   );

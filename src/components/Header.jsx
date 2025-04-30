@@ -1,9 +1,21 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import axios from 'axios';
 import './Header.css';
 
 const Header = () => {
   const [hoveredMenu, setHoveredMenu] = useState(null);
+  const [categories, setCategories] = useState([]);
+
+  useEffect(() => {
+    axios.get('http://127.0.0.1:8000/api/categories')
+      .then(response => setCategories(response.data))
+      .catch(error => console.error('Erreur lors du chargement des catégories:', error));
+  }, []);
+
+  // نفيترو الكاتيجوريات حسب النوع (مثلا parent_category_id ديال CHIENS هو 1)
+  const chiensCategories = categories.filter(cat => cat.parent_category_id === 1);
+  const chatsCategories = categories.filter(cat => cat.parent_category_id === 10);
 
   return (
     <header className="header-container">
@@ -29,6 +41,7 @@ const Header = () => {
             <li><Link to="/">Accueil</Link></li>
             <li><Link to="/connexion">Connexion / Inscription</Link></li>
 
+            {/* Menu CHIENS */}
             <li
               onMouseEnter={() => setHoveredMenu('chiens')}
               onMouseLeave={() => setHoveredMenu(null)}
@@ -37,18 +50,16 @@ const Header = () => {
               <span>CHIENS ▾</span>
               {hoveredMenu === 'chiens' && (
                 <div className="submenu">
-                  <Link to="/chiens/alimentation">Alimentation CHIENS</Link>
-                  <Link to="/chiens/gamelles">Gamelles et distributeurs</Link>
-                  <Link to="/chiens/hygiene">Hygiène et soin chiens</Link>
-                  <Link to="/chiens/accessoires">Accessoires chiens</Link>
-                  <Link to="/chiens/habitat">Habitat et couchage</Link>
-                  <Link to="/chiens/vetements">Vêtements chiens</Link>
-                  <Link to="/chiens/jouets">Jouets</Link>
-                  <Link to="/chiens/transport">Transport chiens</Link>
+                  {chiensCategories.map(cat => (
+                    <Link key={cat.id} to={`/category/${cat.id}`}>
+                      {cat.name}
+                    </Link>
+                  ))}
                 </div>
               )}
             </li>
 
+            {/* Menu CHATS */}
             <li
               onMouseEnter={() => setHoveredMenu('chats')}
               onMouseLeave={() => setHoveredMenu(null)}
@@ -57,14 +68,11 @@ const Header = () => {
               <span>CHATS ▾</span>
               {hoveredMenu === 'chats' && (
                 <div className="submenu">
-                  <Link to="/AlimentationChats">Alimentation chats</Link>
-                  <Link to="/chats/litiere">Gamelles et distributeurs</Link>
-                  <Link to="/chats/jouets">Hygiène et soin chats</Link>
-                  <Link to="/chats/accessoires">Accessoires</Link>
-                  <Link to="/chats/arbre">Habitat et couchage</Link>
-                  <Link to="/chats/soin">Vêtements chats</Link>
-                  <Link to="/chats/arbre">Jouets</Link>
-                  <Link to="/chats/soin">Transport chats</Link>
+                  {chatsCategories.map(cat => (
+                    <Link key={cat.id} to={`/category/${cat.id}`}>
+                      {cat.name}
+                    </Link>
+                  ))}
                 </div>
               )}
             </li>

@@ -10,30 +10,26 @@ function LoginPage() {
     e.preventDefault();
 
     try {
-      const response = await axios.post('http://localhost:8000/api/login', {
+      const response = await axios.post('http://127.0.0.1:8000/api/login', {
         email,
-        password
+        password,
       });
+      console.log("LOGIN RESPONSE:", response.data);
+      if (response.data.token && response.data.user) {
+        localStorage.setItem('token', response.data.token);
+        localStorage.setItem('user', JSON.stringify(response.data.user));
 
-      alert('Connexion réussie');
-      console.log(response.data);
+        alert('Connexion réussie !');
 
       
-      localStorage.setItem('user', JSON.stringify(response.data.user));
-      window.location.href = "/personnels";
-    } catch (error) {
-      if (error.response) {
-        console.error('Erreur Laravel:', error.response.data);
-        alert("Erreur Laravel : " + JSON.stringify(error.response.data));
-      } else if (error.request) {
-        console.error('Pas de réponse du serveur:', error.request);
-        alert("Aucune réponse ");
+        window.location.href = '/ProfilePage';
       } else {
-        console.error('Erreur inconnue:', error.message);
-        alert("Erreur : " + error.message);
+        alert('Erreur: Données de connexion invalides.');
       }
+    } catch (error) {
+      console.error('Erreur de connexion:', error.response?.data || error.message);
+      alert('Erreur de connexion. Vérifiez vos informations.');
     }
-    
   };
 
   return (
@@ -46,6 +42,7 @@ function LoginPage() {
           placeholder="E-mail"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
+          required
         />
 
         <input
@@ -53,17 +50,12 @@ function LoginPage() {
           placeholder="Mot de passe"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
+          required
         />
 
-        <button
-          type="button"
-          className="forgot-password"
-          onClick={() => alert('Lien de réinitialisation bientôt dispo')}
-        >
-          Mot de passe oublié ?
+        <button type="submit" className="green-btn">
+          Connexion
         </button>
-
-        <button type="submit" className="green-btn">Connexion</button>
 
         <p className="link-register">
           Vous n'avez pas de compte ? <a href="/register">Créer un compte</a>

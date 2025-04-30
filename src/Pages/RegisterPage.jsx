@@ -3,32 +3,35 @@ import axios from 'axios';
 import './RegisterPage.css';
 
 function RegisterPage() {
-  const [firstName, setFirstName] = useState('');
-  const [lastName, setLastName] = useState('');
+  const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
 
   const handleRegister = async (e) => {
     e.preventDefault();
 
+    if (password !== confirmPassword) {
+      alert('Les mots de passe ne correspondent pas.');
+      return;
+    }
+
     try {
-      const response = await axios.post('http://localhost:8000/api/register', {
-        first_name: firstName,
-        last_name: lastName,
+      const response = await axios.post('http://127.0.0.1:8000/api/register', {
+        name,
         email,
-        password
+        password,
+        password_confirmation: confirmPassword,
       });
 
-      alert(' Compte créé avec succès');
-      console.log('Réponse Laravel:', response.data);
+      localStorage.setItem('token', response.data.token);
+      localStorage.setItem('user', JSON.stringify(response.data.user));
+
+      alert('Compte créé avec succès !');
+      window.location.href = '/ProfilePage';
     } catch (error) {
-      if (error.response) {
-        console.error('Erreur Laravel:', error.response.data);
-        alert(JSON.stringify(error.response.data));
-      } else {
-        console.error(error);
-        alert(" Erreur inconnue");
-      }
+      console.error('Erreur de création:', error.response?.data || error.message);
+      alert('Erreur lors de la création du compte.');
     }
   };
 
@@ -36,30 +39,39 @@ function RegisterPage() {
     <div className="register-container">
       <form className="register-form" onSubmit={handleRegister}>
         <h2>Créer un compte</h2>
+
         <input
           type="text"
-          placeholder="Prénom"
-          value={firstName}
-          onChange={(e) => setFirstName(e.target.value)}
+          placeholder="Nom complet"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          required
         />
-        <input
-          type="text"
-          placeholder="Nom de famille"
-          value={lastName}
-          onChange={(e) => setLastName(e.target.value)}
-        />
+
         <input
           type="email"
           placeholder="E-mail"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
+          required
         />
+
         <input
           type="password"
           placeholder="Mot de passe"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
+          required
         />
+
+        <input
+          type="password"
+          placeholder="Confirmer le mot de passe"
+          value={confirmPassword}
+          onChange={(e) => setConfirmPassword(e.target.value)}
+          required
+        />
+
         <button type="submit" className="green-btn">Créer</button>
       </form>
     </div>
