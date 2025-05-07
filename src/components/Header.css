@@ -14,28 +14,31 @@
 }
 
 .header-logo {
-  height: 40px;
+  height: 30px;
 }
 
 .header-search-bar {
   display: flex;
   align-items: center;
-  gap: 10px;
-}
+  gap: 10px;/*espace btw les titre*/
+  width: 400px;
+  margin-left: 50px;
+  }
+
 
 .header-search-bar input {
   padding: 10px;
-  border-radius: 20px;
+  border-radius: 10px;
   border: none;
-  width: 250px;
+  width: 350px;/*largeur*/
 }
 
 .header-search-bar button {
-  padding: 10px 15px;
+  padding: 10px 20px;
   background-color: #3BD6F3;
   color: #FDF6ED;
   border: none;
-  border-radius: 20px;
+  border-radius: 10px;
   cursor: pointer;
   font-weight: bold;
 }
@@ -43,7 +46,7 @@
 .header-nav ul {
   list-style: none;
   display: flex;
-  gap: 20px;
+  gap: 5px;
   margin: 0;
   padding: 0;
 }

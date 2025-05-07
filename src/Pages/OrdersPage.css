@@ -1,0 +1,329 @@
+/* === Général === */
+body {
+  background-color: #ccc; /* Couleur de fond générale de la page */
+  margin: 0; /* Supprimer les marges par défaut */
+  padding: 0; /* Supprimer les paddings par défaut */
+  font-family: 'Segoe UI', sans-serif; /* Police principale */
+}
+
+/* === Conteneur principal qui regroupe les deux colonnes === */
+.order-container {
+  display: flex; /* Affichage flex pour faire deux colonnes (formulaire + résumé) */
+  align-items: flex-start; /* Alignement en haut */
+  gap: 30px; /* Espace entre les deux colonnes */
+  padding: 40px; /* Espacement interne global */
+  background-color: #eee; /* Couleur de fond du conteneur */
+  flex-wrap: wrap; /* Permet le passage à la ligne sur petits écrans */
+}
+
+/* === Bloc formulaire d'adresse === */
+.orders-page {
+  flex: 2; /* Prend 2 parts comparé à order-summary */
+  max-width: 900px;
+  background: white;
+  border-radius: 10px; /* Coins arrondis */
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08); /* Ombre douce */
+  padding: 30px 40px; /* Padding interne */
+}
+
+/* === Titres du formulaire === */
+.orders-page h3 {
+  font-size: 20px;
+  font-weight: bold;
+  color: #393838;
+  margin-bottom: 5px;
+  border-bottom: 1px solid #ddd;
+  padding-bottom: 10px;
+}
+
+.orders-page h4 {
+  font-size: 16px;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 25px;
+  text-transform: uppercase; /* Tout en majuscule */
+}
+
+/* === Formulaire === */
+.order-form {
+  margin-bottom: 30px; /* Espace sous le formulaire */
+}
+
+.order-form .form-row {
+  display: flex; /* Affichage en ligne */
+  flex-wrap: wrap;
+  gap: 20px;
+  margin-bottom: 15px;
+}
+
+.order-form .form-group {
+  flex: 1; /* Prend toute la largeur dispo */
+  display: flex;
+  flex-direction: column;
+}
+
+.order-form .form-group.small {
+  max-width: 100px; /* Pour petits champs si besoin */
+}
+
+.order-form label {
+  font-size: 13px;
+  font-weight: 600;
+  margin-bottom: 4px;
+  color: #444;
+}
+
+.order-form input,
+.order-form select {
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  font-size: 14px;
+  background-color: white;
+  transition: border 0.3s ease, box-shadow 0.3s ease;
+}
+
+.order-form input:focus,
+.order-form select:focus {
+  border-color: #3BD6F3;
+  box-shadow: 0 0 4px #3BD6F3;
+  outline: none;
+}
+
+.order-form input:disabled {
+  background-color: #f0f0f0;
+}
+
+/* === Boutons de formulaire === */
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 15px;
+  margin-top: 20px;
+}
+
+.btn-save {
+  background-color: #3BD6F3;
+  color: white;
+  border: none;
+  padding: 10px 25px;
+  font-weight: bold;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.btn-save:hover {
+  background-color: #1bb4d3;
+}
+
+.btn-cancel {
+  background: none;
+  border: none;
+  color: #3BD6F3;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+/* === Lien de retour vers les achats === */
+.return-link {
+  display: inline-block;
+  margin-top: 20px;
+  margin-bottom: 30px;
+  font-size: 14px;
+  color: #191ccb;
+  text-decoration: underline;
+  font-weight: 500;
+  padding-top: 10px;
+}
+
+.return-link:hover {
+  color: #007bff;
+}
+
+/* === Bloc de résumé de la commande === */
+.order-summary {
+  flex: 1; /* Moins large que le formulaire */
+  background: white;
+  padding: 20px 25px;
+  border-radius: 10px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+  height: fit-content;
+  min-width: 250px;
+}
+
+.order-summary h4 {
+  font-size: 16px;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 20px;
+}
+
+
+
+.summary-total {
+  font-weight: bold;
+  font-size:16px;
+  margin-bottom: 20px;
+  color: #333;
+  display: flex; 
+  justify-content: space-between; 
+}
+
+
+
+/* === Affichage de chaque produit dans le résumé === */
+.summary-item {
+  display: flex;
+  align-items: center;
+  margin-bottom: 15px;
+  gap: 10px;
+}
+
+.summary-item img,
+.product-img {
+  width: 60px;
+  height: auto;
+  border-radius: 5px;
+  object-fit: cover;
+  background: #f7f7f7;
+}
+
+.summary-info {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.summary-title {
+  font-weight: 500;
+  font-size: 14px !important;
+  color: #494747;
+}
+
+.summary-price {
+  font-weight: bold;
+  font-size: 14px;
+  color: #000;
+}
+
+/* === Champ code promo === */
+.promo-code {
+  display: flex;
+  gap: 10px;
+  margin: 20px 0;
+}
+
+.promo-code input {
+  flex: 1;
+  padding: 10px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.promo-code button {
+  background-color: #3BD6F3;
+  color: white;
+  border: none;
+  padding: 10px 18px;
+  font-weight: bold;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.promo-code button:hover {
+  background-color: #1bb4d3;
+}
+
+/* === Zone de la checkbox de sauvegarde d’adresse === */
+.checkbox-save-wrapper {
+  display: flex;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.checkbox-save {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #333;
+}
+
+.checkbox-save input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  margin: 0;
+  cursor: pointer;
+}
+/* === Bloc méthode de paiement === */
+.payment-options label {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 20px;
+  font-weight: 500;
+  font-size: 16px;
+  padding: 15px 20px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s, border-color 0.3s;
+  
+  margin-bottom: 20px;
+}
+
+.payment-options input[type="radio"] {
+  transform: scale(1.3);
+}
+
+.payment-options label svg {
+  font-size: 27px; 
+}
+
+.payment-options label:hover {
+  background-color: #f0f8ff;
+  border-color: #0070ba;
+}
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.modal {
+  background-color: #fff;
+  padding: 30px;
+  border-radius: 10px;
+  text-align: center;
+  width: 90%;
+  max-width: 400px;
+}
+
+.btn-close {
+  background-color: #ccc;
+  border: none;
+  padding: 10px 15px;
+  margin-right: 10px;
+  cursor: pointer;
+}
+
+.btn-continue {
+  background-color: #0070ba;
+  color: white;
+  padding: 10px 20px;
+  text-decoration: none;
+  border-radius: 5px;
+}
+
+

@@ -35,7 +35,7 @@ function CategoryProducts() {
                 alt={product.name} 
                 className="product-image" 
               />
-              <h3 className="product-title">{product.name}</h3>
+              <h3 className="product-titlee">{product.name}</h3>
               <p className="product-price">
                 À partir de <strong>{parseFloat(product.price).toFixed(2)} Dhs</strong>
               </p>

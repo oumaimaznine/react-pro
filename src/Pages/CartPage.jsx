@@ -14,7 +14,10 @@ function CartPage() {
         const response = await axios.get('http://127.0.0.1:8000/api/cart', {
           headers: { Authorization: `Bearer ${token}` },
         });
+
         setCartItems(response.data);
+        localStorage.setItem('cartItems', JSON.stringify(response.data));
+
       } catch (error) {
         console.error('Erreur lors du chargement du panier:', error.response?.data || error.message);
       }
@@ -34,6 +37,12 @@ function CartPage() {
           item.id === itemId ? { ...item, quantity } : item
         )
       );
+
+      const updatedItems = cartItems.map((item) =>
+        item.id === itemId ? { ...item, quantity } : item
+      );
+      localStorage.setItem('cartItems', JSON.stringify(updatedItems));
+
     } catch (error) {
       console.error('Erreur lors de la mise à jour de la quantité:', error.response?.data || error.message);
     }
@@ -45,10 +54,14 @@ function CartPage() {
       await axios.delete(`http://127.0.0.1:8000/api/cart/items/${itemId}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
-      setCartItems((prevItems) => prevItems.filter((item) => item.id !== itemId));
+      const updatedItems = cartItems.filter((item) => item.id !== itemId);
+      setCartItems(updatedItems);
+
+      
+      localStorage.setItem('cartItems', JSON.stringify(updatedItems));
+      
     } catch (error) {
       console.error("Erreur lors de la suppression de l'article:", error.response?.data || error.message);
-
     }
   };
 
@@ -111,14 +124,13 @@ function CartPage() {
             </div>
 
             <div className="cart-quantity-column">
-  <div className="quantity-control">
-    <button onClick={() => handleQuantityChange(item.id, item.quantity - 1)}>-</button>
-    <span>{item.quantity}</span>
-    <button onClick={() => handleQuantityChange(item.id, item.quantity + 1)}>+</button>
-  </div>
-  <button onClick={() => handleRemoveItem(item.id)} className="delete-btn">🗑️</button>
-</div>
-
+              <div className="quantity-control">
+                <button onClick={() => handleQuantityChange(item.id, item.quantity - 1)}>-</button>
+                <span>{item.quantity}</span>
+                <button onClick={() => handleQuantityChange(item.id, item.quantity + 1)}>+</button>
+              </div>
+              <button onClick={() => handleRemoveItem(item.id)} className="delete-btn">🗑️</button>
+            </div>
 
             <div className="total-price">
               {(parseFloat(item.product.price) * item.quantity).toFixed(2)} dhs
@@ -127,18 +139,15 @@ function CartPage() {
         ))}
       </div>
 
-    
       <div className="cart-footer">
-  <div className="footer-total-line">
-    Total estimé : <span>{totalPrice.toFixed(2)} Dhs</span>
-  </div>
-  <p className="footer-note">Taxes, réductions et frais d’expédition calculés à l’étape du paiement.</p>
-  <Link to="/checkout">
-    <button className="checkout-button">Procéder au paiement</button>
-  </Link>
-</div>
-
-
+        <div className="footer-total-line">
+          Total estimé : <span>{totalPrice.toFixed(2)} Dhs</span>
+        </div>
+        <p className="footer-note">Taxes, réductions et frais d’expédition calculés à l’étape du paiement.</p>
+        <Link to="/orders">
+          <button className="checkout-button">Commander</button>
+        </Link>
+      </div>
     </div>
   );
 }

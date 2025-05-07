@@ -1,7 +1,11 @@
-.product-list {
-    padding: 40px 20px;
-    text-align: center;
-    background-color: #fff;
+.recherche-container {
+    padding: 30px;
+  }
+  
+  .product-title {
+    font-size: 16px;
+    color: #333;
+    margin-bottom: 5px;
   }
   
   .products-grid {
@@ -10,7 +14,6 @@
     gap: 20px;
     justify-content: center;
   }
-  
   
   .product-card {
     width: 220px; /* fixe la largeur pour avoir une taille uniforme */
@@ -32,22 +35,21 @@
   }
   
   .product-image {
-    width: 200px; /* taille réduite */
+    width: 200px; 
     height: 200px;
     object-fit: contain;
     border-radius: 8px;
     margin-bottom: 10px;
   }
   
-  
-  .product-titlee {
-    font-size: 16px;
+  .product-name {
+    font-weight: bold;
     color: #333;
-    margin-bottom: 5px;
+    text-decoration: none;
+    display: block;
+    margin-bottom: 8px;
   }
-  
   .product-price {
     font-size: 14px;
     color: #4b4f4b; 
   }
-  

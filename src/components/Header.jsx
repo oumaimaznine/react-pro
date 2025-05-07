@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import './Header.css';
+
 import { FiUser, FiChevronDown, FiShoppingCart } from 'react-icons/fi';
 import { FaDog, FaCat } from 'react-icons/fa';
 
@@ -9,6 +10,7 @@ const Header = () => {
   const [hoveredMenu, setHoveredMenu] = useState(null);
   const [categories, setCategories] = useState([]);
   const [user, setUser] = useState(null);
+  const [searchTerm, setSearchTerm] = useState('');
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -34,8 +36,13 @@ const Header = () => {
     }).catch(err => console.error("Erreur logout:", err));
   };
 
+  const handleSearch = () => {
+    if (!searchTerm.trim()) return;
+    navigate(`/recherche?query=${encodeURIComponent(searchTerm)}`);
+  };
+
   const chiensCategories = categories.filter(cat => cat.parent_category_id === 1);
-  const chatsCategories = categories.filter(cat => cat.parent_category_id === 10);
+  const chatsCategories = categories.filter(cat => cat.parent_category_id === 2);
 
   return (
     <header className="header-container">
@@ -50,8 +57,11 @@ const Header = () => {
             type="text"
             id="recherche"
             placeholder="Chercher ce que vous voulez"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
           />
-          <button type="submit">
+          <button type="button" onClick={handleSearch}>
             <i className="fa fa-search"></i> Recherche
           </button>
         </div>
@@ -60,7 +70,7 @@ const Header = () => {
           <ul>
             <li><Link to="/" className="nav-item">Accueil</Link></li>
 
-            {/* DROPDOWN UTILISATEUR */}
+            {/* UTILISATEUR */}
             <li className="dropdown">
               <span
                 onClick={() => setHoveredMenu(hoveredMenu === 'user' ? null : 'user')}
