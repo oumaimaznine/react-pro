@@ -1,0 +1,65 @@
+.livraison-page {
+    max-width: 600px;
+    margin: 40px auto;
+    padding: 30px;
+    background-color: #fff;
+    font-family: 'Segoe UI', sans-serif;
+    text-align: center;
+  }
+  
+  .livraison-page h2 {
+    color:  #3F3F3F;
+    font-size: 28px;
+    margin-bottom: 20px;
+  }
+  
+  .livraison-page p {
+    font-size: 16px;
+    color: #444;
+    margin-bottom: 10px;
+  }
+  
+  .commande-details {
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    padding: 20px;
+    margin-top: 20px;
+    text-align: left;
+  }
+  
+  .commande-details p {
+    margin: 10px 0;
+    font-size: 15px;
+    color: #333;
+  }
+  
+  .btns-livraison {
+    margin-top: 30px;
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    flex-wrap: wrap;
+  }
+  
+  .btn-secondary {
+    padding: 10px 20px;
+    font-size: 14px;
+    font-weight: bold;
+    border: none;
+    border-radius: 6px;
+    text-decoration: none;
+    transition: background 0.3s ease;
+    cursor: pointer;
+  }
+
+  .btn-secondary {
+    background-color:#ffffff;
+    color: #333;
+    border: 1px solid #000; 
+    justify-content: center;
+  }
+  
+  .btn-secondary:hover {
+    background-color: #A3B18A;
+  }
+  

@@ -14,7 +14,10 @@ import RecherchePage from './Pages/RecherchePage';
 import OrdersPage from './Pages/OrdersPage';
 import PaiementPaypal from './produits/PaiementPaypal';
 import Confirmation from './produits/Confirmation';
+import PaiementLivraison from './produits/PaiementLivraison'
 import { PayPalScriptProvider } from "@paypal/react-paypal-js";
+import FacebookCallback from './produits/FacebookCallback';
+import GoogleCallback from './produits/GoogleCallback';
 
 import axios from 'axios';
 axios.defaults.baseURL = 'http://localhost:8000';
@@ -38,6 +41,10 @@ function App() {
           <Route path="/orders" element={<OrdersPage />} />
           <Route path="/PaiementPaypal" element={<PaiementPaypal />} />
           <Route path="/confirmation" element={<Confirmation />} />
+          <Route path="/PaiementLivraison" element={<PaiementLivraison />} />
+          <Route path="/login/facebook/callback" element={<FacebookCallback />} />
+          <Route path="/google/callback" element={<GoogleCallback />} />
+
         </Routes>
         <Footer />
       </Router>

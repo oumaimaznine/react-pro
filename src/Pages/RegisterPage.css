@@ -3,17 +3,16 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  min-height: 100vh;
-  background-color: #f5f5f5;
+  min-height: 90vh;
+  background-color: white;
 }
 
 .register-form {
-  width: 100%;
+  width: 90%;
   max-width: 420px;
   padding: 40px;
   background-color: #fff;
-  border-radius: 10px;
-  box-shadow: 0 0 15px rgba(0, 0, 0, 0.05);
+ 
   text-align: center;
 }
 

@@ -86,7 +86,7 @@ const Header = () => {
                   {user ? (
                     <>
                       <Link to="/profil">Votre compte</Link>
-                      <Link to="/commandes">Vos commandes</Link>
+                      <Link to="/confirmation">Vos commandes</Link>
                       <button onClick={handleLogout} className="logout-button">Se déconnecter</button>
                     </>
                   ) : (

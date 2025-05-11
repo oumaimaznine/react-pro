@@ -110,7 +110,11 @@
   flex-direction: column;
   gap: 15px;
   margin-top: 20px;
+
+  max-width: 400px; 
+  width: 100%;
 }
+
 
 .add-to-cart,
 .buy-now {

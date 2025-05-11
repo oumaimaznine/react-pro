@@ -50,4 +50,72 @@
     font-size: 14px;
     color: #4b4f4b; 
   }
-  
+  /* === Filtre de tri === */
+.filter-sort {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-bottom: 20px;
+  padding: 0 20px;
+  font-size: 17px;
+}
+
+.filter-sort label {
+  font-weight: 700;
+  color: #333;
+}
+
+.filter-sort select {
+  padding: 8px 12px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background-color: white;
+  font-size: 17px;
+  cursor: pointer;
+  transition: border 0.2s ease-in-out;
+}
+
+.filter-sort select:hover,
+.filter-sort select:focus {
+  border-color: #0f0f0f;
+  outline: none;
+}
+.pagination {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 30px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.pagination button {
+  padding: 6px 12px;
+  border: none;
+  background-color: transparent;
+  color: #333;
+  font-size: 16px;
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  transition: all 0.2s ease-in-out;
+}
+
+.pagination button.active {
+  font-weight: bold;
+  border-bottom: 2px solid #000;
+}
+
+.pagination button:hover:not(.active) {
+  border-bottom: 2px solid #ccc;
+}
+
+.pagination button:disabled {
+  color: #aaa;
+  cursor: not-allowed;
+}
+
+.pagination span {
+  padding: 6px 8px;
+  color: #999;
+}
