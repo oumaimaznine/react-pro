@@ -21,39 +21,43 @@ function PaiementPaypal() {
     alert(` Paiement réussi, merci ${details.payer.name.given_name}`);
 
     const token = localStorage.getItem('token');
-    const cart = JSON.parse(localStorage.getItem('cartItems')) || [];
     const user = JSON.parse(localStorage.getItem('user'));
+    const cart = JSON.parse(localStorage.getItem('cartItems')) || [];
+
+    if (!token || !user?.id) {
+      alert(" Vous devez être connecté pour valider la commande.");
+      navigate('/login');
+      return;
+    }
 
     const payload = {
-      cart: cart,
+      items: cart,
       total: total,
       transaction_id: details.id,
-      user_id: user?.id,
+      user_id: user.id
     };
 
-    //  afficher dans la console les données envoyées
     console.log(" Données envoyées à l'API:", payload);
 
     try {
-      const response = await axios.post('http://localhost:8000/api/payment/paypal/success', payload, {
-        headers: {
-          Authorization: `Bearer ${token}`,
+      const response = await axios.post(
+        'http://localhost:8000/api/payment/paypal/success',
+        payload,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          }
         }
-      });
+      );
 
-      console.log(" Réponse du backend:", response.data);
-      alert("Commande enregistrée avec succès !");
-
+      console.log("Réponse du backend:", response.data);
+      alert(" Commande enregistrée avec succès !");
       localStorage.removeItem('cartItems');
       navigate('/confirmation');
-    } catch (error) {
-      console.log("Full Error:", error.response);
-      if (error.response) {console.log("Full Error:", error.response?.data || error.message);//39LI 3LA HEDI Finma ytle3 lik xi erreur obghutu t3rfi xno err diriha oxofi console//
 
-      } else {
-        console.error(" Erreur inconnue:", error.message);
-      }
-      alert("Erreur lors de l'enregistrement de la commande.");
+    } catch (error) {
+      console.error(" Erreur Axios:", error.response?.data || error.message);
+      alert(" Erreur lors de l'enregistrement de la commande.");
     }
   };
 
@@ -77,9 +81,9 @@ function PaiementPaypal() {
             onApprove={(data, actions) => {
               return actions.order.capture().then(handleApprove);
             }}
-            onCancel={() => alert(' Paiement annulé')}
+            onCancel={() => alert('Paiement annulé')}
             onError={(err) => {
-              console.error(" Erreur PayPal:", err);
+              console.error("Erreur PayPal:", err);
               alert("Une erreur est survenue avec PayPal.");
             }}
           />

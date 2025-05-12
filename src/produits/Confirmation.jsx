@@ -10,8 +10,11 @@ function Confirmation() {
     const fetchOrders = async () => {
       try {
         const token = localStorage.getItem('token');
-        console.log('🧪 Token:', token);
-        const response = await axios.get('http://localhost:8000/api/orders', {
+        console.log(' Token:', token);
+       
+
+        const response = await axios.get('http://127.0.0.1:8000/api/orders', {
+        
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -20,6 +23,7 @@ function Confirmation() {
         console.log(' Commandes reçues:', response.data);
         setOrders(response.data);
       } catch (error) {
+        
         console.error(' Erreur lors du chargement des commandes:', error);
       } finally {
         setLoading(false);
