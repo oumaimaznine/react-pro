@@ -16,8 +16,8 @@ function CategoryProducts() {
     axios
       .get(`http://127.0.0.1:8000/api/category/${cleanId}/products?page=${currentPage}&sort=${sortBy}`)
       .then((response) => {
-        setProducts(response.data.data); // données paginées
-        setLastPage(response.data.last_page); // nombre total de pages
+        setProducts(response.data.data); 
+        setLastPage(response.data.last_page); 
       })
       .catch((error) => {
         console.error("Erreur lors du chargement:", error);
@@ -36,7 +36,7 @@ function CategoryProducts() {
           value={sortBy}
           onChange={(e) => {
             setSortBy(e.target.value);
-            setCurrentPage(1); // retourner à la page 1 quand on change le tri
+            setCurrentPage(1); 
           }}
         >
           <option value="">Par défaut</option>
@@ -87,7 +87,7 @@ function CategoryProducts() {
   {/* Pages visibles */}
   {[...Array(lastPage)].map((_, i) => {
     const page = i + 1;
-    // نعرض أول 2، آخر 2، و 2 قبل وبعد الصفحة الحالية
+  
     if (
       page === 1 ||
       page === lastPage ||
@@ -104,7 +104,7 @@ function CategoryProducts() {
       );
     }
 
-    // نعرض نقاط فقط مرة وحدة
+   
     if (
       (page === currentPage - 2 && page !== 2) ||
       (page === currentPage + 2 && page !== lastPage - 1)
