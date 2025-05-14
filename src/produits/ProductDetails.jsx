@@ -137,9 +137,6 @@ const ProductDetails = () => {
 )}
 
 
-
-
-
       <RecommendedProducts productId={product.id} />
     </>
   );
