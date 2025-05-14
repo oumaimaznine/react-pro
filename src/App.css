@@ -8,7 +8,7 @@
 }
 
 body {
- /* تطبق الخلفية على كامل الصفحة */
+
 html, body, #root, main {
   background-color: #FDF6ED;
   margin: 0;

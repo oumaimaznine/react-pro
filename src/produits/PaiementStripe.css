@@ -1,0 +1,96 @@
+/* PaiementStripe.css */
+
+.paiement-stripe-container {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 60px 20px;
+    background-color: #fff;
+    min-height: 100vh;
+    font-family: 'Segoe UI', sans-serif;
+  }
+  
+  .payment-form {
+    background: #fff;
+    padding: 30px;
+    max-width: 480px;
+    width: 100%;
+  }
+  
+  .payment-form h2 {
+    font-size: 20px;
+    margin-bottom: 20px;
+    color: #1a1a1a;
+    font-weight: 600;
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 10px;
+  }
+  
+  .payment-form label {
+    font-size: 14px;
+    color: #333;
+    margin-top: 20px;
+    display: block;
+    font-weight: 500;
+  }
+  
+  .card-element-box {
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    background-color: #fafafa;
+    margin-top: 8px;
+  }
+  
+  .payment-form input,
+  .payment-form select {
+    width: 100%;
+    margin-top: 8px;
+    padding: 10px 12px;
+    font-size: 15px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    box-sizing: border-box;
+  }
+  
+  .payment-form button {
+    width: 50%;
+    margin-top: 30px;
+    padding: 14px;
+    background-color: #3BD6F3;
+    color: white;
+    font-size: 16px;
+    font-weight: 600;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+  }
+  
+  .payment-form button:hover {
+    background-color: #A3B18A;
+  }
+  
+  .payment-message {
+    margin-top: 20px;
+    font-weight: 500;
+    color: #141414;
+    text-align: center;
+    background: #A3B18A;
+    padding: 10px;
+    border-radius: 6px;
+    border: 1px solid #b3ffb3;
+  }
+  
+  /* Ajout d’icônes des cartes */
+  .payment-icons {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 20px;
+  }
+  
+  .payment-icons img {
+    height: 30px;
+    object-fit: contain;
+  }
+  

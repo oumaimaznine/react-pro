@@ -1,10 +1,16 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import './LoginPage.css';
+import { useNavigate, useLocation } from 'react-router-dom';
 
 function LoginPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  // ila ja men route protégée kaykon fih redirectAfterLogin
+  const from = location.state?.from?.pathname || '/profil';
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -16,10 +22,20 @@ function LoginPage() {
       });
 
       if (response.data.token && response.data.user) {
+        //  stocker user et token
         localStorage.setItem('token', response.data.token);
         localStorage.setItem('user', JSON.stringify(response.data.user));
         alert('Connexion réussie !');
-        window.location.href = '/profil';
+
+        // vérifier s'il y a une redirection stockée
+        const manualRedirect = localStorage.getItem("redirectAfterLogin");
+        localStorage.removeItem("redirectAfterLogin");
+
+        //  navigation vers page précédente ou /profil
+        navigate(manualRedirect || from, { replace: true });
+
+        // recharger la page pour que Header affiche "Bonjour"
+        window.location.reload();
       } else {
         alert('Email ou mot de passe incorrect.');
       }

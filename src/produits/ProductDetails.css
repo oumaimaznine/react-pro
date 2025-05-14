@@ -215,7 +215,108 @@
   font-weight: 600;
   color: #333;
 }
+/* Popup container */
+.cart-popup-large {
+  position: fixed;
+  top: 76px;
+  right: 30px;
+  width: 290px;
+  height: 300px;
+  background-color: #3F3F3F;
+  color: white;
+  padding: 20px;
+  z-index: 1000;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.2);
+  font-family: 'Segoe UI', sans-serif;
+  animation: slideIn 0.4s ease-in-out;
+}
+
+.popup-title {
+  font-size: 16px;
+  margin-bottom: 12px;
+}
+
+.popup-row {
+  display: flex;
+  align-items: center;
+  margin-bottom: 14px;
+}
+
+.popup-image-large {
+  width: 80px;
+  height: auto;
+  max-height: 100px;
+  object-fit: contain;
+  border-radius: 10px;
+  margin-right: 12px;
+  padding: 4px;
+}
 
 
+.popup-info {
+  flex: 1;
+  font-size: 14px;
+}
 
+.popup-info strong {
+  display: block;
+  font-size: 14px;
+  font-weight: bold;
+  margin-bottom: 4px;
+}
 
+.popup-btn-full {
+  width: 100%;
+ 
+  color: #080808;
+  border: none;
+  padding: 10px;
+  border-radius: 5px;
+  font-weight: bold;
+  cursor: pointer;
+  margin-bottom: 10px;
+}
+
+.popup-btn-secondary {
+  width: 100%;
+ 
+  color: #0d0d0d;
+  border: none;
+  padding: 10px;
+  border-radius: 5px;
+  font-weight: bold;
+  cursor: pointer;
+  margin-bottom: 10px;
+
+}
+
+.popup-link {
+  background: none;
+  border: none;
+  color: white;
+  text-decoration: underline;
+  cursor: pointer;
+  font-size: 13px;
+  text-align: center;
+  display: block;
+}
+
+.close-btn {
+  position: absolute;
+  top: 10px;
+  right: 14px;
+  font-size: 22px;
+  color: white;
+  cursor: pointer;
+}
+
+@keyframes slideIn {
+  from {
+    right: -400px;
+    opacity: 0;
+  }
+  to {
+    right: 30px;
+    opacity: 1;
+  }
+}

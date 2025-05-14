@@ -6,6 +6,7 @@ import { FiEdit } from 'react-icons/fi';
 import { FaHome, FaEnvelope } from 'react-icons/fa';
 import PhoneInput from 'react-phone-input-2';
 import 'react-phone-input-2/lib/style.css';
+import Loader from "../components/Loader";
 
 function ProfilePage() {
   const [profile, setProfile] = useState(null);
@@ -140,13 +141,30 @@ function ProfilePage() {
     }
   };
 
+  const handleDeleteAddress = async () => {
+    if (!window.confirm("Voulez-vous vraiment supprimer cette adresse ?")) return;
+
+    try {
+      const token = localStorage.getItem("token");
+      await axios.delete("http://127.0.0.1:8000/api/address", {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      alert("Adresse supprimée !");
+      setUserAddress(null);
+      setShowUpdateAddressModal(false);
+    } catch (error) {
+      console.error("Erreur suppression adresse:", error);
+      alert("Erreur: " + (error.response?.data?.message || error.message));
+    }
+  };
+
   const handleLogout = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("user");
     navigate("/connexion");
   };
 
-  const renderAddressForm = (handleSubmit, handleClose) => (
+  const renderAddressForm = (handleSubmit, handleClose, showDelete = false) => (
     <>
       <div className="form-row">
         <div className="form-group">
@@ -201,120 +219,130 @@ function ProfilePage() {
           <input type="text" value={ville} onChange={(e) => setVille(e.target.value)} />
         </div>
       </div>
-      <div className="modal-actions">
-        <button className="cancel-btn" onClick={handleClose}>Annuler</button>
-        <button className="save-btn" onClick={handleSubmit}>Enregistrer</button>
-      </div>
+    
+      <div className="modal-actions spaced-between">
+  <div>
+    <button className="delete-btn" onClick={handleDeleteAddress}>Supprimer</button>
+  </div>
+  <div>
+    <button className="cancel-btn" onClick={handleClose}>Annuler</button>
+    <button className="save-btn" onClick={handleSubmit}>Enregistrer</button>
+  </div>
+</div>
+
+
     </>
   );
 
-  if (loading) return <p className="loading">Chargement...</p>;
-
   return (
-    <>
-      <div className="profile-page">
-        <h2>Votre compte</h2>
-        <div className="profile-grid">
-          <div className="profile-card">
-            <h3><FaEnvelope /> INFORMATIONS PERSONNELLES</h3>
-            <div className="profile-info">
-              <strong>{profile.name}</strong>
-              <span>{profile.email}</span>
-            </div>
-            <div className="btn-center">
-              <button className="edit-btn" onClick={() => setShowModal(true)}><FiEdit /> Modifier</button>
-            </div>
-          </div>
-          <div className="profile-card">
-            <h3><FaHome /> ADRESSES</h3>
-            <p className="adresse-label">Adresse par défaut :</p>
-            {userAddress ? (
-              <>
-                <div className="adresse-box">
-                  <p>{userAddress.first_name} {userAddress.last_name}</p>
-                  <p>{userAddress.address}</p>
-                  <p>{userAddress.postal_code} {userAddress.city}</p>
-                  <p>{userAddress.country}</p>
-                  <p>{userAddress.phone}</p>
-                </div>
-                <div className="btn-center">
-                  <button className="edit-btn" onClick={() => {
-                    setPrenom(userAddress.first_name);
-                    setNom(userAddress.last_name);
-                    setAdresse(userAddress.address);
-                    setVille(userAddress.city);
-                    setCodePostal(userAddress.postal_code);
-                    setCountry(userAddress.country);
-                    setRegion(userAddress.region);
-                    setPhone(userAddress.phone);
-                    setShowUpdateAddressModal(true);
-                  }}>
-                    <FiEdit /> Modifier
-                  </button>
-                </div>
-              </>
-            ) : (
-              <>
-                <p className="muted">Vous n'avez pas encore ajouté une adresse.</p>
-                <div className="btn-center">
-                  <button className="edit-btn" onClick={() => setShowAddressModal(true)}><FiEdit /> Ajouter une adresse</button>
-                </div>
-              </>
-            )}
-          </div>
-        </div>
-        <div className="logout-section">
-          <button className="logout-btn" onClick={handleLogout}>Déconnexion</button>
-        </div>
-      </div>
-
-      {/* Modals */}
-      {showModal && (
-        <div className="modal-backdrop">
-          <div className="profile-modal">
-            <h3>Modifier le profil</h3>
-            <div className="form-row">
-              <div className="form-group">
-                <label>Prénom</label>
-                <input type="text" value={firstName} onChange={(e) => setFirstName(e.target.value)} />
+    <div className="profile-container">
+      {loading ? (
+        <Loader />
+      ) : (
+        <div className="profile-page">
+          <h2>Votre compte</h2>
+          <div className="profile-grid">
+            <div className="profile-card">
+              <h3><FaEnvelope /> INFORMATIONS PERSONNELLES</h3>
+              <div className="profile-info">
+                <strong>{profile.name}</strong>
+                <span>{profile.email}</span>
               </div>
-              <div className="form-group">
-                <label>Nom</label>
-                <input type="text" value={lastName} onChange={(e) => setLastName(e.target.value)} />
+              <div className="btn-center">
+                <button className="edit-btn" onClick={() => setShowModal(true)}><FiEdit /> Modifier</button>
               </div>
             </div>
-            <div className="form-group">
-              <label>Email</label>
-              <input type="text" value={profile.email} disabled />
-              <small className="email-note">L'adresse e-mail utilisée pour la connexion ne peut pas être changée</small>
-            </div>
-            <div className="modal-actions">
-              <button className="cancel-btn" onClick={() => setShowModal(false)}>Annuler</button>
-              <button className="save-btn" onClick={handleSave}>Enregistrer</button>
-              <button className="delete-btn">Supprimer</button>
-            </div>
-          </div>
-        </div>
-      )}
 
-      {showAddressModal && (
-        <div className="modal-backdrop">
-          <div className="profile-modal">
-            <h3>Ajouter une adresse</h3>
-            {renderAddressForm(handleAddAddress, () => setShowAddressModal(false))}
+            <div className="profile-card">
+              <h3><FaHome /> ADRESSES</h3>
+              <p className="adresse-label">Adresse par défaut :</p>
+              {userAddress ? (
+                <>
+                  <div className="adresse-box">
+                    <p>{userAddress.first_name} {userAddress.last_name}</p>
+                    <p>{userAddress.address}</p>
+                    <p>{userAddress.postal_code} {userAddress.city}</p>
+                    <p>{userAddress.country}</p>
+                    <p>{userAddress.phone}</p>
+                  </div>
+                  <div className="btn-center">
+                    <button className="edit-btn" onClick={() => {
+                      setPrenom(userAddress.first_name);
+                      setNom(userAddress.last_name);
+                      setAdresse(userAddress.address);
+                      setVille(userAddress.city);
+                      setCodePostal(userAddress.postal_code);
+                      setCountry(userAddress.country);
+                      setRegion(userAddress.region);
+                      setPhone(userAddress.phone);
+                      setShowUpdateAddressModal(true);
+                    }}>
+                      <FiEdit /> Modifier
+                    </button>
+                  </div>
+                </>
+              ) : (
+                <>
+                  <p className="muted">Vous n'avez pas encore ajouté une adresse.</p>
+                  <div className="btn-center">
+                    <button className="edit-btn" onClick={() => setShowAddressModal(true)}><FiEdit /> Ajouter une adresse</button>
+                  </div>
+                </>
+              )}
+            </div>
           </div>
-        </div>
-      )}
 
-      {showUpdateAddressModal && (
-        <div className="modal-backdrop">
-          <div className="profile-modal">
-            <h3>Modifier l’adresse</h3>
-            {renderAddressForm(handleUpdateAddress, () => setShowUpdateAddressModal(false))}
+          <div className="logout-section">
+            <button className="logout-btn" onClick={handleLogout}>Déconnexion</button>
           </div>
+
+          {showModal && (
+            <div className="modal-backdrop">
+              <div className="profile-modal">
+                <h3>Modifier le profil</h3>
+                <div className="form-row">
+                  <div className="form-group">
+                    <label>Prénom</label>
+                    <input type="text" value={firstName} onChange={(e) => setFirstName(e.target.value)} />
+                  </div>
+                  <div className="form-group">
+                    <label>Nom</label>
+                    <input type="text" value={lastName} onChange={(e) => setLastName(e.target.value)} />
+                  </div>
+                </div>
+                <div className="form-group">
+                  <label>Email</label>
+                  <input type="text" value={profile.email} disabled />
+                  <small className="email-note">L'adresse e-mail utilisée pour la connexion ne peut pas être changée</small>
+                </div>
+                <div className="modal-actions">
+                  <button className="cancel-btn" onClick={() => setShowModal(false)}>Annuler</button>
+                  <button className="save-btn" onClick={handleSave}>Enregistrer</button>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {showAddressModal && (
+            <div className="modal-backdrop">
+              <div className="profile-modal">
+                <h3>Ajouter une adresse</h3>
+                {renderAddressForm(handleAddAddress, () => setShowAddressModal(false))}
+              </div>
+            </div>
+          )}
+
+          {showUpdateAddressModal && (
+            <div className="modal-backdrop">
+              <div className="profile-modal">
+                <h3>Modifier l’adresse</h3>
+                {renderAddressForm(handleUpdateAddress, () => setShowUpdateAddressModal(false), true)}
+              </div>
+            </div>
+          )}
         </div>
       )}
-    </>
+    </div>
   );
 }
 

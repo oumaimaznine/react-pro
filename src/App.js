@@ -1,10 +1,9 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-
 import Header from './components/Header';
 import Footer from './components/Footer';
 import HomePage from './Pages/HomePage';
-import CartPage from './Pages/CartPage';
+import CartPage from './produits/CartPage';
 import LoginPage from './Pages/LoginPage';
 import RegisterPage from './Pages/RegisterPage';
 import ProductDetails from './produits/ProductDetails';
@@ -14,12 +13,16 @@ import RecherchePage from './Pages/RecherchePage';
 import OrdersPage from './Pages/OrdersPage';
 import PaiementPaypal from './produits/PaiementPaypal';
 import Confirmation from './produits/Confirmation';
-import PaiementLivraison from './produits/PaiementLivraison'
-import { PayPalScriptProvider } from "@paypal/react-paypal-js";
+import PaiementLivraison from './produits/PaiementLivraison';
 import FacebookCallback from './produits/FacebookCallback';
 import GoogleCallback from './produits/GoogleCallback';
+import PaiementStripe from './produits/PaiementStripe';
 
+import PrivateRoute from './components/PrivateRoute';
+
+import { PayPalScriptProvider } from "@paypal/react-paypal-js";
 import axios from 'axios';
+
 axios.defaults.baseURL = 'http://localhost:8000';
 
 const PAYPAL_CLIENT_ID = process.env.REACT_APP_PAYPAL_CLIENT_ID;
@@ -30,21 +33,24 @@ function App() {
       <Router>
         <Header />
         <Routes>
+          {/* === Routes publiques === */}
           <Route path="/" element={<HomePage />} />
-          <Route path="/panier" element={<CartPage />} />
           <Route path="/connexion" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
           <Route path="/product/:id" element={<ProductDetails />} />
-          <Route path="/category/:id" element={<CategoryProducts />} />
-          <Route path="/profil" element={<ProfilePage />} />
           <Route path="/recherche" element={<RecherchePage />} />
-          <Route path="/orders" element={<OrdersPage />} />
-          <Route path="/PaiementPaypal" element={<PaiementPaypal />} />
-          <Route path="/confirmation" element={<Confirmation />} />
-          <Route path="/PaiementLivraison" element={<PaiementLivraison />} />
           <Route path="/login/facebook/callback" element={<FacebookCallback />} />
           <Route path="/google/callback" element={<GoogleCallback />} />
+          <Route path="/paiement-stripe" element={<PaiementStripe />} />
 
+          {/* === Routes privées === */}
+          <Route path="/panier" element={<PrivateRoute><CartPage /></PrivateRoute>} />
+          <Route path="/profil" element={<PrivateRoute><ProfilePage /></PrivateRoute>} />
+          <Route path="/orders" element={<PrivateRoute><OrdersPage /></PrivateRoute>} />
+          <Route path="/PaiementPaypal" element={<PrivateRoute><PaiementPaypal /></PrivateRoute>} />
+          <Route path="/PaiementLivraison" element={<PrivateRoute><PaiementLivraison /></PrivateRoute>} />
+          <Route path="/confirmation" element={<PrivateRoute><Confirmation /></PrivateRoute>} />
+          <Route path="/category/:id" element={ <PrivateRoute><CategoryProducts /></PrivateRoute>} />
         </Routes>
         <Footer />
       </Router>
