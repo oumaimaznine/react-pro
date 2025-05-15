@@ -4,7 +4,7 @@
 * {
   margin: 0;
   padding: 0;
-  box-sizing: border-box; /* Assurer que le padding et les bordures ne changent pas la taille de l'élément */
+  box-sizing: border-box; 
 }
 
 body {

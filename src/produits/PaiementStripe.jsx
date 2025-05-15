@@ -43,10 +43,20 @@ const CheckoutForm = () => {
     }
 
     try {
-      const res = await axios.post("http://localhost:8000/api/payment/stripe", {
-        amount: Math.round(totalPrice * 100),
-      });
+      const token = localStorage.getItem("token");
 
+      //  Créer PaymentIntent
+      const res = await axios.post(
+        "http://localhost:8000/api/payment/stripe",
+        { amount: Math.round(totalPrice * 100) },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      //  Confirmer le paiement avec Stripe
       const result = await stripe.confirmCardPayment(res.data.clientSecret, {
         payment_method: {
           card: elements.getElement(CardNumberElement),
@@ -54,24 +64,26 @@ const CheckoutForm = () => {
       });
 
       if (result.error) {
-        setMessage("❌ " + result.error.message);
+        setMessage( + result.error.message);
       } else if (result.paymentIntent.status === "succeeded") {
-        setMessage("✅ Paiement réussi !");
+        setMessage(" Paiement réussi !");
 
-        const token = localStorage.getItem("token");
-
-        await axios.post("http://localhost:8000/api/payment/stripe/success", {
-          items: cartItems,
-          total: totalPrice,
-          transaction_id: result.paymentIntent.id,
-        }, {
-          headers: {
-            Authorization: `Bearer ${token}`,
+        //  Enregistrer la commande côté Laravel
+        await axios.post(
+          "http://localhost:8000/api/payment/stripe/success",
+          {
+            items: cartItems,
+            total: totalPrice,
+            transaction_id: result.paymentIntent.id,
           },
-        });
-        
-      
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
 
+        // Nettoyage
         localStorage.removeItem("cartItems");
         setTimeout(() => navigate("/confirmation"), 2000);
       }
