@@ -3,7 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import './ProductDetails.css';
 import RecommendedProducts from './RecommendedProducts';
-
+import ProductReview from '../components/ProductReview';
 
 const ProductDetails = () => {
   const { id } = useParams();
@@ -105,7 +105,10 @@ const ProductDetails = () => {
 
           <div className="button-actions">
             <button className="add-to-cart" onClick={addToCart}>Ajouter au panier</button>
-            <button className="buy-now">Acheter maintenant</button>
+            <button className="buy-now" onClick={() => navigate('/orders')}>
+  Acheter maintenant
+</button>
+
           </div>
 
           <div className="product-description">
@@ -135,10 +138,15 @@ const ProductDetails = () => {
     <button className="popup-link" onClick={() => setShowPopup(false)}>Continuer les achats</button>
   </div>
 )}
+<ProductReview productId={id} />
 
+<RecommendedProducts
+  productId={product.id}
+  title="Articles également consultés"
+/>
 
-      <RecommendedProducts productId={product.id} />
     </>
+   
   );
 };
 

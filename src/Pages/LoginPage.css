@@ -115,3 +115,11 @@
   color: #007bff;
   text-decoration: none;
 }
+.error-message {
+  color: red;
+  padding: 10px;
+  border-radius: 5px;
+  margin-bottom: 15px;
+  text-align: center;
+  font-weight: bold;
+}

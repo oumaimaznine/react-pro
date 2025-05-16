@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import './Header.css';
-
 import { FiUser, FiChevronDown, FiShoppingCart } from 'react-icons/fi';
 import { FaDog, FaCat } from 'react-icons/fa';
 
@@ -87,7 +86,7 @@ const Header = () => {
                     <>
                       <Link to="/profil">Votre compte</Link>
                       <Link to="/confirmation">Vos commandes</Link>
-                      <button onClick={handleLogout} className="logout-button">Se déconnecter</button>
+                      <Link to="#" onClick={handleLogout}>Se déconnecter</Link>
                     </>
                   ) : (
                     <>

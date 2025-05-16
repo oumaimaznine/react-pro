@@ -17,7 +17,6 @@ import PaiementLivraison from './produits/PaiementLivraison';
 import FacebookCallback from './produits/FacebookCallback';
 import GoogleCallback from './produits/GoogleCallback';
 import PaiementStripe from './produits/PaiementStripe';
-
 import PrivateRoute from './components/PrivateRoute';
 
 import { PayPalScriptProvider } from "@paypal/react-paypal-js";
@@ -41,16 +40,18 @@ function App() {
           <Route path="/recherche" element={<RecherchePage />} />
           <Route path="/login/facebook/callback" element={<FacebookCallback />} />
           <Route path="/google/callback" element={<GoogleCallback />} />
-          <Route path="/paiement-stripe" element={<PaiementStripe />} />
+          <Route path="/panier" element={<CartPage />} />
+          <Route path="/category/:id" element={<CategoryProducts />} />
 
           {/* === Routes privées === */}
-          <Route path="/panier" element={<PrivateRoute><CartPage /></PrivateRoute>} />
+          
           <Route path="/profil" element={<PrivateRoute><ProfilePage /></PrivateRoute>} />
           <Route path="/orders" element={<PrivateRoute><OrdersPage /></PrivateRoute>} />
           <Route path="/PaiementPaypal" element={<PrivateRoute><PaiementPaypal /></PrivateRoute>} />
           <Route path="/PaiementLivraison" element={<PrivateRoute><PaiementLivraison /></PrivateRoute>} />
           <Route path="/confirmation" element={<PrivateRoute><Confirmation /></PrivateRoute>} />
           <Route path="/category/:id" element={ <PrivateRoute><CategoryProducts /></PrivateRoute>} />
+          <Route path="/paiement-stripe" element={ <PrivateRoute><PaiementStripe /></PrivateRoute>} />
         </Routes>
         <Footer />
       </Router>

@@ -2,11 +2,12 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Link, useNavigate } from 'react-router-dom';
 import './CartPage.css';
+import RecommendedProducts from './RecommendedProducts';
 
 function CartPage() {
   const [cartItems, setCartItems] = useState([]);
   const navigate = useNavigate();
-
+  const firstProductId = cartItems.length > 0 ? cartItems[0].product.id : null;
   useEffect(() => {
     const fetchCart = async () => {
       try {
@@ -82,7 +83,7 @@ function CartPage() {
         <p>Parcourez nos catégories et découvrez nos meilleures offres !</p>
         <button
           className="start-shopping-btn"
-          onClick={() => navigate('/produits')}
+          onClick={() => navigate('/')}
         >
           Commencez vos achats
         </button>
@@ -148,6 +149,15 @@ function CartPage() {
           <button className="checkout-button">Commander</button>
         </Link>
       </div>
+        {/*  Bloc des recommandations produits */}
+        {firstProductId && (
+  <RecommendedProducts
+  productId={firstProductId}
+  cartItems={cartItems}
+  title="Vous pourriez le remplir avec"
+/>
+
+      )}
     </div>
   );
 }

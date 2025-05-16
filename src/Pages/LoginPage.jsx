@@ -6,14 +6,15 @@ import { useNavigate, useLocation } from 'react-router-dom';
 function LoginPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
   const navigate = useNavigate();
   const location = useLocation();
 
-  // ila ja men route protégée kaykon fih redirectAfterLogin
   const from = location.state?.from?.pathname || '/profil';
 
   const handleLogin = async (e) => {
     e.preventDefault();
+    setError('');
 
     try {
       const response = await axios.post('http://127.0.0.1:8000/api/login', {
@@ -22,26 +23,20 @@ function LoginPage() {
       });
 
       if (response.data.token && response.data.user) {
-        //  stocker user et token
         localStorage.setItem('token', response.data.token);
         localStorage.setItem('user', JSON.stringify(response.data.user));
-        alert('Connexion réussie !');
 
-        // vérifier s'il y a une redirection stockée
         const manualRedirect = localStorage.getItem("redirectAfterLogin");
         localStorage.removeItem("redirectAfterLogin");
 
-        //  navigation vers page précédente ou /profil
         navigate(manualRedirect || from, { replace: true });
-
-        // recharger la page pour que Header affiche "Bonjour"
         window.location.reload();
       } else {
-        alert('Email ou mot de passe incorrect.');
+        setError('Email ou mot de passe incorrect.');
       }
     } catch (error) {
       console.error('Erreur login:', error);
-      alert('Erreur de connexion. Vérifiez vos infos.');
+      setError('Erreur de connexion. Vérifiez vos informations.');
     }
   };
 
@@ -57,6 +52,8 @@ function LoginPage() {
     <div className="login-page">
       <form className="login-form" onSubmit={handleLogin}>
         <h2>Connexion / S’inscrire</h2>
+
+        {error && <p className="error-message">{error}</p>}
 
         <input
           type="email"
@@ -101,12 +98,6 @@ function LoginPage() {
             Continuer avec Google
           </button>
         </div>
-
-        <p className="terms-text">
-          En continuant, vous acceptez notre{' '}
-          <a href="#">Politique de confidentialité</a> &{' '}
-          <a href="#">Conditions Générales</a>.
-        </p>
 
         <p className="register-link">
           Vous n’avez pas de compte ?{' '}

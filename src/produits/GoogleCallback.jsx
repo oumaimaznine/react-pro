@@ -12,14 +12,13 @@ function GoogleCallback() {
     if (token && user) {
       try {
         localStorage.setItem('token', token);
-        localStorage.setItem('user', user);
-        navigate('/profil'); // redirection vers la page profil ou accueil
+        localStorage.setItem('user', decodeURIComponent(user)); // important
+        navigate('/profil');
       } catch (e) {
         console.error("Erreur lors du stockage des données Google:", e);
-        alert("Erreur lors de la connexion avec Google.");
       }
     } else {
-      alert("Échec de connexion Google.");
+      console.warn("Aucun token ou user trouvé dans l'URL.");
     }
   }, []);
 

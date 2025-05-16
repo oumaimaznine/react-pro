@@ -1,0 +1,216 @@
+/* Conteneur général */
+.review-container {
+    background-color: #fff;
+    padding: 20px;
+    max-width: 600px;
+    margin-left: 0;
+    margin-right: auto;
+    
+  }
+  
+  .review-header-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+  }
+  
+  .review-title {
+    font-size: 20px;
+    font-weight: bold;
+    color: #333;
+    cursor: pointer;
+  }
+  
+  /*  Bouton */
+  .open-review-btn {
+    background-color: white;
+    border: 1px solid #080808;
+    padding: 10px 18px;
+    border-radius: 4px;
+    font-weight: bold;
+    cursor: pointer;
+  }
+  
+  .open-review-btn:hover {
+    background-color: #A3B18A;
+  }
+  
+  /*  Modal */
+  .modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.6);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+  }
+  
+  .modal-content {
+    background: #fff;
+    padding: 25px;
+    width: 100%;
+    max-width: 500px;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+  }
+  
+  /*  Formulaire */
+  .review-form label {
+    display: block;
+    margin-top: 12px;
+    font-weight: bold;
+    color: #333;
+  }
+  
+  .review-form select,
+  .review-form textarea {
+    width: 100%;
+    padding: 12px;
+    margin-top: 6px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 14px;
+    box-sizing: border-box;
+    min-height: 50px;
+  }
+  
+  .review-form textarea {
+    min-height: 100px;
+  }
+  
+  /*  Boutons dans modal */
+  .modal-button-group {
+    display: flex;
+    gap: 15px;
+    margin-top: 20px;
+  }
+  
+
+    .modal-button-group button {
+        width: 120px; 
+        padding: 10px;
+        font-weight: bold;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+      
+        
+      }
+      
+  
+  .modal-button-group button:first-child {
+    background-color: #A3B18A;
+    color: white;
+  }
+  
+  .modal-button-group button:first-child:hover {
+    background-color:  #3BD6F3;
+  }
+  
+  .modal-button-group button:last-child {
+    background-color: #3BD6F3;
+    color: white;
+  }
+  
+  .modal-button-group button:last-child:hover {
+    background-color: #A3B18A;
+  }
+  
+  /*  Avis utilisateur */
+  .review-card {
+    background-color: #f8f8f8;
+    border-radius: 10px;
+    padding: 16px;
+    margin-bottom: 15px;
+  }
+  
+  .review-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+  }
+  
+  .avatar-circle {
+    background-color: #7c4dff;
+    color: white;
+    font-weight: bold;
+    font-size: 16px;
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    text-align: center;
+    line-height: 38px;
+    margin-right: 10px;
+  }
+  
+  .review-meta {
+    flex: 1;
+  }
+  
+  .review-name-line {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
+    color: #444;
+    flex-wrap: wrap;
+  }
+  
+  .review-comment {
+    margin-top: 10px;
+    color: #444;
+    font-size: 15px;
+    line-height: 1.5;
+  }
+  
+  .star-rating {
+    font-size: 18px;
+    color: #ffc107;
+    margin-top: 4px;
+  }
+  /* Animation: fade + scale */
+@keyframes modalFadeIn {
+    from {
+      opacity: 0;
+      transform: scale(0.9);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+  
+  
+  .modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.6);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    animation: modalFadeIn 0.3s ease-in-out; 
+  }
+  
+  /*  Contenu du modal avec animation */
+  .modal-content {
+    background: #fff;
+    padding: 25px;
+    width: 100%;
+    max-width: 500px;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+    animation: modalFadeIn 0.4s ease-in-out; 
+  }
+  
+
+  

@@ -10,12 +10,16 @@ function FacebookCallback() {
     const user = params.get('user');
 
     if (token && user) {
-      localStorage.setItem('token', token);
-      localStorage.setItem('user', user);
-      navigate('/profil');
+      try {
+        localStorage.setItem('token', token);
+        localStorage.setItem('user', decodeURIComponent(user)); // important
+        navigate('/profil');
+      } catch (e) {
+        console.error("Erreur lors du stockage des données Facebook:", e);
+      }
     } else {
-      alert("Erreur de connexion via Facebook");
-      navigate('/login');
+      console.warn("Token ou user manquant dans l'URL (Facebook).");
+      navigate('/connexion');
     }
   }, [navigate]);
 
