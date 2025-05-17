@@ -1,9 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import './Header.css';
 import { FiUser, FiChevronDown, FiShoppingCart } from 'react-icons/fi';
-import { FaDog, FaCat } from 'react-icons/fa';
+import { FaDog, FaCat, FaTags } from 'react-icons/fa';
+import { FaHome } from 'react-icons/fa';
+
 
 const Header = () => {
   const [hoveredMenu, setHoveredMenu] = useState(null);
@@ -11,6 +13,7 @@ const Header = () => {
   const [user, setUser] = useState(null);
   const [searchTerm, setSearchTerm] = useState('');
   const navigate = useNavigate();
+  const searchRef = useRef();
 
   useEffect(() => {
     axios.get('http://127.0.0.1:8000/api/categories')
@@ -21,7 +24,16 @@ const Header = () => {
     if (storedUser) {
       setUser(JSON.parse(storedUser));
     }
-  }, []);
+
+    const handleClickOutside = (event) => {
+      if (searchRef.current && !searchRef.current.contains(event.target)) {
+        if (hoveredMenu === 'search') setHoveredMenu(null);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, [hoveredMenu]);
 
   const handleLogout = () => {
     const token = localStorage.getItem('token');
@@ -47,57 +59,20 @@ const Header = () => {
     <header className="header-container">
       <div className="header-inner">
 
+        {/* LOGO */}
         <Link to="/">
           <img src="/images/logo.png" alt="Logo d'entreprise" className="header-logo" />
         </Link>
 
-        <div className="header-search-bar">
-          <input
-            type="text"
-            id="recherche"
-            placeholder="Chercher ce que vous voulez"
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
-          />
-          <button type="button" onClick={handleSearch}>
-            <i className="fa fa-search"></i> Recherche
-          </button>
-        </div>
-
+        {/* MENU CENTRE */}
         <nav className="header-nav">
           <ul>
-            <li><Link to="/" className="nav-item">Accueil</Link></li>
+          <li>
+  <Link to="/" className="nav-item">
+    <FaHome className="header-icon" /> Accueil
+  </Link>
+</li>
 
-            {/* UTILISATEUR */}
-            <li className="dropdown">
-              <span
-                onClick={() => setHoveredMenu(hoveredMenu === 'user' ? null : 'user')}
-                className="nav-item"
-              >
-                <FiUser className="header-icon" />
-                {user ? `Bonjour, ${user.name}` : 'Se connecter'}
-                <FiChevronDown className="header-icon" />
-              </span>
-
-              {hoveredMenu === 'user' && (
-                <div className="submenu">
-                  {user ? (
-                    <>
-                      <Link to="/profil">Votre compte</Link>
-                      <Link to="/confirmation">Vos commandes</Link>
-                      <Link to="#" onClick={handleLogout}>Se déconnecter</Link>
-                    </>
-                  ) : (
-                    <>
-                      <Link to="/connexion" className="main-connect-btn">Se connecter</Link>
-                      <Link to="/profil">Votre compte</Link>
-                      <Link to="/commandes">Vos commandes</Link>
-                    </>
-                  )}
-                </div>
-              )}
-            </li>
 
             {/* CHIENS */}
             <li
@@ -131,6 +106,62 @@ const Header = () => {
                   {chatsCategories.map(cat => (
                     <Link key={cat.id} to={`/category/${cat.id}`}>{cat.name}</Link>
                   ))}
+                </div>
+              )}
+            </li>
+
+            {/* PROMO  */}
+            <li>
+              <Link to="/promo" className="nav-item">
+                <FaTags className="header-icon" /> Promo
+              </Link>
+            </li>
+          </ul>
+        </nav>
+
+        {/*  BARRE DE RECHERCHE */}
+        <div className="header-search-bar">
+          <input
+            type="text"
+            id="recherche"
+            placeholder="Chercher ce que vous voulez"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
+          />
+          <button type="button" onClick={handleSearch}>
+            <i className="fa fa-search"></i> Recherche
+          </button>
+        </div>
+
+        {/* UTILISATEUR + PANIER */}
+        <nav className="header-nav">
+          <ul>
+            {/* UTILISATEUR */}
+            <li className="dropdown">
+              <span
+                onClick={() => setHoveredMenu(hoveredMenu === 'user' ? null : 'user')}
+                className="nav-item"
+              >
+                <FiUser className="header-icon" />
+                {user ? `Bonjour, ${user.name}` : 'Se connecter'}
+                <FiChevronDown className="header-icon" />
+              </span>
+              {hoveredMenu === 'user' && (
+                <div className="submenu">
+                  {user ? (
+                    <>
+                      <Link to="/profil">Votre compte</Link>
+                      <Link to="/confirmation">Vos commandes</Link>
+                      <Link to="#" onClick={handleLogout}>Se déconnecter</Link>
+                    </>
+                  ) : (
+                    <>
+                      <Link to="/connexion" className="main-connect-btn">Se connecter</Link>
+                      <Link to="/profil">Votre compte</Link>
+                      <Link to="/commandes">Vos commandes</Link>
+                    </>
+                  )}
                 </div>
               )}
             </li>

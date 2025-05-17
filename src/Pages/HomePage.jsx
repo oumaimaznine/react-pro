@@ -166,36 +166,48 @@ const HomePage = () => {
       <section className="product-section">
         <h2 className="section-title"> Nouvel arrivage</h2>
 
-        {/* Grille de produits dynamiquement générée */}
         <div className="products-grid">
-          {products.length > 0 ? (
-            products.map((product) => (
-              <Link
-                key={product.id}
-                to={`/product/${product.id}`}
-                className="product-card"
-              >
-                {/* Image du produit */}
-                <img
-                  src={`http://127.0.0.1:8000/${product.images?.[0]?.url}`}
-                  alt={product.name}
-                  className="product-image"
-                />
+  {products.length > 0 ? (
+    products.map((product) => (
+      <Link
+        key={product.id}
+        to={`/product/${product.id}`}
+        className="product-card"
+      >
+        {/* Label Promotion si promo */}
+        {product.is_promo === 1 && (
+          <span className="promo-label">Promotion</span>
+        )}
 
-                {/* Nom du produit */}
-                <h3 className="product-titlee">{product.name}</h3>
+        {/* Image du produit */}
+        {product.images?.[0]?.url && (
+          <img
+            src={`http://127.0.0.1:8000/${product.images[0].url}`}
+            alt={product.name}
+            className="product-image"
+          />
+        )}
+        {/* Nom du produit */}
+        <h3 className="product-titlee">{product.name}</h3>
 
-                {/* Prix affiché formaté */}
-                <p className="product-price">
-                  À partir de <strong>{parseFloat(product.price).toFixed(2)} Dhs</strong>
-                </p>
-              </Link>
-            ))
-          ) : (
-            // Message si aucun produit n’est trouvé
-            <p>Aucun produit trouvé.</p>
+        {/*  Prix avec old_price si promo */}
+        <div className="price">
+          {product.is_promo === 1 && product.old_price && (
+            <span className="old-price">
+              {parseFloat(product.old_price).toFixed(2)} Dhs
+            </span>
           )}
+          <span className="new-price">
+            {parseFloat(product.price).toFixed(2)} Dhs
+          </span>
         </div>
+      </Link>
+    ))
+  ) : (
+    <p>Aucun produit trouvé.</p>
+  )}
+</div>
+
       </section>
     </main>
   );

@@ -138,3 +138,33 @@
   color: #3f3c3d;
   
 }
+
+.promo-label {
+  background-color: #8bc34a;
+  color: white;
+  font-size: 12px;
+  padding: 4px 10px;
+  border-radius: 20px;
+  display: inline-block;
+  margin-bottom: 5px;
+}
+
+.price {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 5px;
+}
+
+.old-price {
+  text-decoration: line-through;
+  color: #888;
+  font-size: 14px;
+}
+
+.new-price {
+  font-weight: bold;
+  color: #000;
+  font-size: 15px;
+}
+

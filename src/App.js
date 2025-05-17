@@ -18,6 +18,9 @@ import FacebookCallback from './produits/FacebookCallback';
 import GoogleCallback from './produits/GoogleCallback';
 import PaiementStripe from './produits/PaiementStripe';
 import PrivateRoute from './components/PrivateRoute';
+import PromoPage from './Pages/PromoPage';
+import VerifyEmailPage from './produits/VerifyEmailPage';
+
 
 import { PayPalScriptProvider } from "@paypal/react-paypal-js";
 import axios from 'axios';
@@ -42,6 +45,8 @@ function App() {
           <Route path="/google/callback" element={<GoogleCallback />} />
           <Route path="/panier" element={<CartPage />} />
           <Route path="/category/:id" element={<CategoryProducts />} />
+          <Route path="/verify-email" element={<VerifyEmailPage />} />
+         <Route path="/promo" element={<PromoPage />} />
 
           {/* === Routes privées === */}
           
