@@ -1,21 +1,21 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom'; 
 import './RegisterPage.css';
 
 function RegisterPage() {
+  const navigate = useNavigate();
+
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
-  const [errors, setErrors] = useState({}); // pour afficher les erreurs Laravel
 
   const handleRegister = async (e) => {
     e.preventDefault();
 
-    setErrors({}); // vider les erreurs avant une nouvelle tentative
-
     if (password !== confirmPassword) {
-      setErrors({ password_confirmation: ["Les mots de passe ne correspondent pas."] });
+      alert('Les mots de passe ne correspondent pas.');
       return;
     }
 
@@ -27,16 +27,16 @@ function RegisterPage() {
         password_confirmation: confirmPassword,
       });
 
-      localStorage.setItem('token', response.data.token);
+  
       localStorage.setItem('user', JSON.stringify(response.data.user));
+      localStorage.setItem('emailToVerify', email); 
+      alert('Compte créé avec succès ! Vérifiez votre email.');
+       navigate('/verify-email');
 
-      window.location.href = '/ProfilePage';
+
     } catch (error) {
-      if (error.response && error.response.data) {
-        setErrors(error.response.data); // Laravel errors
-      } else {
-        setErrors({ general: ["Erreur lors de la création du compte."] });
-      }
+      console.error('Erreur de création:', error.response?.data || error.message);
+      alert('Erreur lors de la création du compte.');
     }
   };
 
@@ -45,8 +45,6 @@ function RegisterPage() {
       <form className="register-form" onSubmit={handleRegister}>
         <h2>Créer un compte</h2>
 
-        {errors.general && <p className="error">{errors.general[0]}</p>}
-
         <input
           type="text"
           placeholder="Nom complet"
@@ -54,7 +52,6 @@ function RegisterPage() {
           onChange={(e) => setName(e.target.value)}
           required
         />
-        {errors.name && <p className="error">{errors.name[0]}</p>}
 
         <input
           type="email"
@@ -63,7 +60,6 @@ function RegisterPage() {
           onChange={(e) => setEmail(e.target.value)}
           required
         />
-        {errors.email && <p className="error">{errors.email[0]}</p>}
 
         <input
           type="password"
@@ -72,7 +68,6 @@ function RegisterPage() {
           onChange={(e) => setPassword(e.target.value)}
           required
         />
-        {errors.password && <p className="error">{errors.password[0]}</p>}
 
         <input
           type="password"
@@ -81,7 +76,6 @@ function RegisterPage() {
           onChange={(e) => setConfirmPassword(e.target.value)}
           required
         />
-        {errors.password_confirmation && <p className="error">{errors.password_confirmation[0]}</p>}
 
         <button type="submit" className="green-btn">Créer</button>
       </form>

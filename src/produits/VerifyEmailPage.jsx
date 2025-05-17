@@ -1,58 +1,63 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import './VerifyEmailPage.css';
+import { useNavigate } from 'react-router-dom';
 
 function VerifyEmailPage() {
-  const [email, setEmail] = useState('');
+  const email = localStorage.getItem('emailToVerify');
   const [code, setCode] = useState('');
   const [message, setMessage] = useState('');
   const [success, setSuccess] = useState(false);
+  const navigate = useNavigate();
 
-  const handleVerify = async () => {
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
     try {
-      const response = await axios.post('http://localhost:8000/api/verify-email', {
+        await axios.post('http://127.0.0.1:8000/api/verify-email', {
         email,
-        code
+        code,
       });
 
-      setMessage(response.data.message);
       setSuccess(true);
+      setMessage('Email vérifié avec succès.');
+      localStorage.removeItem('emailToVerify');
+
+      setTimeout(() => {
+        navigate('/');
+      }, 2000); 
     } catch (error) {
       setSuccess(false);
-      if (error.response && error.response.data.error) {
-        setMessage(error.response.data.error);
-      } else {
-        setMessage("Erreur lors de la vérification");
-      }
+      setMessage(' Code invalide ou expiré.');
     }
   };
 
   return (
-    <div className="verification-container" style={{ padding: 20, maxWidth: 400, margin: '0 auto' }}>
-      <h2>Vérification de l'adresse email</h2>
+    <div className="verify-wrapper">
+      <div className="verify-card">
+        <h1 className="title">NOURRITURE DES FIDÈLES</h1>
+        <h3>Saisir le code</h3>
+        <p>Envoyé à <strong>{email}</strong></p>
 
-      <label>Email :</label>
-      <input
-        type="email"
-        placeholder="Entrez votre email"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-        style={{ width: '100%', marginBottom: 10 }}
-      />
+        <form onSubmit={handleSubmit}>
+          <input
+            type="text"
+            value={code}
+            onChange={(e) => setCode(e.target.value)}
+            required
+            className="code-input"
+          />
+          <button type="submit" className="submit-btn">Soumettre</button>
+        </form>
 
-      <label>Code de vérification :</label>
-      <input
-        type="text"
-        placeholder="Code reçu par email"
-        value={code}
-        onChange={(e) => setCode(e.target.value)}
-        style={{ width: '100%', marginBottom: 10 }}
-      />
+        {message && (
+          <div className={`verify-message ${success ? 'success' : 'error'}`}>
+            {message}
+          </div>
+        )}
 
-      <button onClick={handleVerify} style={{ width: '100%' }}>
-        Vérifier
-      </button>
-
-      <p style={{ marginTop: 10, color: success ? 'green' : 'red' }}>{message}</p>
+        <p className="alt-email">Se connecter avec une autre adresse e-mail</p>
+      </div>
     </div>
   );
 }
