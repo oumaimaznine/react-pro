@@ -1,65 +1,71 @@
-import React, { useState } from 'react';
-import axios from 'axios';
-import './VerifyEmailPage.css';
-import { useNavigate } from 'react-router-dom';
+import React, { useEffect, useState } from "react";
+import { useParams, useNavigate } from "react-router-dom";
+import axios from "axios";
 
-function VerifyEmailPage() {
-  const email = localStorage.getItem('emailToVerify');
-  const [code, setCode] = useState('');
-  const [message, setMessage] = useState('');
-  const [success, setSuccess] = useState(false);
+function VerifyEmail() {
+  const { id, hash } = useParams();
   const navigate = useNavigate();
+  const [message, setMessage] = useState("Vérification en cours...");
+  const [status, setStatus] = useState("loading");
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  useEffect(() => {
+    const verifyEmail = async () => {
+      try {
+        const response = await axios.get(
+          `${process.env.REACT_APP_API_URL}/api/verify-email/${id}/${hash}`
+        );
+        setMessage(response.data.message);
+        setStatus("success");
 
-    try {
-        await axios.post('http://127.0.0.1:8000/api/verify-email', {
-        email,
-        code,
-      });
+        setTimeout(() => {
+          navigate("/");
+        }, 9000);
+      } catch (error) {
+        setMessage("Erreur lors de la vérification.");
+        setStatus("error");
+      }
+    };
 
-      setSuccess(true);
-      setMessage('Email vérifié avec succès.');
-      localStorage.removeItem('emailToVerify');
-
-      setTimeout(() => {
-        navigate('/');
-      }, 2000); 
-    } catch (error) {
-      setSuccess(false);
-      setMessage(' Code invalide ou expiré.');
-    }
-  };
+    verifyEmail();
+  }, [id, hash, navigate]);
 
   return (
-    <div className="verify-wrapper">
-      <div className="verify-card">
-        <h1 className="title">NOURRITURE DES FIDÈLES</h1>
-        <h3>Saisir le code</h3>
-        <p>Envoyé à <strong>{email}</strong></p>
-
-        <form onSubmit={handleSubmit}>
-          <input
-            type="text"
-            value={code}
-            onChange={(e) => setCode(e.target.value)}
-            required
-            className="code-input"
-          />
-          <button type="submit" className="submit-btn">Soumettre</button>
-        </form>
-
-        {message && (
-          <div className={`verify-message ${success ? 'success' : 'error'}`}>
-            {message}
-          </div>
-        )}
-
-        <p className="alt-email">Se connecter avec une autre adresse e-mail</p>
+    <div className="phrase">
+      <div className="text-center">
+        <h2 className="text">
+          {status === "success" ? "Email vérifié" : "Vérification"}
+        </h2>
+        <p>{message}</p>
       </div>
+
+      {/* Style CSS */}
+      <style>{`
+        .phrase {
+       display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+
+        .text-center {
+          background: white;
+          padding: 30px;
+          text-align: center;
+        }
+
+        .text {
+          font-size: 24px;
+          font-weight: bold;
+          margin-bottom: 10px;
+          color:#A3B18A; 
+        }
+
+        p {
+          font-size: 18px;
+          color: #555;
+        }
+      `}</style>
     </div>
   );
 }
 
-export default VerifyEmailPage;
+export default VerifyEmail;

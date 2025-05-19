@@ -3,9 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import './Header.css';
 import { FiUser, FiChevronDown, FiShoppingCart } from 'react-icons/fi';
-import { FaDog, FaCat, FaTags } from 'react-icons/fa';
-import { FaHome } from 'react-icons/fa';
-
+import { FaDog, FaCat, FaTags, FaHome } from 'react-icons/fa';
 
 const Header = () => {
   const [hoveredMenu, setHoveredMenu] = useState(null);
@@ -16,15 +14,23 @@ const Header = () => {
   const searchRef = useRef();
 
   useEffect(() => {
+    // 🔽 Récupération des catégories
     axios.get('http://127.0.0.1:8000/api/categories')
       .then(response => setCategories(response.data))
       .catch(error => console.error('Erreur lors du chargement des catégories:', error));
 
+    // 🔽 Lecture sécurisée de l'utilisateur dans localStorage
     const storedUser = localStorage.getItem('user');
-    if (storedUser) {
-      setUser(JSON.parse(storedUser));
+    try {
+      if (storedUser) {
+        setUser(JSON.parse(storedUser));
+      }
+    } catch (error) {
+      console.error("Erreur JSON.parse sur user:", error);
+      localStorage.removeItem('user');
     }
 
+    // 🔽 Gestion du clic extérieur
     const handleClickOutside = (event) => {
       if (searchRef.current && !searchRef.current.contains(event.target)) {
         if (hoveredMenu === 'search') setHoveredMenu(null);
@@ -67,19 +73,14 @@ const Header = () => {
         {/* MENU CENTRE */}
         <nav className="header-nav">
           <ul>
-          <li>
-  <Link to="/" className="nav-item">
-    <FaHome className="header-icon" /> Accueil
-  </Link>
-</li>
-
+            <li>
+              <Link to="/" className="nav-item">
+                <FaHome className="header-icon" /> Accueil
+              </Link>
+            </li>
 
             {/* CHIENS */}
-            <li
-              onMouseEnter={() => setHoveredMenu('chiens')}
-              onMouseLeave={() => setHoveredMenu(null)}
-              className="dropdown"
-            >
+            <li onMouseEnter={() => setHoveredMenu('chiens')} onMouseLeave={() => setHoveredMenu(null)} className="dropdown">
               <span className="nav-item">
                 <FaDog className="header-icon" /> Chiens <FiChevronDown className="header-icon" />
               </span>
@@ -93,11 +94,7 @@ const Header = () => {
             </li>
 
             {/* CHATS */}
-            <li
-              onMouseEnter={() => setHoveredMenu('chats')}
-              onMouseLeave={() => setHoveredMenu(null)}
-              className="dropdown"
-            >
+            <li onMouseEnter={() => setHoveredMenu('chats')} onMouseLeave={() => setHoveredMenu(null)} className="dropdown">
               <span className="nav-item">
                 <FaCat className="header-icon" /> Chats <FiChevronDown className="header-icon" />
               </span>
@@ -110,7 +107,7 @@ const Header = () => {
               )}
             </li>
 
-            {/* PROMO  */}
+            {/* PROMO */}
             <li>
               <Link to="/promo" className="nav-item">
                 <FaTags className="header-icon" /> Promo
@@ -119,8 +116,8 @@ const Header = () => {
           </ul>
         </nav>
 
-        {/*  BARRE DE RECHERCHE */}
-        <div className="header-search-bar">
+        {/* BARRE DE RECHERCHE */}
+        <div className="header-search-bar" ref={searchRef}>
           <input
             type="text"
             id="recherche"
@@ -139,10 +136,7 @@ const Header = () => {
           <ul>
             {/* UTILISATEUR */}
             <li className="dropdown">
-              <span
-                onClick={() => setHoveredMenu(hoveredMenu === 'user' ? null : 'user')}
-                className="nav-item"
-              >
+              <span onClick={() => setHoveredMenu(hoveredMenu === 'user' ? null : 'user')} className="nav-item">
                 <FiUser className="header-icon" />
                 {user ? `Bonjour, ${user.name}` : 'Se connecter'}
                 <FiChevronDown className="header-icon" />

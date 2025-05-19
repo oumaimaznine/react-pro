@@ -8,6 +8,7 @@
     "@stripe/stripe-js": "^7.3.0",
     "axios": "^1.8.4",
     "classnames": "^2.5.1",
+    "js-sha1": "^0.7.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-icons": "^5.5.0",

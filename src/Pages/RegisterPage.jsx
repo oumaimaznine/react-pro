@@ -31,7 +31,8 @@ function RegisterPage() {
       localStorage.setItem('user', JSON.stringify(response.data.user));
       localStorage.setItem('emailToVerify', email); 
       alert('Compte créé avec succès ! Vérifiez votre email.');
-       navigate('/verify-email');
+      navigate('/verify-email-pending');
+
 
 
     } catch (error) {
