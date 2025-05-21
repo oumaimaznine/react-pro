@@ -2,35 +2,29 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import './Header.css';
-import { FiUser, FiChevronDown, FiShoppingCart } from 'react-icons/fi';
-import { FaDog, FaCat, FaTags, FaHome } from 'react-icons/fa';
+import { FiUser, FiChevronDown, FiShoppingCart, FiMenu, FiX, FiSearch } from 'react-icons/fi';
+import { FaDog, FaCat, FaTags } from 'react-icons/fa';
 
 const Header = () => {
   const [hoveredMenu, setHoveredMenu] = useState(null);
   const [categories, setCategories] = useState([]);
   const [user, setUser] = useState(null);
   const [searchTerm, setSearchTerm] = useState('');
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [showMobileSearch, setShowMobileSearch] = useState(false);
   const navigate = useNavigate();
   const searchRef = useRef();
 
   useEffect(() => {
-    // 🔽 Récupération des catégories
     axios.get('http://127.0.0.1:8000/api/categories')
       .then(response => setCategories(response.data))
       .catch(error => console.error('Erreur lors du chargement des catégories:', error));
 
-    // 🔽 Lecture sécurisée de l'utilisateur dans localStorage
     const storedUser = localStorage.getItem('user');
-    try {
-      if (storedUser) {
-        setUser(JSON.parse(storedUser));
-      }
-    } catch (error) {
-      console.error("Erreur JSON.parse sur user:", error);
-      localStorage.removeItem('user');
+    if (storedUser) {
+      setUser(JSON.parse(storedUser));
     }
 
-    // 🔽 Gestion du clic extérieur
     const handleClickOutside = (event) => {
       if (searchRef.current && !searchRef.current.contains(event.target)) {
         if (hoveredMenu === 'search') setHoveredMenu(null);
@@ -56,121 +50,222 @@ const Header = () => {
   const handleSearch = () => {
     if (!searchTerm.trim()) return;
     navigate(`/recherche?query=${encodeURIComponent(searchTerm)}`);
+    setShowMobileSearch(false);
   };
 
   const chiensCategories = categories.filter(cat => cat.parent_category_id === 1);
   const chatsCategories = categories.filter(cat => cat.parent_category_id === 2);
 
   return (
-    <header className="header-container">
-      <div className="header-inner">
+    <>
+      {/*MOBILE HEADER */}
+      <header className="header-container">
+        <div className="header-inner mobile-header">
+          <div className="mobile-menu-toggle">
+            {isMobileMenuOpen ? (
+              <FiX className="burger-icon" onClick={() => setIsMobileMenuOpen(false)} />
+            ) : (
+              <FiMenu className="burger-icon" onClick={() => setIsMobileMenuOpen(true)} />
+            )}
+          </div>
 
-        {/* LOGO */}
-        <Link to="/">
-          <img src="/images/logo.png" alt="Logo d'entreprise" className="header-logo" />
-        </Link>
+          <Link to="/" className="mobile-logo">
+            <img src="/images/logo.png" alt="Logo" className="header-logo" />
+          </Link>
 
-        {/* MENU CENTRE */}
-        <nav className="header-nav">
-          <ul>
-            <li>
-              <Link to="/" className="nav-item">
-                <FaHome className="header-icon" /> Accueil
-              </Link>
-            </li>
+          <div className="mobile-icons">
+            <button onClick={() => setShowMobileSearch(true)} className="mobile-search-icon">
+              <FiSearch className="header-icon" />
+            </button>
+            <Link to="/panier">
+              <FiShoppingCart className="header-icon" />
+            </Link>
+          </div>
+        </div>
+        {showMobileSearch && (
+  <div className="mobile-search-overlay">
+    <form onSubmit={(e) => { e.preventDefault(); handleSearch(); }}>
+      <input
+        type="text"
+        placeholder="Chercher..."
+        value={searchTerm}
+        onChange={(e) => setSearchTerm(e.target.value)}
+        autoFocus
+      />
+      <button type="submit">
+        <FiSearch />
+      </button>
+      <button type="button" onClick={() => setShowMobileSearch(false)} className="close-search">
+        <FiX />
+      </button>
+    </form>
+  </div>
+)}
 
-            {/* CHIENS */}
-            <li onMouseEnter={() => setHoveredMenu('chiens')} onMouseLeave={() => setHoveredMenu(null)} className="dropdown">
-              <span className="nav-item">
+
+        {/* DESKTOP HEADER  */}
+        <div className="desktop-header">
+          <div className="header-inner">
+            <Link to="/">
+              <img src="/images/logo.png" alt="Logo d'entreprise" className="header-logo" />
+            </Link>
+
+            <nav className="header-nav">
+              <ul>
+                <li><Link to="/" className="nav-item">Accueil</Link></li>
+
+                <li
+                  onMouseEnter={() => setHoveredMenu('chiens')}
+                  onMouseLeave={() => setHoveredMenu(null)}
+                  className="dropdown"
+                >
+                  <span className="nav-item">
+                    <FaDog className="header-icon" /> Chiens <FiChevronDown className="header-icon" />
+                  </span>
+                  {hoveredMenu === 'chiens' && (
+                    <div className="submenu">
+                      {chiensCategories.map(cat => (
+                        <Link key={cat.id} to={`/category/${cat.id}`}>{cat.name}</Link>
+                      ))}
+                    </div>
+                  )}
+                </li>
+
+                <li
+                  onMouseEnter={() => setHoveredMenu('chats')}
+                  onMouseLeave={() => setHoveredMenu(null)}
+                  className="dropdown"
+                >
+                  <span className="nav-item">
+                    <FaCat className="header-icon" /> Chats <FiChevronDown className="header-icon" />
+                  </span>
+                  {hoveredMenu === 'chats' && (
+                    <div className="submenu">
+                      {chatsCategories.map(cat => (
+                        <Link key={cat.id} to={`/category/${cat.id}`}>{cat.name}</Link>
+                      ))}
+                    </div>
+                  )}
+                </li>
+
+                <li><Link to="/promo" className="nav-item"><FaTags className="header-icon" /> Promo</Link></li>
+              </ul>
+            </nav>
+
+            <div className="header-search-bar" ref={searchRef}>
+              <input
+                type="text"
+                placeholder="Chercher ce que vous voulez"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
+              />
+              <button type="button" onClick={handleSearch}>
+                <FiSearch className="header-icon" /> 
+              </button>
+            </div>
+
+            <nav className="header-nav">
+              <ul>
+                <li className="dropdown">
+                  <span
+                    onClick={() => setHoveredMenu(hoveredMenu === 'user' ? null : 'user')}
+                    className="nav-item"
+                  >
+                    <FiUser className="header-icon" />
+                    {user ? `Bonjour, ${user.name}` : 'Se connecter'}
+                    <FiChevronDown className="header-icon" />
+                  </span>
+                  {hoveredMenu === 'user' && (
+                    <div className="submenu">
+                      {user ? (
+                        <>
+                          <Link to="/profil">Votre compte</Link>
+                          <Link to="/confirmation">Vos commandes</Link>
+                          <Link to="#" onClick={handleLogout}>Se déconnecter</Link>
+                        </>
+                      ) : (
+                        <>
+                          <Link to="/connexion" className="main-connect-btn">Se connecter</Link>
+                          <Link to="/profil">Votre compte</Link>
+                          <Link to="/commandes">Vos commandes</Link>
+                        </>
+                      )}
+                    </div>
+                  )}
+                </li>
+
+                <li><Link to="/panier" className="nav-item"><FiShoppingCart className="header-icon" /> Panier</Link></li>
+              </ul>
+            </nav>
+          </div>
+        </div>
+      </header>
+
+      {/* MOBILE MENU  */}
+      {isMobileMenuOpen && (
+        <div className="mobile-menu">
+          <ul className="mobile-nav-list">
+            <li><Link to="/" className="nav-item" onClick={() => setIsMobileMenuOpen(false)}>Accueil</Link></li>
+
+            <li className="dropdown">
+              <span className="nav-item" onClick={() => setHoveredMenu(hoveredMenu === 'mobile-chiens' ? null : 'mobile-chiens')}>
                 <FaDog className="header-icon" /> Chiens <FiChevronDown className="header-icon" />
               </span>
-              {hoveredMenu === 'chiens' && (
+              {hoveredMenu === 'mobile-chiens' && (
                 <div className="submenu">
                   {chiensCategories.map(cat => (
-                    <Link key={cat.id} to={`/category/${cat.id}`}>{cat.name}</Link>
+                    <Link key={cat.id} to={`/category/${cat.id}`} onClick={() => setIsMobileMenuOpen(false)}>
+                      {cat.name}
+                    </Link>
                   ))}
                 </div>
               )}
             </li>
 
-            {/* CHATS */}
-            <li onMouseEnter={() => setHoveredMenu('chats')} onMouseLeave={() => setHoveredMenu(null)} className="dropdown">
-              <span className="nav-item">
+            <li className="dropdown">
+              <span className="nav-item" onClick={() => setHoveredMenu(hoveredMenu === 'mobile-chats' ? null : 'mobile-chats')}>
                 <FaCat className="header-icon" /> Chats <FiChevronDown className="header-icon" />
               </span>
-              {hoveredMenu === 'chats' && (
+              {hoveredMenu === 'mobile-chats' && (
                 <div className="submenu">
                   {chatsCategories.map(cat => (
-                    <Link key={cat.id} to={`/category/${cat.id}`}>{cat.name}</Link>
+                    <Link key={cat.id} to={`/category/${cat.id}`} onClick={() => setIsMobileMenuOpen(false)}>
+                      {cat.name}
+                    </Link>
                   ))}
                 </div>
               )}
             </li>
 
-            {/* PROMO */}
-            <li>
-              <Link to="/promo" className="nav-item">
-                <FaTags className="header-icon" /> Promo
-              </Link>
-            </li>
-          </ul>
-        </nav>
+            <li><Link to="/promo" className="nav-item" onClick={() => setIsMobileMenuOpen(false)}><FaTags className="header-icon" /> Promo</Link></li>
 
-        {/* BARRE DE RECHERCHE */}
-        <div className="header-search-bar" ref={searchRef}>
-          <input
-            type="text"
-            id="recherche"
-            placeholder="Chercher ce que vous voulez"
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
-          />
-          <button type="button" onClick={handleSearch}>
-            <i className="fa fa-search"></i> Recherche
-          </button>
-        </div>
-
-        {/* UTILISATEUR + PANIER */}
-        <nav className="header-nav">
-          <ul>
-            {/* UTILISATEUR */}
             <li className="dropdown">
-              <span onClick={() => setHoveredMenu(hoveredMenu === 'user' ? null : 'user')} className="nav-item">
-                <FiUser className="header-icon" />
-                {user ? `Bonjour, ${user.name}` : 'Se connecter'}
-                <FiChevronDown className="header-icon" />
+              <span className="nav-item" onClick={() => setHoveredMenu(hoveredMenu === 'mobile-user' ? null : 'mobile-user')}>
+                <FiUser className="header-icon" /> {user ? `Bonjour, ${user.name}` : 'Se connecter'} <FiChevronDown className="header-icon" />
               </span>
-              {hoveredMenu === 'user' && (
+              {hoveredMenu === 'mobile-user' && (
                 <div className="submenu">
                   {user ? (
                     <>
-                      <Link to="/profil">Votre compte</Link>
-                      <Link to="/confirmation">Vos commandes</Link>
-                      <Link to="#" onClick={handleLogout}>Se déconnecter</Link>
+                      <Link to="/profil" onClick={() => setIsMobileMenuOpen(false)}>Votre compte</Link>
+                      <Link to="/confirmation" onClick={() => setIsMobileMenuOpen(false)}>Vos commandes</Link>
+                      <span onClick={() => { handleLogout(); setIsMobileMenuOpen(false); }}>Se déconnecter</span>
                     </>
                   ) : (
                     <>
-                      <Link to="/connexion" className="main-connect-btn">Se connecter</Link>
-                      <Link to="/profil">Votre compte</Link>
-                      <Link to="/commandes">Vos commandes</Link>
+                      <Link to="/connexion" onClick={() => setIsMobileMenuOpen(false)}>Se connecter</Link>
+                      <Link to="/profil" onClick={() => setIsMobileMenuOpen(false)}>Votre compte</Link>
+                      <Link to="/commandes" onClick={() => setIsMobileMenuOpen(false)}>Vos commandes</Link>
                     </>
                   )}
                 </div>
               )}
             </li>
-
-            {/* PANIER */}
-            <li>
-              <Link to="/panier" className="nav-item">
-                <FiShoppingCart className="header-icon" /> Panier
-              </Link>
-            </li>
           </ul>
-        </nav>
-
-      </div>
-    </header>
+        </div>
+      )}
+    </>
   );
 };
 

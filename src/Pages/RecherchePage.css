@@ -1,55 +1,93 @@
 .recherche-container {
-    padding: 30px;
-  }
-  
-  .product-title {
-    font-size: 16px;
-    color: #333;
-    margin-bottom: 5px;
-  }
-  
+  padding: 30px;
+  background-color: #fff;
+}
+
+/* === Titre Produit === */
+.product-title {
+  font-size: 16px;
+  color: #333;
+  margin-bottom: 5px;
+}
+
+/* === Grille des Produits === */
+.products-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 20px;
+  justify-content: center;
+}
+
+/* === Carte Produit === */
+.product-card {
+  width: 100%;
+  max-width: 220px;
+  background: #fff;
+  border-radius: 12px;
+  padding: 10px;
+  text-align: center;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  box-shadow: 0 0 0 rgba(0, 0, 0, 0);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  text-decoration: none;
+  color: inherit;
+}
+
+.product-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+/* === Image Produit === */
+.product-image {
+  width: 100%;
+  height: 200px;
+  object-fit: contain;
+  border-radius: 8px;
+  margin-bottom: 10px;
+}
+
+/* === Nom et Prix === */
+.product-name {
+  font-size: 16px;
+  color: #333;
+  margin-bottom: 5px;
+}
+
+.product-price {
+  font-size: 14px;
+  color: #4b4f4b;
+}
+
+/* === Responsive: Mobile & Tablette (jusqu’à 768px) === */
+@media (max-width: 768px) {
   .products-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-    gap: 20px;
-    justify-content: center;
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 12px;
+    padding: 0 10px;
   }
-  
+
   .product-card {
-    width: 220px; /* fixe la largeur pour avoir une taille uniforme */
-    background: #fff;
-    border-radius: 12px;
-    padding: 10px;
-    text-align: center;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-    box-shadow: 0 0 0 rgba(0, 0, 0, 0);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    position: relative;
+    width: 100% !important;
+    max-width: none;
+    padding: 8px;
   }
-  
-  .product-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-  }
-  
+
   .product-image {
-    width: 200px; 
-    height: 200px;
+    width: 100%;
+    height: 160px;
     object-fit: contain;
-    border-radius: 8px;
-    margin-bottom: 10px;
   }
-  
-  .product-name {
-    font-weight: bold;
-    color: #333;
-    text-decoration: none;
-    display: block;
-    margin-bottom: 8px;
-  }
-  .product-price {
+
+  .product-name,
+  .product-title {
     font-size: 14px;
-    color: #4b4f4b; 
   }
+
+  .product-price {
+    font-size: 13px;
+  }
+}

@@ -34,18 +34,21 @@ function ProfilePage() {
         const token = localStorage.getItem('token');
         if (!token) return navigate('/connexion');
 
+
         const response = await axios.get('http://127.0.0.1:8000/api/user', {
           headers: { Authorization: `Bearer ${token}` },
         });
+        console.log("Données du profil:", response.data);
 
         setProfile(response.data);
         const [prenom, nom] = response.data.name.split(' ');
         setFirstName(prenom || '');
         setLastName(nom || '');
       } catch (error) {
+        console.error(" Erreur récupération profil:", error);
         console.error("Erreur:", error);
-        localStorage.clear();
-        navigate('/connexion');
+      
+     
       }
     };
 
@@ -55,6 +58,7 @@ function ProfilePage() {
         const res = await axios.get('http://127.0.0.1:8000/api/address', {
           headers: { Authorization: `Bearer ${token}` }
         });
+        
         setUserAddress(res.data);
       } catch (error) {
         setUserAddress(null);
@@ -78,6 +82,7 @@ function ProfilePage() {
       }, {
         headers: { Authorization: `Bearer ${token}` },
       });
+    
 
       setProfile((prev) => ({ ...prev, name: updatedName }));
       setShowModal(false);
@@ -236,17 +241,24 @@ function ProfilePage() {
 
   return (
     <div className="profile-container">
-      {loading ? (
-        <Loader />
-      ) : (
+     {loading || !profile ? (
+  <Loader />
+) : (
+
+
         <div className="profile-page">
           <h2>Votre compte</h2>
           <div className="profile-grid">
             <div className="profile-card">
               <h3><FaEnvelope /> INFORMATIONS PERSONNELLES</h3>
               <div className="profile-info">
-                <strong>{profile.name}</strong>
-                <span>{profile.email}</span>
+              {profile && (
+  <>
+    <strong>{profile.name}</strong>
+    <span>{profile.email}</span>
+  </>
+)}
+
               </div>
               <div className="btn-center">
                 <button className="edit-btn" onClick={() => setShowModal(true)}><FiEdit /> Modifier</button>

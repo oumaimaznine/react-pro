@@ -19,8 +19,11 @@ import GoogleCallback from './produits/GoogleCallback';
 import PaiementStripe from './produits/PaiementStripe';
 import PrivateRoute from './components/PrivateRoute';
 import PromoPage from './Pages/PromoPage';
-import VerifyEmailPage from './produits/VerifyEmailPage';
 import VerifyEmailPending from './produits/VerifyEmailPending';
+import EmailVerified from "./produits/EmailVerified";
+
+
+
 
 
 import { PayPalScriptProvider } from "@paypal/react-paypal-js";
@@ -46,10 +49,12 @@ function App() {
           <Route path="/google/callback" element={<GoogleCallback />} />
           <Route path="/panier" element={<CartPage />} />
           <Route path="/category/:id" element={<CategoryProducts />} />
-          <Route path="/verify-email/:id/:hash" element={<VerifyEmailPage />} />
-
+   
          <Route path="/promo" element={<PromoPage />} />
+        
 <Route path="/verify-email-pending" element={<VerifyEmailPending />} />
+<Route path="/email-verified" element={<EmailVerified />} />
+
 
           {/* === Routes privées === */}
           

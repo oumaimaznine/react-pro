@@ -25,12 +25,14 @@ function LoginPage() {
       if (response.data.token && response.data.user) {
         localStorage.setItem('token', response.data.token);
         localStorage.setItem('user', JSON.stringify(response.data.user));
+        console.log("oken saved:", response.data.token);
+        console.log("User saved:", response.data.user);
 
         const manualRedirect = localStorage.getItem("redirectAfterLogin");
         localStorage.removeItem("redirectAfterLogin");
 
         navigate(manualRedirect || from, { replace: true });
-        window.location.reload();
+     
       } else {
         setError('Email ou mot de passe incorrect.');
       }

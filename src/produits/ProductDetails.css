@@ -20,7 +20,6 @@
   align-items: center;
 }
 
-
 .detail-image {
   width: 100%;
   max-width: 450px;
@@ -63,14 +62,13 @@
   justify-content: flex-start;
   gap: 20px;
 }
+
 .product-title {
   font-size: 28px !important; 
   font-weight: 700;
   color: #2d2f2f;
   margin-bottom: 9px;
 }
-
-
 
 .price {
   font-size: 24px;
@@ -110,11 +108,9 @@
   flex-direction: column;
   gap: 15px;
   margin-top: 20px;
-
   max-width: 400px; 
   width: 100%;
 }
-
 
 .add-to-cart,
 .buy-now {
@@ -138,31 +134,17 @@
 }
 
 .buy-now {
-  background-color:#3BD6F3; 
+  background-color: #3BD6F3; 
   color: white;
   border: none;
   font-weight: bold;
 }
 
 .buy-now:hover {
-  background-color:#A3B18A;
+  background-color: #A3B18A;
 }
 
 /* === Description Produit === */
-.product-description {
-  margin-top: 30px;
-}
-
-.product-description h3 {
-  font-size: 20px;
-  margin-bottom: 10px;
-}
-
-.product-description p {
-  font-size: 16px;
-  color: #555;
-  line-height: 1.7;
-}
 .product-description {
   margin-top: 40px;
   padding: 0 20px;
@@ -182,11 +164,11 @@
   font-size: 16px;
   line-height: 1.8;
   color: #333;
-    padding-left: 0;   
-    margin-left: 0;       
-    border-left: none;   
-  }
-  
+  padding-left: 0;   
+  margin-left: 0;       
+  border-left: none;   
+}
+
 .product-description-content h1,
 .product-description-content h2,
 .product-description-content h3 {
@@ -201,7 +183,6 @@
   text-align: left; 
 }
 
-
 .product-description-content ul {
   margin-top: 10px;
   padding-left: 25px;
@@ -211,10 +192,12 @@
 .product-description-content li {
   margin-bottom: 8px;
 }
+
 .product-description-content strong {
   font-weight: 600;
   color: #333;
 }
+
 /* Popup container */
 .cart-popup-large {
   position: fixed;
@@ -318,5 +301,48 @@
   to {
     right: 30px;
     opacity: 1;
+  }
+}
+
+/* Responsive pour écrans petits (mobile/tablette) */
+@media screen and (max-width: 768px) {
+  .product-details-container {
+    flex-direction: column;
+    padding: 20px;
+  }
+
+  .detail-image-section {
+    position: static;
+    top: auto;
+    align-items: center;
+  }
+
+  .detail-image {
+    max-width: 100%;
+  }
+
+  .detail-info {
+    flex: 1 1 auto;
+  }
+
+  .button-actions {
+    width: 100%;
+  }
+
+  .product-description {
+    padding: 0 10px;
+  }
+
+  .popup-image-large {
+    width: 60px;
+    max-height: 80px;
+  }
+
+  .cart-popup-large {
+    width: 90%;
+    right: 5%;
+    height: auto;
+    max-height: 400px;
+    top: 60px;
   }
 }

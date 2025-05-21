@@ -167,4 +167,69 @@
   color: #000;
   font-size: 15px;
 }
+/*RESPONSIVE GLOBAL : TOUS TÉLÉPHONES + IPAD (jusqu’à 899px) */
+@media (max-width: 899px) {
+  .intro-section {
+    padding: 60px 10px 40px;
+  }
+
+  .intro-section h1 {
+    font-size: 24px;
+  }
+
+  .intro-subtext {
+    font-size: 16px;
+  }
+
+  .section-title {
+    font-size: 20px;
+    margin-left: 20px;
+  }
+
+  .products-grid,
+  .categories-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr); /*4 éléments par ligne */
+    gap: 15px;
+    justify-content: center;
+  }
+
+  .product-card {
+    width: 100%;
+    padding: 10px;
+  }
+
+  .product-image {
+    width: 150px;
+    height: 150px;
+  }
+
+  .category-item {
+    width: 100%;
+    text-align: center;
+  }
+
+  .category-item img {
+    width: 80px;
+    height: 80px;
+  }
+
+  .category-link p {
+    font-size: 13px;
+  }
+
+  .price {
+    flex-direction: column;
+    align-items: center;
+  }
+}
+/* === Section des produits === */
+.products-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr); /*  2 produits par ligne */
+  gap: 20px;
+  justify-content: center;
+}
+
+
 

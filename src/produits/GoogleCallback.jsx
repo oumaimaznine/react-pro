@@ -13,7 +13,7 @@ function GoogleCallback() {
       try {
         localStorage.setItem('token', token);
         localStorage.setItem('user', decodeURIComponent(user)); // important
-        navigate('/profil');
+        navigate('/');
       } catch (e) {
         console.error("Erreur lors du stockage des données Google:", e);
       }

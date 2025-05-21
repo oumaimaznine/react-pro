@@ -1,56 +1,96 @@
+/* === Liste des Produits === */
 .product-list {
-    padding: 40px 20px;
-    text-align: center;
-    background-color: #fff;
-  }
-  
-  .products-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-    gap: 20px;
-    justify-content: center;
-  }
-  
-  
-  .product-card {
-    width: 220px; /* fixe la largeur pour avoir une taille uniforme */
-    background: #fff;
-    border-radius: 12px;
-    padding: 10px;
-    text-align: center;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-    box-shadow: 0 0 0 rgba(0, 0, 0, 0);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    position: relative;
-  }
-  
-  .product-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-  }
-  
-  .product-image {
-    width: 200px; /* taille réduite */
-    height: 200px;
-    object-fit: contain;
-    border-radius: 8px;
-    margin-bottom: 10px;
-  }
-  
-  
-  .product-titlee {
-    font-size: 16px;
-    color: #333;
-    margin-bottom: 5px;
-  }
-  
-  .product-price {
-    font-size: 14px;
-    color: #4b4f4b; 
-  }
-  /* === Filtre de tri === */
+  padding: 40px 20px;
+  text-align: center;
+  background-color: #fff;
+  max-width: 1200px;
+  margin: auto;
+}
+
+/* === Grille des produits === */
+.products-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 20px;
+  justify-content: center;
+}
+
+/* === Carte Produit === */
+.product-card {
+  width: 100%;
+  max-width: 220px;
+  background: #fff;
+  border-radius: 12px;
+  padding: 10px;
+  text-align: center;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  box-shadow: 0 0 0 rgba(0, 0, 0, 0);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  text-decoration: none;
+  color: inherit;
+}
+
+.product-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+/* === Image produit === */
+.product-image {
+  width: 100%;
+  height: 200px;
+  object-fit: contain;
+  border-radius: 8px;
+  margin-bottom: 10px;
+}
+
+/* === Titre et prix === */
+.product-titlee {
+  font-size: 16px;
+  color: #333;
+  margin-bottom: 5px;
+}
+
+.product-price {
+  font-size: 14px;
+  color: #4b4f4b;
+}
+
+/* === Étiquette Promotion === */
+.promo-label {
+  background-color: #8bc34a;
+  color: white;
+  font-size: 12px;
+  padding: 4px 10px;
+  border-radius: 20px;
+  display: inline-block;
+  margin-bottom: 5px;
+}
+
+/* === Prix avec promotion === */
+.price {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 5px;
+}
+
+.old-price {
+  text-decoration: line-through;
+  color: #888;
+  font-size: 14px;
+}
+
+.new-price {
+  font-weight: bold;
+  color: #000;
+  font-size: 15px;
+}
+
+/* === Tri des produits === */
 .filter-sort {
   display: flex;
   align-items: center;
@@ -81,6 +121,8 @@
   border-color: #0f0f0f;
   outline: none;
 }
+
+/* === Pagination === */
 .pagination {
   display: flex;
   justify-content: center;
@@ -119,32 +161,53 @@
   padding: 6px 8px;
   color: #999;
 }
-.promo-label {
-  background-color: #8bc34a;
-  color: white;
-  font-size: 12px;
-  padding: 4px 10px;
-  border-radius: 20px;
-  display: inline-block;
-  margin-bottom: 5px;
-}
 
-.price {
-  display: flex;
-  justify-content: center;
-  gap: 10px;
-  margin-top: 5px;
-}
+/* Responsive: Mobile (2 produits par ligne) */
+@media (max-width: 768px) {
+  .products-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 12px;
+    padding: 0 10px;
+  }
 
-.old-price {
-  text-decoration: line-through;
-  color: #888;
-  font-size: 14px;
-}
+  .product-card {
+    width: 100% !important;
+    max-width: none !important;
+    padding: 8px;
+  }
 
-.new-price {
-  font-weight: bold;
-  color: #000;
-  font-size: 15px;
-}
+  .product-image {
+    width: 100%;
+    height: 160px;
+    object-fit: contain;
+  }
 
+  .product-titlee {
+    font-size: 14px;
+  }
+
+  .product-price {
+    font-size: 13px;
+  }
+
+
+  .pagination button {
+    font-size: 14px;
+    padding: 5px 10px;
+  }
+}
+@media (min-width: 769px) and (max-width: 1024px) {
+  .products-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    padding: 0 15px;
+  }
+
+  .product-card {
+    max-width: none;
+  }
+
+  .product-image {
+    height: 180px;
+  }
+}
