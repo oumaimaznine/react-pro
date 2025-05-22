@@ -15,6 +15,14 @@ function ProfilePage() {
   const [showModal, setShowModal] = useState(false);
   const [showAddressModal, setShowAddressModal] = useState(false);
   const [showUpdateAddressModal, setShowUpdateAddressModal] = useState(false);
+  const [showDeleteConfirmModal, setShowDeleteConfirmModal] = useState(false);
+  const [showUpdateSuccessAlert, setShowUpdateSuccessAlert] = useState(false);
+  const [showAddSuccessAlert, setShowAddSuccessAlert] = useState(false);
+
+
+ 
+
+
 
   const [prenom, setPrenom] = useState('');
   const [nom, setNom] = useState('');
@@ -35,9 +43,10 @@ function ProfilePage() {
         if (!token) return navigate('/connexion');
 
 
-        const response = await axios.get('http://127.0.0.1:8000/api/user', {
+        const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/user`, {
           headers: { Authorization: `Bearer ${token}` },
         });
+        
         console.log("Données du profil:", response.data);
 
         setProfile(response.data);
@@ -55,9 +64,10 @@ function ProfilePage() {
     const fetchAddress = async () => {
       try {
         const token = localStorage.getItem('token');
-        const res = await axios.get('http://127.0.0.1:8000/api/address', {
+        const res = await axios.get(`${process.env.REACT_APP_API_URL}/api/address`, {
           headers: { Authorization: `Bearer ${token}` }
         });
+        
         
         setUserAddress(res.data);
       } catch (error) {
@@ -70,19 +80,21 @@ function ProfilePage() {
     fetchProfile();
     fetchAddress();
   }, [navigate]);
+  
 
   const handleSave = async () => {
+    
     try {
       const token = localStorage.getItem('token');
       const updatedName = `${firstName} ${lastName}`;
 
-      await axios.put('http://127.0.0.1:8000/api/user', {
+      await axios.put(`${process.env.REACT_APP_API_URL}/api/user`, {
         name: updatedName,
         email: profile.email
       }, {
-        headers: { Authorization: `Bearer ${token}` },
+        headers: { Authorization: `Bearer ${token}` }
       });
-    
+      
 
       setProfile((prev) => ({ ...prev, name: updatedName }));
       setShowModal(false);
@@ -100,7 +112,7 @@ function ProfilePage() {
     try {
       const token = localStorage.getItem('token');
 
-      await axios.post('http://127.0.0.1:8000/api/address', {
+      await axios.post(`${process.env.REACT_APP_API_URL}/api/address`, {
         first_name: prenom,
         last_name: nom,
         address: adresse,
@@ -112,10 +124,10 @@ function ProfilePage() {
       }, {
         headers: { Authorization: `Bearer ${token}` }
       });
+      
 
-      alert("Adresse ajoutée avec succès !");
-      setShowAddressModal(false);
-      window.location.reload();
+      setShowAddSuccessAlert(true);
+
     } catch (error) {
       console.error("Erreur axios complète:", error);
       alert("Erreur: " + (error.response?.data?.message || error.message));
@@ -125,7 +137,7 @@ function ProfilePage() {
   const handleUpdateAddress = async () => {
     try {
       const token = localStorage.getItem('token');
-      await axios.put('http://127.0.0.1:8000/api/address', {
+      await axios.put(`${process.env.REACT_APP_API_URL}/api/address`,  {
         first_name: prenom,
         last_name: nom,
         address: adresse,
@@ -137,31 +149,35 @@ function ProfilePage() {
       }, {
         headers: { Authorization: `Bearer ${token}` }
       });
-      alert("Adresse mise à jour avec succès !");
-      setShowUpdateAddressModal(false);
-      window.location.reload();
+      setShowUpdateSuccessAlert(true);
+
     } catch (error) {
       console.error("Erreur mise à jour adresse:", error);
       alert("Erreur: " + (error.response?.data?.message || error.message));
     }
   };
 
-  const handleDeleteAddress = async () => {
-    if (!window.confirm("Voulez-vous vraiment supprimer cette adresse ?")) return;
 
-    try {
-      const token = localStorage.getItem("token");
-      await axios.delete("http://127.0.0.1:8000/api/address", {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      alert("Adresse supprimée !");
-      setUserAddress(null);
-      setShowUpdateAddressModal(false);
-    } catch (error) {
-      console.error("Erreur suppression adresse:", error);
-      alert("Erreur: " + (error.response?.data?.message || error.message));
-    }
-  };
+const handleDeleteAddress = () => {
+  setShowDeleteConfirmModal(true); 
+};
+
+const handleDeleteAddressConfirmed = async () => {
+  try {
+    const token = localStorage.getItem("token");
+    await axios.delete(`${process.env.REACT_APP_API_URL}/api/address`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+
+   
+    setUserAddress(null);
+    setShowUpdateAddressModal(false);
+    setShowDeleteConfirmModal(false); 
+  } catch (error) {
+    console.error("Erreur suppression adresse:", error);
+    alert("Erreur: " + (error.response?.data?.message || error.message));
+  }
+};
 
   const handleLogout = () => {
     localStorage.removeItem("token");
@@ -327,13 +343,30 @@ function ProfilePage() {
                   <input type="text" value={profile.email} disabled />
                   <small className="email-note">L'adresse e-mail utilisée pour la connexion ne peut pas être changée</small>
                 </div>
-                <div className="modal-actions">
-                  <button className="cancel-btn" onClick={() => setShowModal(false)}>Annuler</button>
-                  <button className="save-btn" onClick={handleSave}>Enregistrer</button>
-                </div>
+                <div className="modal-actions horizontal">
+  <button className="cancel-btn" onClick={() => setShowModal(false)}>Annuler</button>
+  <button className="save-btn" onClick={handleSave}>Enregistrer</button>
+</div>
+
               </div>
             </div>
           )}
+{showAddSuccessAlert && (
+  <div className="alert-overlay">
+    <div className="alert-box">
+      <p>Adresse ajoutée avec succès !</p>
+      <button
+        onClick={() => {
+          setShowAddSuccessAlert(false);
+          setShowAddressModal(false);
+          window.location.reload();
+        }}
+      >
+        OK
+      </button>
+    </div>
+  </div>
+)}
 
           {showAddressModal && (
             <div className="modal-backdrop">
@@ -343,6 +376,37 @@ function ProfilePage() {
               </div>
             </div>
           )}
+    {showUpdateSuccessAlert && (
+  <div className="alert-overlay">
+    <div className="alert-box">
+      <p>Adresse mise à jour avec succès !</p>
+      <button
+        onClick={() => {
+          setShowUpdateSuccessAlert(false);
+          setShowUpdateAddressModal(false);
+          window.location.reload();
+        }}
+      >
+        OK
+      </button>
+    </div>
+  </div>
+)}
+
+{showDeleteConfirmModal && (
+  <div className="modal-backdropp">
+    <div className="delete-confirm-modall">
+      <button className="close-btnn" onClick={() => setShowDeleteConfirmModal(false)}>×</button>
+      <h3>Supprimer l’adresse ?</h3>
+      <p className="subtext">Voulez-vous vraiment supprimer cette adresse ?</p>
+      <div className="modal-actions horizontall">
+        <button className="cancel-linkk" onClick={() => setShowDeleteConfirmModal(false)}>Retour</button>
+        <button className="delete-btnn" onClick={handleDeleteAddressConfirmed}>Supprimer l’adresse</button>
+      </div>
+    </div>
+  </div>
+)}
+
 
           {showUpdateAddressModal && (
             <div className="modal-backdrop">

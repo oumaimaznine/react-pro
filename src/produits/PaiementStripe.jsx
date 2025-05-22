@@ -47,7 +47,7 @@ const CheckoutForm = () => {
 
       //  Créer PaymentIntent
       const res = await axios.post(
-        "http://localhost:8000/api/payment/stripe",
+        `${process.env.REACT_APP_API_URL}/api/payment/stripe`,
         { amount: Math.round(totalPrice * 100) },
         {
           headers: {
@@ -55,6 +55,8 @@ const CheckoutForm = () => {
           },
         }
       );
+      
+        
 
       //  Confirmer le paiement avec Stripe
       const result = await stripe.confirmCardPayment(res.data.clientSecret, {
@@ -82,6 +84,7 @@ const CheckoutForm = () => {
             },
           }
         );
+        
 
         // Nettoyage
         localStorage.removeItem("cartItems");

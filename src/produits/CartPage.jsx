@@ -12,9 +12,11 @@ function CartPage() {
     const fetchCart = async () => {
       try {
         const token = localStorage.getItem('token');
-        const response = await axios.get('http://127.0.0.1:8000/api/cart', {
+        const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/cart`, {
           headers: { Authorization: `Bearer ${token}` },
         });
+        
+        
 
         setCartItems(response.data);
         localStorage.setItem('cartItems', JSON.stringify(response.data));
@@ -30,9 +32,10 @@ function CartPage() {
     if (quantity < 1) return;
     try {
       const token = localStorage.getItem('token');
-      await axios.put(`http://127.0.0.1:8000/api/cart/items/${itemId}`, { quantity }, {
+      await axios.put(`${process.env.REACT_APP_API_URL}/api/cart/items/${itemId}`, { quantity }, {
         headers: { Authorization: `Bearer ${token}` },
       });
+      
       setCartItems((prevItems) =>
         prevItems.map((item) =>
           item.id === itemId ? { ...item, quantity } : item
@@ -52,9 +55,10 @@ function CartPage() {
   const handleRemoveItem = async (itemId) => {
     try {
       const token = localStorage.getItem('token');
-      await axios.delete(`http://127.0.0.1:8000/api/cart/items/${itemId}`, {
+      await axios.delete(`${process.env.REACT_APP_API_URL}/api/cart/items/${itemId}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
+      
       const updatedItems = cartItems.filter((item) => item.id !== itemId);
       setCartItems(updatedItems);
 
@@ -105,15 +109,16 @@ function CartPage() {
           <div key={item.id} className="cart-item">
             <div className="product-info">
               <div className="image-wrapper">
-                <img
-                  src={
-                    item.product.images && item.product.images.length > 0
-                      ? `http://127.0.0.1:8000/${item.product.images[0].url}`
-                      : 'https://via.placeholder.com/150'
-                  }
-                  alt={item.product.name}
-                  className="product-image"
-                />
+              <img
+  src={
+    item.product.images && item.product.images.length > 0
+      ? `${process.env.REACT_APP_API_URL}/${item.product.images[0].url}`
+      : 'https://via.placeholder.com/150'
+  }
+  alt={item.product.name}
+  className="product-image"
+/>
+
               </div>
               <div className="product-details">
                 <h3>{item.product.name}</h3>
@@ -144,7 +149,7 @@ function CartPage() {
         <div className="footer-total-line">
           Total estimé : <span>{totalPrice.toFixed(2)} Dhs</span>
         </div>
-        <p className="footer-note">Taxes, réductions et frais d’expédition calculés à l’étape du paiement.</p>
+   
         <Link to="/orders">
           <button className="checkout-button">Commander</button>
         </Link>

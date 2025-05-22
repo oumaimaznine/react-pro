@@ -17,10 +17,11 @@ function LoginPage() {
     setError('');
 
     try {
-      const response = await axios.post('http://127.0.0.1:8000/api/login', {
+      const response = await axios.post(`${process.env.REACT_APP_API_URL}/api/login`, {
         email,
         password,
       });
+      
 
       if (response.data.token && response.data.user) {
         localStorage.setItem('token', response.data.token);

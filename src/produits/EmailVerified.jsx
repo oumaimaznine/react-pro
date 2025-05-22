@@ -1,8 +1,8 @@
-// src/Pages/EmailVerified.jsx
 
 import { useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import axios from "axios";
+import Loader from "../components/Loader"; 
 
 function EmailVerified() {
   const navigate = useNavigate();
@@ -30,7 +30,7 @@ function EmailVerified() {
     }
   }, [location, navigate]);
 
-  return <p>🔄 Vérification terminée... Redirection en cours...</p>;
+  return <Loader size={18} color="#333" />; 
 }
 
 export default EmailVerified;

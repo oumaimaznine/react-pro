@@ -21,7 +21,7 @@
   display: flex;
   align-items: center;
   gap: 10px;
-  width: 370px;
+  width: 340px;
   margin-left: 50px;
   font-family: Georgia, 'Times New Roman', Times, serif;
 }
@@ -246,9 +246,12 @@
     background-color: #A3B18A;
     padding: 10px 15px;
     border-radius: 6px;
-    margin-top: 6px;
+    margin-top: 5px;
     box-shadow: none;
+    max-width: 88%;               /* vvvvvvvvvvv */
+    box-sizing: border-box; 
   }
+  
 
   .mobile-nav-list .submenu a {
     font-size: 14px;

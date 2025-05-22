@@ -8,14 +8,14 @@ function PromoPage() {
 
   useEffect(() => {
     axios
-      .get('http://127.0.0.1:8000/api/products?promo=1')
+      .get(`${process.env.REACT_APP_API_URL}/api/products?promo=1`)
       .then((res) => setProducts(res.data))
       .catch((err) => console.error('Erreur chargement promos:', err));
   }, []);
 
   return (
     <div className="product-list">
-      <h2> Produits en Promotion</h2>
+      <h2>Produits en Promotion</h2>
 
       <div className="products-grid">
         {products.length > 0 ? (
@@ -30,7 +30,7 @@ function PromoPage() {
               )}
 
               <img
-                src={`http://127.0.0.1:8000/${product.images?.[0]?.url}`}
+                src={`${process.env.REACT_APP_API_URL}/${product.images?.[0]?.url}`}
                 alt={product.name}
                 className="product-image"
               />

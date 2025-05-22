@@ -11,7 +11,8 @@ const RecommendedProducts = ({ productId, cartItems = [], title = "Articles reco
   useEffect(() => {
     if (!productId) return;
 
-    axios.get(`http://localhost:8000/api/recommendations/${productId}`)
+    axios.get(`${process.env.REACT_APP_API_URL}/api/recommendations/${productId}`)
+
       .then((res) => {
         setSameCategory(res.data.same_category || []);
         setAlsoBought(res.data.also_bought || []);
@@ -47,12 +48,24 @@ const RecommendedProducts = ({ productId, cartItems = [], title = "Articles reco
               onClick={() => handleClick(product.id)}
               style={{ cursor: 'pointer' }}
             >
-              <img
-                src={`http://127.0.0.1:8000/${product.images?.[0]?.url}`}
-                alt={product.name}
-              />
-              <p>{product.name}</p>
-              <p className="price">{product.price} Dh</p>
+   {product.is_promo === 1 && (
+  <span className="promo-label">Promotion</span>
+)}
+
+<img
+  src={`${process.env.REACT_APP_API_URL}/${product.images?.[0]?.url}`}
+  alt={product.name}
+/>
+
+<p className="product-name">{product.name}</p>
+
+<div className="price">
+  {product.is_promo === 1 && product.old_price && (
+    <span className="old-price">{parseFloat(product.old_price).toFixed(2)} Dhs</span>
+  )}
+  <span className="new-price">{parseFloat(product.price).toFixed(2)} Dhs</span>
+</div>
+
             </div>
           ))}
         </div>

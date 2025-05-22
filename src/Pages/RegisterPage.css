@@ -54,9 +54,13 @@
 .register-form button:hover {
   background-color:#A3B18A;
 }
-.error {
-  color: red;
-  font-size: 0.9em;
-  margin-top: 4px;
-  margin-bottom: 8px;
+.error-under-input {
+  color: #d93025;
+  font-size: 14px;
+  margin-top: 4px !important ;      
+  margin-bottom: 10px; 
+  text-align: left;
+  width: 100%;
 }
+
+

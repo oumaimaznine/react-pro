@@ -10,11 +10,12 @@ function PaiementLivraison() {
     const fetchAddress = async () => {
       try {
         const token = localStorage.getItem('token');
-        const response = await axios.get('http://127.0.0.1:8000/api/address', {
+        const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/address`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         });
+        
         setUserAddress(response.data);
       } catch (error) {
         console.error('Erreur lors du chargement de l’adresse:', error);
@@ -44,9 +45,10 @@ function PaiementLivraison() {
           payment_method: 'Paiement à la livraison'
         };
         console.log('Payload envoyé :', payload);
-        await axios.post('http://127.0.0.1:8000/api/payment/cod', payload, {
+        await axios.post(`${process.env.REACT_APP_API_URL}/api/payment/cod`, payload, {
           headers: { Authorization: `Bearer ${token}` }
         });
+        
 
         console.log('Commande en livraison enregistrée !');
        

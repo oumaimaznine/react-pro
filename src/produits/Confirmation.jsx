@@ -13,13 +13,12 @@ function Confirmation() {
         console.log(' Token:', token);
        
 
-        const response = await axios.get('http://127.0.0.1:8000/api/orders', {
-        
+        const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/orders`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         });
-
+         
         console.log(' Commandes reçues:', response.data);
         setOrders(response.data);
       } catch (error) {

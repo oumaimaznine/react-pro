@@ -14,8 +14,8 @@ function CategoryProducts() {
   const [lastPage, setLastPage] = useState(1);
 
   useEffect(() => {
-    axios
-      .get(`http://127.0.0.1:8000/api/category/${cleanId}/products?page=${currentPage}&sort=${sortBy}`)
+    axios.get(`${process.env.REACT_APP_API_URL}/api/category/${cleanId}/products?page=${currentPage}&sort=${sortBy}`)
+
       .then((response) => {
         setProducts(response.data.data);
         setLastPage(response.data.last_page);
@@ -53,7 +53,8 @@ function CategoryProducts() {
       {/* Grille produits */}
       <div className="products-grid">
   {products.length > 0 ? (
-    products.map((product) => (
+    products.map((product) =>
+       (
       <Link key={product.id} to={`/product/${product.id}`} className="product-card">
         
         {/*  Label Promotion si promo */}
@@ -63,11 +64,12 @@ function CategoryProducts() {
 
         {/*  Image */}
         {product.images?.[0]?.url && (
-          <img
-            src={`http://127.0.0.1:8000/${product.images[0].url}`}
-            alt={product.name}
-            className="product-image"
-          />
+  <img
+    src={`${process.env.REACT_APP_API_URL}/${product.images[0].url}`}
+         alt={product.name}
+         className="product-image"
+       />
+       
         )}
 
         {/* Titre */}

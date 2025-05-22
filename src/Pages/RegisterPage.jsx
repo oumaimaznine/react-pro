@@ -10,34 +10,36 @@ function RegisterPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
 
   const handleRegister = async (e) => {
     e.preventDefault();
+    setErrorMessage('');
+   
 
     if (password !== confirmPassword) {
-      alert('Les mots de passe ne correspondent pas.');
+      setErrorMessage('Les mots de passe ne correspondent pas.');
       return;
     }
 
     try {
-      const response = await axios.post('http://127.0.0.1:8000/api/register', {
+      const response = await axios.post(`${process.env.REACT_APP_API_URL}/api/register`, {
         name,
         email,
         password,
         password_confirmation: confirmPassword,
       });
+      
 
-  
       localStorage.setItem('user', JSON.stringify(response.data.user));
-      localStorage.setItem('emailToVerify', email); 
-      alert('Compte créé avec succès ! Vérifiez votre email.');
-      navigate('/verify-email-pending');
-
-
-
+      localStorage.setItem('emailToVerify', email);
+      
+      setTimeout(() => {
+        navigate('/verify-email-pending');
+      }, 2000);
     } catch (error) {
       console.error('Erreur de création:', error.response?.data || error.message);
-      alert('Erreur lors de la création du compte.');
+      setErrorMessage('Erreur lors de la création du compte.');
     }
   };
 
@@ -78,7 +80,12 @@ function RegisterPage() {
           required
         />
 
+        {errorMessage && (
+          <div className="error-under-input">{errorMessage}</div>
+        )}
+
         <button type="submit" className="green-btn">Créer</button>
+
       </form>
     </div>
   );

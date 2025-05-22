@@ -2,8 +2,9 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import './Header.css';
-import { FiUser, FiChevronDown, FiShoppingCart, FiMenu, FiX, FiSearch } from 'react-icons/fi';
 import { FaDog, FaCat, FaTags } from 'react-icons/fa';
+import { FiHome, FiUser, FiChevronDown, FiShoppingCart, FiMenu, FiX, FiSearch } from 'react-icons/fi';
+
 
 const Header = () => {
   const [hoveredMenu, setHoveredMenu] = useState(null);
@@ -16,7 +17,7 @@ const Header = () => {
   const searchRef = useRef();
 
   useEffect(() => {
-    axios.get('http://127.0.0.1:8000/api/categories')
+    axios.get(`${process.env.REACT_APP_API_URL}/api/categories`)
       .then(response => setCategories(response.data))
       .catch(error => console.error('Erreur lors du chargement des catégories:', error));
 
@@ -37,7 +38,7 @@ const Header = () => {
 
   const handleLogout = () => {
     const token = localStorage.getItem('token');
-    axios.post('http://127.0.0.1:8000/api/logout', {}, {
+    axios.post(`${process.env.REACT_APP_API_URL}/api/logout`, {}, {
       headers: { Authorization: `Bearer ${token}` }
     }).then(() => {
       localStorage.removeItem('token');
@@ -70,8 +71,9 @@ const Header = () => {
           </div>
 
           <Link to="/" className="mobile-logo">
-            <img src="/images/logo.png" alt="Logo" className="header-logo" />
-          </Link>
+  <img src={`${process.env.PUBLIC_URL}/images/logo.png`} alt="Logo" className="header-logo" />
+</Link>
+
 
           <div className="mobile-icons">
             <button onClick={() => setShowMobileSearch(true)} className="mobile-search-icon">
@@ -106,13 +108,14 @@ const Header = () => {
         {/* DESKTOP HEADER  */}
         <div className="desktop-header">
           <div className="header-inner">
-            <Link to="/">
-              <img src="/images/logo.png" alt="Logo d'entreprise" className="header-logo" />
-            </Link>
+          <Link to="/">
+  <img src={`${process.env.PUBLIC_URL}/images/logo.png`} alt="Logo d'entreprise" className="header-logo" />
+</Link>
 
             <nav className="header-nav">
               <ul>
-                <li><Link to="/" className="nav-item">Accueil</Link></li>
+              <li><Link to="/" className="nav-item"><FiHome className="header-icon" /> Accueil</Link></li>
+
 
                 <li
                   onMouseEnter={() => setHoveredMenu('chiens')}
@@ -172,9 +175,10 @@ const Header = () => {
                     onClick={() => setHoveredMenu(hoveredMenu === 'user' ? null : 'user')}
                     className="nav-item"
                   >
-                    <FiUser className="header-icon" />
-                    {user ? `Bonjour, ${user.name}` : 'Se connecter'}
-                    <FiChevronDown className="header-icon" />
+                   <FiUser className="header-icon" />
+{user ? `Bonjour, ${user.name.length > 10 ? user.name.slice(0, 10) + '…' : user.name}` : 'Se connecter'}
+<FiChevronDown className="header-icon" />
+
                   </span>
                   {hoveredMenu === 'user' && (
                     <div className="submenu">
@@ -206,7 +210,12 @@ const Header = () => {
       {isMobileMenuOpen && (
         <div className="mobile-menu">
           <ul className="mobile-nav-list">
-            <li><Link to="/" className="nav-item" onClick={() => setIsMobileMenuOpen(false)}>Accueil</Link></li>
+          <li>
+  <Link to="/" className="nav-item" onClick={() => setIsMobileMenuOpen(false)}>
+    <FiHome className="header-icon" /> Accueil
+  </Link>
+</li>
+
 
             <li className="dropdown">
               <span className="nav-item" onClick={() => setHoveredMenu(hoveredMenu === 'mobile-chiens' ? null : 'mobile-chiens')}>

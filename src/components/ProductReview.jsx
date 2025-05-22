@@ -11,7 +11,7 @@ const ProductReview = ({ productId }) => {
   const [error, setError] = useState('');
   const [showForm, setShowForm] = useState(false);
   const [showReviews, setShowReviews] = useState(true);
-  const [expanded, setExpanded] = useState(null); // Pour "Voir plus"
+  const [expanded, setExpanded] = useState(null);
 
   useEffect(() => {
     axios.get(`http://localhost:8000/api/products/${productId}/reviews`)
@@ -23,21 +23,29 @@ const ProductReview = ({ productId }) => {
     e.preventDefault();
     const token = localStorage.getItem('token');
 
+    if (comment.length > 250) {
+      setError("Votre avis ne peut pas dépasser 250 caractères.");
+      return;
+    }
+
     try {
-      await axios.post('http://localhost:8000/api/reviews', {
+      await axios.post(`${process.env.REACT_APP_API_URL}/api/reviews`, {
         product_id: productId,
         rating,
         comment,
+      
       }, {
         headers: { Authorization: `Bearer ${token}` }
       });
 
       setSuccess("Avis ajouté !");
+      setError('');
       setComment('');
       setRating(5);
       setShowForm(false);
 
-      const res = await axios.get(`http://localhost:8000/api/products/${productId}/reviews`);
+      const res = await axios.get(`${process.env.REACT_APP_API_URL}/api/products/${productId}/reviews`);
+
       setReviews(res.data);
     } catch (err) {
       setError("Erreur : impossible d’ajouter l’avis.");
@@ -81,23 +89,25 @@ const ProductReview = ({ productId }) => {
                         ))}
                       </div>
 
-                      {/*  Commentaire + Voir plus */}
                       <p className="review-comment">
-                        {!r.comment || expanded === index || r.comment.length < 150
-                          ? r.comment
-                          : r.comment.slice(0, 150) + '...'}
-                      </p>
+  {r.comment && (
+    expanded === index
+      ? r.comment 
+      : r.comment.length <= 150
+        ? r.comment //
+        : r.comment.slice(0, 150) + '...' 
+  )}
+</p>
 
-                      {r.comment && r.comment.length >= 150 && (
-                        <button
-                          className="voir-plus"
-                          onClick={() =>
-                            setExpanded(expanded === index ? null : index)
-                          }
-                        >
-                          {expanded === index ? 'Voir moins' : 'Voir plus'}
-                        </button>
-                      )}
+{r.comment && r.comment.length > 150 && (
+  <button
+    className="voir-plus"
+    onClick={() => setExpanded(expanded === index ? null : index)}
+  >
+    {expanded === index ? 'Voir moins' : 'Voir plus'}
+  </button>
+)}
+
                     </div>
                   </div>
                 </div>
@@ -128,7 +138,9 @@ const ProductReview = ({ productId }) => {
                 value={comment}
                 onChange={(e) => setComment(e.target.value)}
                 placeholder="Votre commentaire ici..."
+                maxLength={250}
               />
+              <p className="char-counter">{comment.length}/250</p>
 
               <div className="modal-button-group">
                 <button type="button" onClick={() => setShowForm(false)}>Annuler</button>

@@ -233,3 +233,32 @@
   transform: translateY(-5px);
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
 }
+@media (max-width: 768px) {
+  .modal-overlay {
+    align-items: flex-end !important; 
+    padding: 0;
+  }
+
+  .modal-content {
+    width: 100% !important;
+    max-width: 100% !important;
+    border-radius: 16px 16px 0 0 !important;
+    padding: 24px 16px !important;
+    animation: slideUp 0.3s ease-out forwards;
+    transform: translateY(100%);
+    min-height: 55vh;
+    max-height: 75vh;
+
+    overflow-y: auto;
+  }
+
+  @keyframes slideUp {
+    from {
+      transform: translateY(100%);
+    }
+    to {
+      transform: translateY(0%);
+    }
+  }
+}
+
