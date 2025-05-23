@@ -25,7 +25,7 @@ function CartPage() {
       } catch (error) {
         console.error('Erreur lors du chargement du panier:', error.response?.data || error.message);
       } finally {
-        setLoading(false); // fin du chargement
+        setLoading(false);
       }
     };
     fetchCart();
@@ -70,12 +70,16 @@ function CartPage() {
   );
 
   if (loading) {
-    return <Loader />;
+    return (
+      <div className="page-full-height">
+        <Loader />
+      </div>
+    );
   }
 
   if (cartItems.length === 0) {
     return (
-      <div className="empty-cart">
+      <div className="page-full-height empty-cart">
         <img
           src="https://cdn-icons-png.flaticon.com/512/2038/2038854.png"
           alt="Panier vide"
@@ -91,72 +95,73 @@ function CartPage() {
   }
 
   return (
-    <div className="cart-container">
-      <h2>Votre panier</h2>
-      <div className="cart-header">
-        <div>Produit</div>
-        <div>Quantité</div>
-        <div>Total</div>
-      </div>
-
-      <div className="cart-items">
-        {cartItems.map((item) => (
-          <div key={item.id} className="cart-item">
-            <div className="product-info">
-              <div className="image-wrapper">
-                <img
-                  src={
-                    item.product.images && item.product.images.length > 0
-                      ? `${process.env.REACT_APP_API_URL}/${item.product.images[0].url}`
-                      : 'https://via.placeholder.com/150'
-                  }
-                  alt={item.product.name}
-                  className="product-image"
-                />
-              </div>
-              <div className="product-details">
-                <h3>{item.product.name}</h3>
-                <p className="small-price">{parseFloat(item.product.price).toFixed(2)} dhs</p>
-                {item.product.size && (
-                  <p className="product-size">Taille: {item.product.size}</p>
-                )}
-              </div>
-            </div>
-
-            <div className="cart-quantity-column">
-              <div className="quantity-control">
-                <button onClick={() => handleQuantityChange(item.id, item.quantity - 1)}>-</button>
-                <span>{item.quantity}</span>
-                <button onClick={() => handleQuantityChange(item.id, item.quantity + 1)}>+</button>
-              </div>
-              <button onClick={() => handleRemoveItem(item.id)} className="delete-btn">🗑️</button>
-            </div>
-
-            <div className="total-price">
-              {(parseFloat(item.product.price) * item.quantity).toFixed(2)} dhs
-            </div>
-          </div>
-        ))}
-      </div>
-
-      <div className="cart-footer">
-        <div className="footer-total-line">
-          Total estimé : <span>{totalPrice.toFixed(2)} Dhs</span>
+    <div className="page-full-height">
+      <div className="cart-container">
+        <h2>Votre panier</h2>
+        <div className="cart-header">
+          <div>Produit</div>
+          <div>Quantité</div>
+          <div>Total</div>
         </div>
 
-        <Link to="/orders">
-          <button className="checkout-button">Commander</button>
-        </Link>
-      </div>
+        <div className="cart-items">
+          {cartItems.map((item) => (
+            <div key={item.id} className="cart-item">
+              <div className="product-info">
+                <div className="image-wrapper">
+                  <img
+                    src={
+                      item.product.images && item.product.images.length > 0
+                        ? `${process.env.REACT_APP_API_URL}/${item.product.images[0].url}`
+                        : 'https://via.placeholder.com/150'
+                    }
+                    alt={item.product.name}
+                    className="product-image"
+                  />
+                </div>
+                <div className="product-details">
+                  <h3>{item.product.name}</h3>
+                  <p className="small-price">{parseFloat(item.product.price).toFixed(2)} dhs</p>
+                  {item.product.size && (
+                    <p className="product-size">Taille: {item.product.size}</p>
+                  )}
+                </div>
+              </div>
 
-      {/* Recommandations */}
-      {firstProductId && (
-        <RecommendedProducts
-          productId={firstProductId}
-          cartItems={cartItems}
-          title="Vous pourriez le remplir avec"
-        />
-      )}
+              <div className="cart-quantity-column">
+                <div className="quantity-control">
+                  <button onClick={() => handleQuantityChange(item.id, item.quantity - 1)}>-</button>
+                  <span>{item.quantity}</span>
+                  <button onClick={() => handleQuantityChange(item.id, item.quantity + 1)}>+</button>
+                </div>
+                <button onClick={() => handleRemoveItem(item.id)} className="delete-btn">🗑️</button>
+              </div>
+
+              <div className="total-price">
+                {(parseFloat(item.product.price) * item.quantity).toFixed(2)} dhs
+              </div>
+            </div>
+          ))}
+        </div>
+
+        <div className="cart-footer">
+          <div className="footer-total-line">
+            Total estimé : <span>{totalPrice.toFixed(2)} Dhs</span>
+          </div>
+
+          <Link to="/orders">
+            <button className="checkout-button">Commander</button>
+          </Link>
+        </div>
+
+        {firstProductId && (
+          <RecommendedProducts
+            productId={firstProductId}
+            cartItems={cartItems}
+            title="Vous pourriez le remplir avec"
+          />
+        )}
+      </div>
     </div>
   );
 }

@@ -14,6 +14,12 @@ h2 {
  font-size: 30px;
  font-family: 'Times New Roman', Times, serif;
 }
+.page-full-height {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
 
 .cart-header {
   display: grid;
