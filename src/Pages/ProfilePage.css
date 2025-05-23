@@ -409,19 +409,10 @@
     opacity: 1;
   }
 }
-
-input.error,
-select.error,
-textarea.error {
-  border: 1px solid #d93025;
-  background-color: #fff6f6;
-}
-
 .error-text {
-  color: #d93025;
-  font-size: 12px;
+  color: red;
+  font-size: 13px;
   margin-top: 4px;
-  margin-left: 2px;
 }
 
 
@@ -441,7 +432,7 @@ textarea.error {
     border-radius: 16px 16px 0 0;
     padding: 24px 16px;
     animation: slideUp 0.3s ease-out forwards;
-    transform: translateY(100%);
+    transform: translateY(0%) !important;
     opacity: 1;
     max-height: 75vh;
     min-height: 75vh;

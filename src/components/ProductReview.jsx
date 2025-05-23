@@ -33,6 +33,7 @@ const ProductReview = ({ productId }) => {
         product_id: productId,
         rating,
         comment,
+
       
       }, {
         headers: { Authorization: `Bearer ${token}` }

@@ -47,8 +47,8 @@
 }
 
 .no-scrollbar {
-  scrollbar-width: none;     /* Firefox */
-  -ms-overflow-style: none;  /* IE/Edge */
+  scrollbar-width: none;    
+  -ms-overflow-style: none;  
 }
 
 /* Carte commentaire */
@@ -235,8 +235,9 @@
 }
 @media (max-width: 768px) {
   .modal-overlay {
-    align-items: flex-end !important; 
+    align-items: flex-end !important;
     padding: 0;
+    width: 100%;
   }
 
   .modal-content {
@@ -245,11 +246,13 @@
     border-radius: 16px 16px 0 0 !important;
     padding: 24px 16px !important;
     animation: slideUp 0.3s ease-out forwards;
-    transform: translateY(100%);
+    transform: translateY(0%) !important;
     min-height: 55vh;
     max-height: 75vh;
-
     overflow-y: auto;
+    margin: 0 auto !important;
+    left: 0;
+    right: 0;
   }
 
   @keyframes slideUp {
@@ -261,4 +264,3 @@
     }
   }
 }
-
