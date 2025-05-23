@@ -160,9 +160,8 @@ if (!formData.code_postal || !/^\d{5}$/.test(formData.code_postal)) {
 if (!formData.ville || formData.ville.length < 2 || formData.ville.length > 30) {
   errors.ville = "Le nom de la ville doit contenir 2 à 30 caractères.";
 }
-if (!formData.tel || !/^[^5]\d{8}$/.test(formData.tel)) {
-  errors.tel = "Le numéro de téléphone doit être valide (9 chiffres, ne commence pas par 5).";
-}
+
+
 if (!formData.email || !formData.email.includes("@")) {
   errors.email = "Adresse e-mail invalide.";
 }
@@ -190,22 +189,25 @@ if (Object.keys(errors).length > 0) {
     };
     try {
       if (adresseExiste) {
-  await axios.put(`${process.env.REACT_APP_API_URL}/api/address`, payload, {
-    headers: { Authorization: `Bearer ${token}` }
-  });
-} else {
-  await axios.post(`${process.env.REACT_APP_API_URL}/api/address`, payload, {
-    headers: { Authorization: `Bearer ${token}` }
-  });
-}
-
-      
+        await axios.put(`${process.env.REACT_APP_API_URL}/api/address`, payload, {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+      } else {
+        await axios.post(`${process.env.REACT_APP_API_URL}/api/address`, payload, {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+      }
+    
+      //  mise à jour directe sans refresh
+      setAdresseData(payload);
+      setAdresseExiste(true);
       setShowAdresseModal(false);
     } catch (error) {
       alert("Erreur Laravel: " + JSON.stringify(error.response?.data));
     } finally {
       setLoading(false);
     }
+    
   };
 
   return (
@@ -304,6 +306,18 @@ if (Object.keys(errors).length > 0) {
       >
         <option value="">Grand Casablanca</option>
         <option value="Casablanca-Settat">Casablanca-Settat</option>
+        <option value="Tanger-Tétouan-Al Hoceïma">Tanger-Tétouan-Al Hoceïma</option>
+<option value="Fès-Meknès">Fès-Meknès</option>
+<option value="Rabat-Salé-Kénitra">Rabat-Salé-Kénitra</option>
+<option value="Béni Mellal-Khénifra">Béni Mellal-Khénifra</option>
+<option value="Casablanca-Settat">Casablanca-Settat</option>
+<option value="Marrakech-Safi">Marrakech-Safi</option>
+<option value="Drâa-Tafilalet">Drâa-Tafilalet</option>
+<option value="Souss-Massa">Souss-Massa</option>
+<option value="Guelmim-Oued Noun">Guelmim-Oued Noun</option>
+<option value="Laâyoune-Sakia El Hamra">Laâyoune-Sakia El Hamra</option>
+<option value="Dakhla-Oued Ed Dahab">Dakhla-Oued Ed Dahab</option>
+
       </select>
       {fieldErrors.region && <p className="error-message">{fieldErrors.region}</p>}
     </div>

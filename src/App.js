@@ -21,6 +21,7 @@ import PrivateRoute from './components/PrivateRoute';
 import PromoPage from './Pages/PromoPage';
 import VerifyEmailPending from './produits/VerifyEmailPending';
 import EmailVerified from "./produits/EmailVerified";
+import ContactPage from './Pages/ContactPage';
 
 
 
@@ -55,6 +56,7 @@ function App() {
               <Route path="/promo" element={<PromoPage />} />
               <Route path="/verify-email-pending" element={<VerifyEmailPending />} />
               <Route path="/email-verified" element={<EmailVerified />} />
+              <Route path="/contact" element={<ContactPage/>}/>
 
               {/* === Routes privées === */}
               <Route path="/profil" element={<PrivateRoute><ProfilePage /></PrivateRoute>} />
