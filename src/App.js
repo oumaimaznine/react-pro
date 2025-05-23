@@ -37,36 +37,37 @@ function App() {
   return (
     <PayPalScriptProvider options={{ "client-id": PAYPAL_CLIENT_ID }}>
       <Router>
-        <Header />
-        <Routes>
-          {/* === Routes publiques === */}
-          <Route path="/" element={<HomePage />} />
-          <Route path="/connexion" element={<LoginPage />} />
-          <Route path="/register" element={<RegisterPage />} />
-          <Route path="/product/:id" element={<ProductDetails />} />
-          <Route path="/recherche" element={<RecherchePage />} />
-          <Route path="/login/facebook/callback" element={<FacebookCallback />} />
-          <Route path="/google/callback" element={<GoogleCallback />} />
-          <Route path="/panier" element={<CartPage />} />
-          <Route path="/category/:id" element={<CategoryProducts />} />
-   
-         <Route path="/promo" element={<PromoPage />} />
-        
-<Route path="/verify-email-pending" element={<VerifyEmailPending />} />
-<Route path="/email-verified" element={<EmailVerified />} />
+        <div className="main-container">
+          <Header />
 
+          <div className="content">
+            <Routes>
+              {/* === Routes publiques === */}
+              <Route path="/" element={<HomePage />} />
+              <Route path="/connexion" element={<LoginPage />} />
+              <Route path="/register" element={<RegisterPage />} />
+              <Route path="/product/:id" element={<ProductDetails />} />
+              <Route path="/recherche" element={<RecherchePage />} />
+              <Route path="/login/facebook/callback" element={<FacebookCallback />} />
+              <Route path="/google/callback" element={<GoogleCallback />} />
+              <Route path="/panier" element={<CartPage />} />
+              <Route path="/category/:id" element={<CategoryProducts />} />
+              <Route path="/promo" element={<PromoPage />} />
+              <Route path="/verify-email-pending" element={<VerifyEmailPending />} />
+              <Route path="/email-verified" element={<EmailVerified />} />
 
-          {/* === Routes privées === */}
-          
-          <Route path="/profil" element={<PrivateRoute><ProfilePage /></PrivateRoute>} />
-          <Route path="/orders" element={<PrivateRoute><OrdersPage /></PrivateRoute>} />
-          <Route path="/PaiementPaypal" element={<PrivateRoute><PaiementPaypal /></PrivateRoute>} />
-          <Route path="/PaiementLivraison" element={<PrivateRoute><PaiementLivraison /></PrivateRoute>} />
-          <Route path="/confirmation" element={<PrivateRoute><Confirmation /></PrivateRoute>} />
-          <Route path="/category/:id" element={ <PrivateRoute><CategoryProducts /></PrivateRoute>} />
-          <Route path="/paiement-stripe" element={ <PrivateRoute><PaiementStripe /></PrivateRoute>} />
-        </Routes>
-        <Footer />
+              {/* === Routes privées === */}
+              <Route path="/profil" element={<PrivateRoute><ProfilePage /></PrivateRoute>} />
+              <Route path="/orders" element={<PrivateRoute><OrdersPage /></PrivateRoute>} />
+              <Route path="/PaiementPaypal" element={<PrivateRoute><PaiementPaypal /></PrivateRoute>} />
+              <Route path="/PaiementLivraison" element={<PrivateRoute><PaiementLivraison /></PrivateRoute>} />
+              <Route path="/confirmation" element={<PrivateRoute><Confirmation /></PrivateRoute>} />
+              <Route path="/paiement-stripe" element={<PrivateRoute><PaiementStripe /></PrivateRoute>} />
+            </Routes>
+          </div>
+
+          <Footer />
+        </div>
       </Router>
     </PayPalScriptProvider>
   );

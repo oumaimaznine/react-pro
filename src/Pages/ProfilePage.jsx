@@ -18,10 +18,8 @@ function ProfilePage() {
   const [showDeleteConfirmModal, setShowDeleteConfirmModal] = useState(false);
   const [showUpdateSuccessAlert, setShowUpdateSuccessAlert] = useState(false);
   const [showAddSuccessAlert, setShowAddSuccessAlert] = useState(false);
-
-
- 
-
+  const [errors, setErrors] = useState({});
+  const [profileErrors, setProfileErrors] = useState({});
 
 
   const [prenom, setPrenom] = useState('');
@@ -81,37 +79,77 @@ function ProfilePage() {
     fetchAddress();
   }, [navigate]);
   
-
   const handleSave = async () => {
-    
+    const errors = {};
+  
+    if (!firstName.trim() || firstName.length < 2 || firstName.length > 30) {
+      errors.firstName = "Le prénom doit contenir entre 2 et 30 caractères.";
+    }
+  
+    if (!lastName.trim() || lastName.length < 2 || lastName.length > 30) {
+      errors.lastName = "Le nom doit contenir entre 2 et 30 caractères.";
+    }
+  
+    if (Object.keys(errors).length > 0) {
+      setProfileErrors(errors);
+      return;
+    }
+  
     try {
       const token = localStorage.getItem('token');
       const updatedName = `${firstName} ${lastName}`;
-
+  
       await axios.put(`${process.env.REACT_APP_API_URL}/api/user`, {
         name: updatedName,
-        email: profile.email
+        email: profile.email,
       }, {
         headers: { Authorization: `Bearer ${token}` }
       });
-      
-
+  
       setProfile((prev) => ({ ...prev, name: updatedName }));
       setShowModal(false);
+      setProfileErrors({});
     } catch (error) {
       console.error('Erreur lors de la mise à jour:', error);
     }
   };
-
+  
   const handleAddAddress = async () => {
-    if (!ville.trim()) {
-      alert("Veuillez remplir le champ Ville !");
+    const newErrors = {};
+  
+    if (!prenom.trim() || prenom.length < 2 || prenom.length > 30) {
+      newErrors.prenom = "Le prénom doit contenir entre 2 et 30 caractères.";
+    }
+  
+    if (!nom.trim() || nom.length < 2 || nom.length > 30) {
+      newErrors.nom = "Le nom doit contenir entre 2 et 30 caractères.";
+    }
+  
+    if (!ville.trim() || ville.length < 2 || ville.length > 30) {
+      newErrors.ville = "Le nom de la ville doit contenir 2 à 30 caractères.";
+    }
+  
+    
+    if (!adresse.trim() || adresse.length < 9) {
+      newErrors.adresse = "L'adresse doit contenir au moins 9 caractères.";
+    }
+  
+    if (!region.trim() || region.length < 5) {
+      newErrors.region = "La région doit contenir au moins 5 caractères.";
+    }
+  
+    if (!codePostal.trim() || !/^\d{5}$/.test(codePostal)) {
+      newErrors.codePostal = "Le code postal doit être composé de 5 chiffres.";
+    }
+  
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors);
       return;
     }
-
+  
     try {
       const token = localStorage.getItem('token');
-
+  
       await axios.post(`${process.env.REACT_APP_API_URL}/api/address`, {
         first_name: prenom,
         last_name: nom,
@@ -124,20 +162,48 @@ function ProfilePage() {
       }, {
         headers: { Authorization: `Bearer ${token}` }
       });
-      
-
+  
       setShowAddSuccessAlert(true);
-
+      setErrors({});
     } catch (error) {
       console.error("Erreur axios complète:", error);
-      alert("Erreur: " + (error.response?.data?.message || error.message));
     }
   };
-
+  
   const handleUpdateAddress = async () => {
+    const newErrors = {};
+  
+    if (!prenom.trim() || prenom.length < 2 || prenom.length > 40) {
+      newErrors.prenom = "Le prénom doit contenir entre 2 et 40 caractères.";
+    }
+  
+    if (!nom.trim() || nom.length < 2 || nom.length > 40) {
+      newErrors.nom = "Le nom doit contenir entre 2 et 40 caractères.";
+    }
+  
+    if (!ville.trim() || ville.length < 2 || ville.length > 60) {
+      newErrors.ville = "Le nom de la ville doit contenir 2 à 60 caractères.";
+    }
+    if (!adresse.trim() || adresse.length < 5) {
+      newErrors.adresse = "L'adresse doit contenir au moins 5 caractères.";
+    }
+  
+    if (!region.trim() || region.length < 2) {
+      newErrors.region = "La région doit contenir au moins 2 caractères.";
+    }
+  
+    if (!codePostal.trim() || !/^\d{5}$/.test(codePostal)) {
+      newErrors.codePostal = "Le code postal doit être composé de 5 chiffres.";
+    }
+  
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors);
+      return;
+    }
+  
     try {
       const token = localStorage.getItem('token');
-      await axios.put(`${process.env.REACT_APP_API_URL}/api/address`,  {
+      await axios.put(`${process.env.REACT_APP_API_URL}/api/address`, {
         first_name: prenom,
         last_name: nom,
         address: adresse,
@@ -149,13 +215,15 @@ function ProfilePage() {
       }, {
         headers: { Authorization: `Bearer ${token}` }
       });
+  
       setShowUpdateSuccessAlert(true);
-
+      setErrors({}); 
     } catch (error) {
       console.error("Erreur mise à jour adresse:", error);
       alert("Erreur: " + (error.response?.data?.message || error.message));
     }
   };
+  
 
 
 const handleDeleteAddress = () => {
@@ -187,61 +255,114 @@ const handleDeleteAddressConfirmed = async () => {
 
   const renderAddressForm = (handleSubmit, handleClose, showDelete = false) => (
     <>
-      <div className="form-row">
-        <div className="form-group">
-          <label>Prénom</label>
-          <input type="text" value={prenom} onChange={(e) => setPrenom(e.target.value)} />
-        </div>
-        <div className="form-group">
-          <label>Nom</label>
-          <input type="text" value={nom} onChange={(e) => setNom(e.target.value)} />
-        </div>
-      </div>
-      <div className="form-row">
-        <div className="form-group">
-          <label>Pays</label>
-          <select value={country} onChange={(e) => setCountry(e.target.value)}>
-            <option value="ma">Maroc</option>
-            <option value="fr">France</option>
-            <option value="us">États-Unis</option>
-            <option value="dz">Algérie</option>
-            <option value="tn">Tunisie</option>
-          </select>
-        </div>
-        <div className="form-group">
-          <label>Région</label>
-          <input type="text" value={region} onChange={(e) => setRegion(e.target.value)} />
-        </div>
-      </div>
-      <div className="form-row">
-        <div className="form-group">
-          <label>Adresse</label>
-          <input type="text" value={adresse} onChange={(e) => setAdresse(e.target.value)} />
-        </div>
-        <div className="form-group">
-          <label>Téléphone</label>
-          <PhoneInput
-            country={country}
-            value={phone}
-            onChange={setPhone}
-            enableSearch={true}
-            inputStyle={{ width: '100%', height: '45px', borderRadius: '8px', paddingLeft: '48px' }}
-            buttonStyle={{ border: 'none', borderRadius: '8px 0 0 8px', backgroundColor: '#f9f9f9' }}
-          />
-        </div>
-      </div>
-      <div className="form-row">
-        <div className="form-group">
-          <label>Code postal</label>
-          <input type="text" value={codePostal} onChange={(e) => setCodePostal(e.target.value)} />
-        </div>
-        <div className="form-group">
-          <label>Ville</label>
-          <input type="text" value={ville} onChange={(e) => setVille(e.target.value)} />
-        </div>
-      </div>
-    
-      <div className="modal-actions spaced-between">
+      
+        <div className="form-row">
+  <div className="form-group">
+    <label>Prénom</label>
+    <input
+      type="text"
+      value={prenom}
+      onChange={(e) => setPrenom(e.target.value)}
+      className={errors.prenom ? "error-input" : ""}
+    />
+    {errors.prenom && <small className="error-message">{errors.prenom}</small>}
+  </div>
+  <div className="form-group">
+    <label>Nom</label>
+    <input
+      type="text"
+      value={nom}
+      onChange={(e) => setNom(e.target.value)}
+      className={errors.nom ? "error-input" : ""}
+    />
+    {errors.nom && <small className="error-message">{errors.nom}</small>}
+  </div>
+</div>
+
+<div className="form-row">
+  <div className="form-group">
+    <label>Pays</label>
+    <select value={country} onChange={(e) => setCountry(e.target.value)}>
+      <option value="ma">Maroc</option>
+      <option value="fr">France</option>
+      <option value="us">États-Unis</option>
+      <option value="dz">Algérie</option>
+      <option value="tn">Tunisie</option>
+    </select>
+  </div>
+  <div className="form-group">
+  <label>Région</label>
+  <input
+    type="text"
+    value={region}
+    onChange={(e) => setRegion(e.target.value)}
+    className={errors.region ? "error-input" : ""}
+  />
+  {errors.region && <small className="error-message">{errors.region}</small>}
+</div>
+
+</div>
+
+<div className="form-row">
+  <div className="form-group">
+  <label>Adresse</label>
+    <input
+      type="text"
+      value={adresse}
+      onChange={(e) => setAdresse(e.target.value)}
+      className={errors.adresse ? "error-input" : ""}
+    />
+    {errors.adresse && <small className="error-message">{errors.adresse}</small>}
+  </div>
+  <div className="form-group">
+    <label>Téléphone</label>
+    <PhoneInput
+      country={country}
+      value={phone}
+      onChange={setPhone}
+      enableSearch={true}
+      inputStyle={{
+        width: '100%',
+        height: '45px',
+        borderRadius: '8px',
+        paddingLeft: '48px',
+        border: errors.phone ? '1px solid red' : undefined,
+        backgroundColor: errors.phone ? '#fff0f0' : undefined,
+      }}
+      buttonStyle={{
+        border: 'none',
+        borderRadius: '8px 0 0 8px',
+        backgroundColor: '#f9f9f9',
+      }}
+    />
+    {errors.phone && <small className="error-message">{errors.phone}</small>}
+  </div>
+</div>
+
+<div className="form-row">
+  <div className="form-group">
+  <label>Code postal</label>
+    <input
+      type="text"
+      value={codePostal}
+      onChange={(e) => setCodePostal(e.target.value)}
+      className={errors.codePostal ? "error-input" : ""}
+    />
+    {errors.codePostal && <small className="error-message">{errors.codePostal}</small>}
+  </div>
+  <div className="form-group">
+    <label>Ville</label>
+    <input
+      type="text"
+      value={ville}
+      onChange={(e) => setVille(e.target.value)}
+      className={errors.ville ? "error-input" : ""}
+    />
+    {errors.ville && <small className="error-message">{errors.ville}</small>}
+  </div>
+</div>
+
+<div className="modal-actions spaced-between">
   <div>
     <button className="delete-btn" onClick={handleDeleteAddress}>Supprimer</button>
   </div>
@@ -256,7 +377,7 @@ const handleDeleteAddressConfirmed = async () => {
   );
 
   return (
-    <div className="profile-container">
+    <div className="page-full-height">
      {loading || !profile ? (
   <Loader />
 ) : (
@@ -329,20 +450,34 @@ const handleDeleteAddressConfirmed = async () => {
               <div className="profile-modal">
                 <h3>Modifier le profil</h3>
                 <div className="form-row">
-                  <div className="form-group">
-                    <label>Prénom</label>
-                    <input type="text" value={firstName} onChange={(e) => setFirstName(e.target.value)} />
-                  </div>
-                  <div className="form-group">
-                    <label>Nom</label>
-                    <input type="text" value={lastName} onChange={(e) => setLastName(e.target.value)} />
-                  </div>
-                </div>
-                <div className="form-group">
-                  <label>Email</label>
-                  <input type="text" value={profile.email} disabled />
-                  <small className="email-note">L'adresse e-mail utilisée pour la connexion ne peut pas être changée</small>
-                </div>
+  <div className="form-group">
+    <label>Prénom</label>
+    <input
+      type="text"
+      value={firstName}
+      onChange={(e) => setFirstName(e.target.value)}
+      className={profileErrors.firstName ? "error-input" : ""}
+    />
+    {profileErrors.firstName && <small className="error-message">{profileErrors.firstName}</small>}
+  </div>
+  <div className="form-group">
+    <label>Nom</label>
+    <input
+      type="text"
+      value={lastName}
+      onChange={(e) => setLastName(e.target.value)}
+      className={profileErrors.lastName ? "error-input" : ""}
+    />
+    {profileErrors.lastName && <small className="error-message">{profileErrors.lastName}</small>}
+  </div>
+</div>
+
+<div className="form-group">
+  <label>Email</label>
+  <input type="text" value={profile.email} disabled />
+  <small className="email-note">L'adresse e-mail utilisée pour la connexion ne peut pas être changée</small>
+</div>
+
                 <div className="modal-actions horizontal">
   <button className="cancel-btn" onClick={() => setShowModal(false)}>Annuler</button>
   <button className="save-btn" onClick={handleSave}>Enregistrer</button>
@@ -371,10 +506,13 @@ const handleDeleteAddressConfirmed = async () => {
           {showAddressModal && (
             <div className="modal-backdrop">
               <div className="profile-modal">
+              <div className="modal-scroll-container">
                 <h3>Ajouter une adresse</h3>
                 {renderAddressForm(handleAddAddress, () => setShowAddressModal(false))}
               </div>
             </div>
+            </div>
+
           )}
     {showUpdateSuccessAlert && (
   <div className="alert-overlay">
@@ -411,10 +549,12 @@ const handleDeleteAddressConfirmed = async () => {
           {showUpdateAddressModal && (
             <div className="modal-backdrop">
               <div className="profile-modal">
+              <div className="modal-scroll-container">
                 <h3>Modifier l’adresse</h3>
                 {renderAddressForm(handleUpdateAddress, () => setShowUpdateAddressModal(false), true)}
               </div>
             </div>
+              </div>
           )}
         </div>
       )}

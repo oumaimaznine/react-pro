@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { FaCreditCard, FaPaypal, FaTruck } from 'react-icons/fa';
 import BeatLoader from "react-spinners/BeatLoader";
 
+
 import 'react-phone-input-2/lib/style.css';
 import './OrdersPage.css';
 
@@ -139,6 +140,39 @@ if (!formData.email) errors.email = "Entrez un email";
   
   const handleSubmit = async (e) => {
     e.preventDefault();
+    const errors = {};
+
+if (!formData.prenom || formData.prenom.length < 2 || formData.prenom.length > 30) {
+  errors.prenom = "Le prénom doit contenir entre 2 et 30 caractères.";
+}
+if (!formData.nom || formData.nom.length < 2 || formData.nom.length > 30) {
+  errors.nom = "Le nom doit contenir entre 2 et 30 caractères.";
+}
+if (!formData.region || formData.region.length < 5) {
+  errors.region = "La région doit contenir au moins 5 caractères.";
+}
+if (!formData.adresse || formData.adresse.length < 9) {
+  errors.adresse = "L'adresse doit contenir au moins 9 caractères.";
+}
+if (!formData.code_postal || !/^\d{5}$/.test(formData.code_postal)) {
+  errors.code_postal = "Le code postal doit être composé de 5 chiffres.";
+}
+if (!formData.ville || formData.ville.length < 2 || formData.ville.length > 30) {
+  errors.ville = "Le nom de la ville doit contenir 2 à 30 caractères.";
+}
+if (!formData.tel || !/^[^5]\d{8}$/.test(formData.tel)) {
+  errors.tel = "Le numéro de téléphone doit être valide (9 chiffres, ne commence pas par 5).";
+}
+if (!formData.email || !formData.email.includes("@")) {
+  errors.email = "Adresse e-mail invalide.";
+}
+
+if (Object.keys(errors).length > 0) {
+  setFieldErrors(errors);
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+  return;
+}
+
     setLoading(true);
     const token = localStorage.getItem('token');
     const payload = {
@@ -388,58 +422,106 @@ if (!formData.email) errors.email = "Entrez un email";
 
     {showAdresseModal && (
       <div className="modal-backdrop">
-        <div className="profile-modal">
-          <h3>Modifier l’adresse</h3>
-          <div className="form-row">
-            <div className="form-group">
-              <label>Prénom</label>
-              <input type="text" value={formData.prenom} onChange={(e) => setFormData({ ...formData, prenom: e.target.value })} />
-            </div>
-            <div className="form-group">
-              <label>Nom</label>
-              <input type="text" value={formData.nom} onChange={(e) => setFormData({ ...formData, nom: e.target.value })} />
-            </div>
+      <div className="profile-modal">
+        <h3>Modifier l’adresse</h3>
+        <div className="modal-scroll-container"> 
+        <div className="form-row">
+          <div className="form-group">
+            <label>Prénom</label>
+            <input
+              type="text"
+              value={formData.prenom}
+              onChange={(e) => setFormData({ ...formData, prenom: e.target.value })}
+              className={fieldErrors.prenom ? 'input-error' : ''}
+            />
+            {fieldErrors.prenom && <p className="error-message">{fieldErrors.prenom}</p>}
           </div>
-          <div className="form-row">
-            <div className="form-group">
-              <label>Pays</label>
-              <select value={formData.country} onChange={(e) => setFormData({ ...formData, country: e.target.value })}>
-                <option value="Maroc">Maroc</option>
-                <option value="France">France</option>
-                <option value="USA">USA</option>
-              </select>
-            </div>
-            <div className="form-group">
-              <label>Région</label>
-              <input type="text" value={formData.region} onChange={(e) => setFormData({ ...formData, region: e.target.value })} />
-            </div>
-          </div>
-          <div className="form-row">
-            <div className="form-group">
-              <label>Adresse</label>
-              <input type="text" value={formData.adresse} onChange={(e) => setFormData({ ...formData, adresse: e.target.value })} />
-            </div>
-            <div className="form-group">
-              <label>Téléphone</label>
-              <input type="text" value={formData.tel} onChange={(e) => setFormData({ ...formData, tel: e.target.value })} />
-            </div>
-          </div>
-          <div className="form-row">
-            <div className="form-group">
-              <label>Code postal</label>
-              <input type="text" value={formData.code_postal} onChange={(e) => setFormData({ ...formData, code_postal: e.target.value })} />
-            </div>
-            <div className="form-group">
-              <label>Ville</label>
-              <input type="text" value={formData.ville} onChange={(e) => setFormData({ ...formData, ville: e.target.value })} />
-            </div>
-          </div>
-          <div className="modal-actions horizontal">
-            <button className="cancel-btn" onClick={() => setShowAdresseModal(false)}>Annuler</button>
-            <button className="save-btn" onClick={handleSubmit}>Enregistrer</button>
+          <div className="form-group">
+            <label>Nom</label>
+            <input
+              type="text"
+              value={formData.nom}
+              onChange={(e) => setFormData({ ...formData, nom: e.target.value })}
+              className={fieldErrors.nom ? 'input-error' : ''}
+            />
+            {fieldErrors.nom && <p className="error-message">{fieldErrors.nom}</p>}
           </div>
         </div>
+        <div className="form-row">
+          <div className="form-group">
+            <label>Pays</label>
+            <select
+              value={formData.country}
+              onChange={(e) => setFormData({ ...formData, country: e.target.value })}
+            >
+              <option value="Maroc">Maroc</option>
+              <option value="France">France</option>
+              <option value="USA">USA</option>
+            </select>
+          </div>
+          <div className="form-group">
+            <label>Région</label>
+            <input
+              type="text"
+              value={formData.region}
+              onChange={(e) => setFormData({ ...formData, region: e.target.value })}
+              className={fieldErrors.region ? 'input-error' : ''}
+            />
+            {fieldErrors.region && <p className="error-message">{fieldErrors.region}</p>}
+          </div>
+        </div>
+        <div className="form-row">
+          <div className="form-group">
+            <label>Adresse</label>
+            <input
+              type="text"
+              value={formData.adresse}
+              onChange={(e) => setFormData({ ...formData, adresse: e.target.value })}
+              className={fieldErrors.adresse ? 'input-error' : ''}
+            />
+            {fieldErrors.adresse && <p className="error-message">{fieldErrors.adresse}</p>}
+          </div>
+          <div className="form-group">
+            <label>Téléphone</label>
+            <input
+              type="text"
+              value={formData.tel}
+              onChange={(e) => setFormData({ ...formData, tel: e.target.value })}
+              className={fieldErrors.tel ? 'input-error' : ''}
+            />
+            {fieldErrors.tel && <p className="error-message">{fieldErrors.tel}</p>}
+          </div>
+        </div>
+        <div className="form-row">
+          <div className="form-group">
+            <label>Code postal</label>
+            <input
+              type="text"
+              value={formData.code_postal}
+              onChange={(e) => setFormData({ ...formData, code_postal: e.target.value })}
+              className={fieldErrors.code_postal ? 'input-error' : ''}
+            />
+            {fieldErrors.code_postal && <p className="error-message">{fieldErrors.code_postal}</p>}
+          </div>
+          <div className="form-group">
+            <label>Ville</label>
+            <input
+              type="text"
+              value={formData.ville}
+              onChange={(e) => setFormData({ ...formData, ville: e.target.value })}
+              className={fieldErrors.ville ? 'input-error' : ''}
+            />
+            {fieldErrors.ville && <p className="error-message">{fieldErrors.ville}</p>}
+          </div>
+        </div>
+        <div className="modal-actions horizontal">
+          <button className="cancel-btn" onClick={() => setShowAdresseModal(false)}>Annuler</button>
+          <button className="save-btn" onClick={handleSubmit}>Enregistrer</button>
+        </div>
       </div>
+    </div></div>
+    
+    
     )}
 
     {showPaypalModal && (
