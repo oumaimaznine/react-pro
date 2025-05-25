@@ -219,9 +219,18 @@ h2 {
 }
 
 .empty-cart {
+  min-height: 50vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start; 
+  align-items: center;
   text-align: center;
-  padding: 50px 20px;
+  padding-top: 100px; 
+  padding-left: 20px;
+  padding-right: 20px;
 }
+
+
 
 .cart-icon {
   width: 150px;
