@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import axios from 'axios';
 import './ContactPage.css';
 
 const ContactPage = () => {
@@ -8,6 +9,9 @@ const ContactPage = () => {
     message: '',
   });
 
+  const [successMessage, setSuccessMessage] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({
@@ -16,21 +20,38 @@ const ContactPage = () => {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log('Formulaire envoyé:', formData);
-    
-    alert("Merci pour votre message !");
-   
-    setFormData({ name: '', email: '', message: '' });
+  
+    try {
+      const token = localStorage.getItem('token'); 
+  
+      const response = await axios.post(
+        'http://localhost:8000/api/contact',
+        formData,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`, 
+          },
+        }
+      );
+  
+      setSuccessMessage(response.data.message); 
+      setErrorMessage('');
+      setFormData({ name: '', email: '', message: '' }); 
+    } catch (error) {
+      setSuccessMessage('');
+      setErrorMessage("Erreur lors de l’envoi du message.");
+      console.error(error);
+    }
   };
+  
 
   return (
     <div className="contact-page">
       <h2>Contactez-nous</h2>
       <p>
-        Si vous avez des questions ou des préoccupations, n'hésitez pas à nous contacter
-        en remplissant le formulaire ci-dessous.
+        Si vous avez des questions, remplissez le formulaire ci-dessous.
       </p>
 
       <div className="contact-form">
@@ -72,6 +93,9 @@ const ContactPage = () => {
 
           <button type="submit" className="submit-btn">Envoyer</button>
         </form>
+
+        {successMessage && <p className="success-msg">{successMessage}</p>}
+        {errorMessage && <p className="error-msg">{errorMessage}</p>}
       </div>
     </div>
   );
