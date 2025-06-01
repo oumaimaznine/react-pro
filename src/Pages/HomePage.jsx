@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import './HomePage.css';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
+import { Helmet } from 'react-helmet';
+
 
 const HomePage = () => {
   const [products, setProducts] = useState([]); // État pour stocker la liste des produits
@@ -11,14 +13,57 @@ const HomePage = () => {
     axios.get(`${process.env.REACT_APP_API_URL}/api/products`)
 
       .then((res) => {
-        setProducts(res.data); // Stocker les produits dans le state
+        setProducts(res.data.data); // Stocker les produits dans le state
       })
       .catch((error) => {
         console.error('Erreur lors du chargement des produits:', error);
       });
   }, []);
 
-  return (
+  return ( 
+  <>
+   <Helmet>
+  {/*  Titre principal de la page — affiché dans les résultats de recherche Google */}
+  <title>Nourritures des Fidèles – Boutique pour chiens et chats</title>
+
+  {/*  Meta description — résumé qui s'affiche sous le titre sur Google */}
+  <meta
+    name="description"
+    content="Découvrez nos produits de qualité pour chiens et chats : alimentation, hygiène, accessoires, jouets. Livraison rapide partout au Maroc."
+  />
+
+  {/*  Ancienne balise SEO — moins utilisée aujourd’hui, mais reste utile */}
+  <meta
+    name="keywords"
+    content="nourriture chien, nourriture chat, croquettes, jouets animaux, soins animaux, boutique animaux Maroc"
+  />
+
+  {/*  Canonical — indique à Google l’URL principale de cette page pour éviter le contenu dupliqué */}
+  <link rel="canonical" href="http://localhost:3000/" />
+
+  {/*  Balises Open Graph — utilisées pour améliorer l’aperçu lors du partage sur Facebook, WhatsApp, etc. */}
+  <meta property="og:title" content="Nourritures des Fidèles - Produits pour Chiens & Chats" />
+  <meta property="og:description" content="Produits de qualité, livraison rapide partout au Maroc." />
+  <meta property="og:image" content="http://localhost:3000/images/cover.png" />
+  <meta property="og:url" content="http://localhost:3000/" />
+  <meta property="og:type" content="website" />
+</Helmet>
+{/*  Schema.org: C’est un code caché (en JSON) que tu ajoutes dans ta page
+    pour aider Google à comprendre exactement ce qu’il y a sur ton site.
+    Résultat → Meilleur référencement, rich snippets (prix, stock, image...) */}
+
+<script type="application/ld+json">
+{`
+{
+  "@context": "https://schema.org",
+  "@type": "WebSite",            // Type de contenu : ici un site web (pas un produit)
+  "name": "Nourritures des Fidèles", // Nom du site
+  "url": "http://localhost:3000",    // URL du site (à changer en production)
+  "description": "Boutique locale pour chiens et chats : croquettes, hygiène, jouets, accessoires." //  Description courte utile pour les résultats enrichis
+}
+`}
+</script>
+
     <main>
 
       {/* Image de couverture principale */}
@@ -167,54 +212,57 @@ const HomePage = () => {
 
       {/* Section des produits récents (nouvel arrivage) */}
       <section className="product-section">
-        <h2 className="section-title"> Nouvel arrivage</h2>
+  <h2 className="section-title"> Nouvel arrivage</h2>
 
-        <div className="products-grid">
-  {products.length > 0 ? (
-    products.map((product) =>
-       (
-      <Link
-        key={product.id}
-        to={`/product/${product.id}`}
-        className="product-card"
-      >
-        {/* Label Promotion si promo */}
-        {product.is_promo === 1 && (
-          <span className="promo-label">Promotion</span>
-        )}
+  <div className="products-grid">
+    {products.length > 0 ? (
+      products.map((product) => (
+        <Link
+          key={product.id}
+          to={`/product/${product.id}`}
+          className="product-card"
+        >
+          {/* Image du produit dans wrapper */}
+          <div className="product-image-wrapper">
+            {product.images?.[0]?.url && (
+              <img
+                src={`${process.env.REACT_APP_API_URL}/${product.images[0].url}`}
+                alt={product.name}
+                className="product-image"
+              />
+            )}
+          </div>
 
-        {/* Image du produit */}
-        {product.images?.[0]?.url && (
-  <img
-  src={`${process.env.REACT_APP_API_URL}/${product.images[0].url}`}
-  alt={product.name}
-  className="product-image"
-/>
-
-        )}
-        {/* Nom du produit */}
-        <h3 className="product-titlee">{product.name}</h3>
-
-        {/*  Prix avec old_price si promo */}
-        <div className="price">
-          {product.is_promo === 1 && product.old_price && (
-            <span className="old-price">
-              {parseFloat(product.old_price).toFixed(2)} Dhs
-            </span>
+          {/* Badge Promotion en dessous de l’image */}
+          {product.is_promo === 1 && (
+            <div className="promo-label">Promotion</div>
           )}
-          <span className="new-price">
-            {parseFloat(product.price).toFixed(2)} Dhs
-          </span>
-        </div>
-      </Link>
-    ))
-  ) : (
-    <p>Aucun produit trouvé.</p>
-  )}
-</div>
 
-      </section>
+          {/* Nom du produit */}
+          <h3 className="product-titlee">{product.name}</h3>
+
+          {/* Prix */}
+          <div className="price">
+            {product.is_promo === 1 && product.old_price && (
+              <span className="old-price">
+                {parseFloat(product.old_price).toFixed(2)} Dhs
+              </span>
+            )}
+            <span className="new-price">
+              {parseFloat(product.price).toFixed(2)} Dhs
+            </span>
+          </div>
+        </Link>
+      ))
+    ) : (
+      <p>Aucun produit trouvé.</p>
+    )}
+  </div>
+</section>
+
+
     </main>
+    </>
   );
 };
 

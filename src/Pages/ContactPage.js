@@ -24,17 +24,19 @@ const ContactPage = () => {
     e.preventDefault();
   
     try {
-      const token = localStorage.getItem('token'); 
-  
+      const token = localStorage.getItem('token');
+      const apiUrl = process.env.REACT_APP_API_URL;
+
       const response = await axios.post(
-        'http://localhost:8000/api/contact',
+        `${apiUrl}/api/contact`,
         formData,
         {
           headers: {
-            Authorization: `Bearer ${token}`, 
+            Authorization: `Bearer ${token}`,
           },
         }
       );
+      
   
       setSuccessMessage(response.data.message); 
       setErrorMessage('');

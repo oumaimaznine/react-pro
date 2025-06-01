@@ -1,67 +1,134 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation, Link } from 'react-router-dom';
 import axios from 'axios';
-import './RecherchePage.css'; 
+import './RecherchePage.css';
 
 const RecherchePage = () => {
   const [results, setResults] = useState([]);
+  const [sortBy, setSortBy] = useState('');
+  const [currentPage, setCurrentPage] = useState(1);
+  const [lastPage, setLastPage] = useState(1);
   const location = useLocation();
   const query = new URLSearchParams(location.search).get('query');
 
   useEffect(() => {
     if (query) {
-      axios.get(`/api/search?query=${query}`)
-        .then((res) => setResults(res.data))
+      axios
+        .get(`/api/search?query=${query}&sort=${sortBy}&page=${currentPage}`)
+        .then((res) => {
+          setResults(res.data.data);
+          setLastPage(res.data.last_page);
+        })
         .catch((err) => console.error('Erreur recherche:', err));
     }
-  }, [query]);
+  }, [query, sortBy, currentPage]);
+
+  const handlePageChange = (page) => {
+    if (page >= 1 && page <= lastPage) {
+      setCurrentPage(page);
+    }
+  };
 
   return (
     <div className="recherche-container">
       <h2 className="recherche-title">Résultats pour : "{query}"</h2>
+
+      {/* Tri */}
+      <div className="filter-sort">
+        <label htmlFor="sort">Trier par :</label>
+        <select
+          id="sort"
+          value={sortBy}
+          onChange={(e) => {
+            setSortBy(e.target.value);
+            setCurrentPage(1); // reset page
+          }}
+        >
+          <option value="">Par défaut</option>
+          <option value="price_asc">Prix : faible à élevé</option>
+          <option value="price_desc">Prix : élevé à faible</option>
+          <option value="name_asc">A → Z</option>
+          <option value="name_desc">Z → A</option>
+          <option value="newest">Plus récent</option>
+          <option value="oldest">Plus ancien</option>
+        </select>
+      </div>
+
+      {/* Résultats */}
       <div className="products-grid">
-      {results.length > 0 ? (
-  results.map((product) => (
-    <Link
-      key={product.id}
-      to={`/product/${product.id}`}
-      className="product-card"
-    >
-      {/* Label Promotion si promo */}
-      {product.is_promo === 1 && (
-        <span className="promo-label">Promotion</span>
-      )}
+        {results.length > 0 ? (
+          results.map((product) => (
+            <Link
+              key={product.id}
+              to={`/product/${product.id}`}
+              className="product-card"
+            >
+              {product.images?.[0]?.url && (
+                <img
+                  src={`${process.env.REACT_APP_API_URL}/${product.images[0].url}`}
+                  alt={product.name}
+                  className="product-image"
+                />
+              )}
 
-      {/* Image du produit */}
-      {product.images?.[0]?.url && (
-        <img
-          src={`${process.env.REACT_APP_API_URL}/${product.images[0].url}`}
-          alt={product.name}
-          className="product-image"
-        />
-      )}
+              {product.is_promo === 1 && (
+                <div className="promo-label">Promotion</div>
+              )}
 
-      {/* Nom du produit */}
-      <h3 className="product-titlee">{product.name}</h3>
+              <h3 className="product-titlee">{product.name}</h3>
 
-      {/* Prix avec old_price si promo */}
-      <div className="price">
-        {product.is_promo === 1 && product.old_price && (
-          <span className="old-price">
-            {parseFloat(product.old_price).toFixed(2)} Dhs
-          </span>
+              <div className="price">
+                {product.is_promo === 1 && product.old_price && (
+                  <span className="old-price">
+                    {parseFloat(product.old_price).toFixed(2)} Dhs
+                  </span>
+                )}
+                <span className="new-price">
+                  {parseFloat(product.price).toFixed(2)} Dhs
+                </span>
+              </div>
+            </Link>
+          ))
+        ) : (
+          <p>Aucun produit trouvé.</p>
         )}
-        <span className="new-price">
-          {parseFloat(product.price).toFixed(2)} Dhs
-        </span>
       </div>
-    </Link>
-  ))
-) : (
-  <p>Aucun produit trouvé.</p>
-)}
 
-      </div>
+      {/* Pagination */}
+      {lastPage > 1 && (
+        <div className="pagination">
+          <button onClick={() => handlePageChange(currentPage - 1)} disabled={currentPage === 1}>
+            &lt;
+          </button>
+
+          {[...Array(lastPage)].map((_, i) => {
+            const page = i + 1;
+            if (
+              page === 1 ||
+              page === lastPage ||
+              (page >= currentPage - 1 && page <= currentPage + 1)
+            ) {
+              return (
+                <button
+                  key={page}
+                  className={currentPage === page ? "active" : ""}
+                  onClick={() => handlePageChange(page)}
+                >
+                  {page}
+                </button>
+              );
+            }
+            if ((page === currentPage - 2 && page !== 2) || (page === currentPage + 2 && page !== lastPage - 1)) {
+              return <span key={page}>...</span>;
+            }
+            return null;
+          })}
+
+          <button onClick={() => handlePageChange(currentPage + 1)} disabled={currentPage === lastPage}>
+            &gt;
+          </button>
+        </div>
+      )}
     </div>
   );
 };

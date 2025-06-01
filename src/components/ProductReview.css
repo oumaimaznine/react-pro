@@ -233,6 +233,13 @@
   transform: translateY(-5px);
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
 }
+.error-auth-message {
+  color: red;
+  margin-top: 10px;
+  font-size: 14px;
+  font-weight: 500;
+}
+
 @media (max-width: 768px) {
   .modal-overlay {
     align-items: flex-end !important;

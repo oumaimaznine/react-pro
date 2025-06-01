@@ -70,9 +70,15 @@
   font-size: 12px;
   padding: 4px 10px;
   border-radius: 20px;
+  font-weight: bold;
+  margin-top: 6px;
+  margin-bottom: 4px;
   display: inline-block;
-  margin-bottom: 5px;
+  margin-left: 20px;
+  text-align: left;
+  align-self: flex-start;
 }
+
 
 /* === Prix avec promotion === */
 .price {
@@ -165,6 +171,29 @@
   padding: 6px 8px;
   color: #999;
 }
+.product-rating {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 14px;
+  margin-top: 6px;
+  margin-bottom: 0;
+}
+
+.star-filled {
+  color: #f7b500;
+}
+
+.star-empty {
+  color: #ddd;
+}
+
+.rating-count {
+  color: #444;
+  font-size: 13px;
+  margin-left: 4px;
+}
+
 
 /* Responsive: Mobile (2 produits par ligne) */
 @media (max-width: 768px) {

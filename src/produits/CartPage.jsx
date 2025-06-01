@@ -14,8 +14,22 @@ function CartPage() {
 
   useEffect(() => {
     const fetchCart = async () => {
+      const token = localStorage.getItem('token');
+
+      if (!token) {
+        const storedCart = JSON.parse(localStorage.getItem('cart')) || [];
+        setCartItems(
+          storedCart.map((item, index) => ({
+            id: index,
+            product: item,
+            quantity: item.quantity || 1,
+          }))
+        );
+        setLoading(false);
+        return;
+      }
+
       try {
-        const token = localStorage.getItem('token');
         const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/cart`, {
           headers: { Authorization: `Bearer ${token}` },
         });
@@ -33,8 +47,21 @@ function CartPage() {
 
   const handleQuantityChange = async (itemId, quantity) => {
     if (quantity < 1) return;
+    const token = localStorage.getItem('token');
+
+    if (!token) {
+      const updatedItems = cartItems.map((item) =>
+        item.id === itemId ? { ...item, quantity } : item
+      );
+      setCartItems(updatedItems);
+      localStorage.setItem('cart', JSON.stringify(updatedItems.map((item) => ({
+        ...item.product,
+        quantity: item.quantity,
+      }))));
+      return;
+    }
+
     try {
-      const token = localStorage.getItem('token');
       await axios.put(`${process.env.REACT_APP_API_URL}/api/cart/items/${itemId}`, { quantity }, {
         headers: { Authorization: `Bearer ${token}` },
       });
@@ -50,8 +77,19 @@ function CartPage() {
   };
 
   const handleRemoveItem = async (itemId) => {
+    const token = localStorage.getItem('token');
+
+    if (!token) {
+      const updatedItems = cartItems.filter((item) => item.id !== itemId);
+      setCartItems(updatedItems);
+      localStorage.setItem('cart', JSON.stringify(updatedItems.map((item) => ({
+        ...item.product,
+        quantity: item.quantity,
+      }))));
+      return;
+    }
+
     try {
-      const token = localStorage.getItem('token');
       await axios.delete(`${process.env.REACT_APP_API_URL}/api/cart/items/${itemId}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
@@ -87,9 +125,7 @@ function CartPage() {
         />
         <h3>Votre panier est vide !</h3>
         <p>Parcourez nos catégories et découvrez nos meilleures offres !</p>
-        <button className="start-shopping-btn" onClick={() => navigate('/')}>
-          Commencez vos achats
-        </button>
+        <button className="start-shopping-btn" onClick={() => navigate('/')}>Commencez vos achats</button>
       </div>
     );
   }

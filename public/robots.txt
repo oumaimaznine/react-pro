@@ -1,3 +1,9 @@
-# https://www.robotstxt.org/robotstxt.html
-User-agent: *
-Disallow:
+User-agent: * 
+#  Cela signifie que la règle s'applique à tous les robots d'indexation (Googlebot, Bingbot, etc.)
+
+Disallow: 
+#  Laisser cette ligne vide signifie que l’on **n’interdit rien**, donc tous les robots peuvent visiter toutes les pages.
+
+Sitemap: http://127.0.0.1:8000/sitemap.xml 
+# Indique aux moteurs de recherche l’emplacement du fichier sitemap.xml
+# Cela permet aux robots de découvrir plus facilement toutes les URL de ton site.

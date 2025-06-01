@@ -55,15 +55,15 @@ const RecommendedProducts = ({ productId, cartItems = [], title = "Articles reco
               style={{ cursor: 'pointer' }}
             >
               {/* Étiquette "Promotion" si le produit est en promo */}
-              {product.is_promo === 1 && (
-                <span className="promo-label">Promotion</span>
-              )}
-
-              {/* Image du produit */}
               <img
-                src={`${process.env.REACT_APP_API_URL}/${product.images?.[0]?.url}`}
-                alt={product.name}
-              />
+  src={`${process.env.REACT_APP_API_URL}/${product.images?.[0]?.url}`}
+  alt={product.name}
+/>
+
+{product.is_promo === 1 && (
+  <span className="promo-label">Promotion</span>
+)}
+
 
               {/* Nom du produit */}
               <p className="product-name">{product.name}</p>
