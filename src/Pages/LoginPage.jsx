@@ -42,10 +42,7 @@ function LoginPage() {
     }
   };
 
-  const loginWithFacebook = () => {
-    window.location.href = `${process.env.REACT_APP_API_URL}/auth/facebook`;
-
-  };
+ 
 
   const loginWithGoogle = () => {
     window.location.href = `${process.env.REACT_APP_API_URL}/auth/google`;
@@ -84,16 +81,7 @@ function LoginPage() {
         </div>
 
         <div className="social-login">
-          <button
-            type="button"
-            className="social-btn facebook"
-            onClick={loginWithFacebook}
-          >
-          <img src={`${process.env.PUBLIC_URL}/icons/facebook.png`}  alt="Facebook" />
 
-
-            Continuer avec Facebook
-          </button>
 
           <button
             type="button"

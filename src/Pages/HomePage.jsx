@@ -11,8 +11,6 @@ const HomePage = () => {
   const [bestSellers, setBestSellers] = useState([]);
   const [reviews, setReviews] = useState([]);
 
-  
-  
   const token = localStorage.getItem("token");
 
   useEffect(() => {
@@ -39,7 +37,8 @@ const HomePage = () => {
       // fallback si non connecté
       fetchLatestOrPromo();
     }
-  }, []);
+   },);
+
   useEffect(() => {
     axios.get(`${process.env.REACT_APP_API_URL}/bestsellers`)
       .then(res => setBestSellers(res.data))

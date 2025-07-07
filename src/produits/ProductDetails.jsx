@@ -4,7 +4,6 @@ import axios from 'axios';
 import './ProductDetails.css';
 import RecommendedProducts from './RecommendedProducts';
 import ProductReview from '../components/ProductReview';
-import { Helmet } from 'react-helmet';
 import RecentlyViewed from './RecentlyViewed';
 
 const ProductDetails = () => {
@@ -259,16 +258,7 @@ const ProductDetails = () => {
 
   return (
     <>
-      <Helmet>
-        <title>{product.name} – Nourritures des Fidèles</title>
-        <meta name="description" content={product.description?.slice(0, 160) || "Produit pour animaux."} />
-        <link rel="canonical" href={`https://nourrituredesfideles.ma/ppd/product/${product.id}`} />
-        <meta property="og:title" content={product.name} />
-        <meta property="og:description" content={product.description?.slice(0, 160) || "Produit pour animaux."} />
-        <meta property="og:image" content={`${process.env.REACT_APP_IMAGE_URL}/${product.images?.[0]?.url}`} />
-        <meta property="og:url" content={`https://nourrituredesfideles.ma/ppd/product/${product.id}`} />
-        <meta property="og:type" content="product" />
-      </Helmet>
+    
 
       <div className="product-details-container">
         <div className="detail-image-section">
