@@ -16,8 +16,6 @@
   margin-bottom: 10px;
 }
 
-
-/* Input + Boutons même taille */
 .login-form input,
 .main-btn,
 .social-btn {
@@ -43,7 +41,6 @@
   cursor: pointer;
 }
 
-/* Divider "Ou" */
 .or-divider {
   display: flex;
   align-items: center;
@@ -62,7 +59,6 @@
   font-size: 13px;
 }
 
-/* Social login section */
 .social-login {
   display: flex;
   flex-direction: column;
@@ -89,7 +85,6 @@
   display: block;
 }
 
-/* Country select */
 .country-selector {
   margin: 20px 0;
 }
@@ -103,7 +98,6 @@
   font-size: 14px;
 }
 
-/* Conditions */
 .terms-text {
   font-size: 12px;
   color: #555;

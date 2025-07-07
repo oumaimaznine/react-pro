@@ -383,7 +383,6 @@
   color: inherit;
 }
 
-
 /* Responsive */
 @media (max-width: 768px) {
   .recommended-card {
@@ -400,9 +399,6 @@
     font-size: 13px;
   }
 }
-
-
-
 
 .promo-label {
   background-color: #8bc34a;

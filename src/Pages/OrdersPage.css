@@ -15,8 +15,6 @@ body {
   background-color: #eee; /* Couleur de fond du conteneur */
   flex-wrap: wrap; /* Permet le passage à la ligne sur petits écrans */
 }
-
-
 /* === Formulaire === */
 .order-form {
   margin-bottom: 30px; /* Espace sous le formulaire */

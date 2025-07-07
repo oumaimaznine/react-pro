@@ -443,7 +443,7 @@
     backdrop-filter: blur(1px);
   }
 
-  /* Contenu principal du modal */
+ 
   .profile-modal {
     width: 100%;
     max-width: 100%;
@@ -489,7 +489,7 @@
     cursor: pointer;
   }
 
-  /* Groupes de champs */
+ 
   .form-group {
     width: 100%;
     margin-bottom: 16px;
