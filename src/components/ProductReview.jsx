@@ -15,7 +15,7 @@ const ProductReview = ({ productId }) => {
   const [expanded, setExpanded] = useState(null);
 
   useEffect(() => {
-    axios.get(`http://localhost:8000/api/products/${productId}/reviews`)
+    axios.get(`${process.env.REACT_APP_API_URL}/products/${productId}/reviews`)
       .then((res) => setReviews(res.data))
       .catch(() => setReviews([]));
   }, [productId]);
@@ -37,7 +37,7 @@ const ProductReview = ({ productId }) => {
     }
 
     try {
-      await axios.post(`${process.env.REACT_APP_API_URL}/api/reviews`, {
+      await axios.post(`${process.env.REACT_APP_API_URL}/reviews`, {
         product_id: productId,
         rating,
         comment,
@@ -53,7 +53,7 @@ const ProductReview = ({ productId }) => {
       setRating(5);
       setShowForm(false);
 
-      const res = await axios.get(`${process.env.REACT_APP_API_URL}/api/products/${productId}/reviews`);
+      const res = await axios.get(`${process.env.REACT_APP_API_URL}/products/${productId}/reviews`);
       setReviews(res.data);
     } catch (err) {
       setError("Erreur : impossible d’ajouter l’avis.");

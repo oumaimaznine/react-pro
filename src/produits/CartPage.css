@@ -203,7 +203,7 @@ h2 {
 
 .checkout-button {
   padding: 14px 30px;
-  background-color: #3BD6F3;
+  background-color:  #5FC2D4;
   font-size: 16px;
   font-weight: bold;
   color: white;
@@ -242,7 +242,7 @@ h2 {
   padding: 16px 20px;
   font-size: 16px;
   font-weight: normal;
-  background-color: #3BD6F3;
+  background-color:  #5FC2D4;
   color: #ffffff;
   border: none;
   border-radius: 5px;
@@ -296,77 +296,84 @@ h2 {
   }
 
   .cart-item {
-    grid-template-columns: 1fr;
-    align-items: flex-start;
+    display: flex; 
+    flex-direction: column;
+    align-items: center;
     padding: 15px 10px;
+    border-bottom: 1px solid #ddd;
+    background-color: #fff;
+    border-radius: 8px;
+    margin-bottom: 15px;
+    min-height: 180px; 
   }
 
   .product-info {
+    display: flex;
     flex-direction: row;
     align-items: center;
     gap: 10px;
+    width: 100%;
   }
 
   .image-wrapper {
     width: 100px;
     height: 100px;
     min-width: 100px;
+    flex-shrink: 0;
   }
 
   .product-details {
-    max-width: 100%;
+    flex: 1;
+    word-break: break-word;
+    font-size: 14px;
+    text-align: left;
   }
 
   .cart-quantity-column {
-    flex-direction: row;
-    justify-content: space-between;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
     width: 100%;
     margin-top: 10px;
+  }
+
+  .quantity-control {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+  }
+
+  .delete-btn {
+    margin-top: 5px;
   }
 
   .total-price {
-    text-align: right;
-    display: block;
-    width: 100%;
-    padding-right: 10px;
+    text-align: center;
     font-weight: bold;
+    font-size: 15px;
+    margin-top: 8px;
   }
-
 
   .cart-footer {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-end;   
-    text-align: right;       
+    width: 100%;
     padding: 15px 10px;
-    margin-top: 30px;
+    margin-top: 20px;
+    text-align: center;
+    align-items: center;
+    border-top: 1px solid #ccc;
   }
 
-  .cart-footer h3,
-  .cart-footer p {
-    width: 100%;
+  .cart-footer h3 {
+    font-size: 16px;
+    margin-bottom: 5px;
   }
+
   .checkout-button {
-    width: auto;
-    max-width: 100%;
+    width: 100%;
+    max-width: 300px;
+    padding: 14px;
+    font-size: 16px;
     margin-top: 10px;
   }
-
-.cart-quantity-column {
-  display: flex;
-  flex-direction: column;
-  align-items: center;  
-  justify-content: center;
-  gap: 10px;
-  margin-top: 10px;
 }
-
-.quantity-control {
-  justify-content: center; 
-}
-
-.delete-btn {
-  margin-top: 8px;
-}}
-
-

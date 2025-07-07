@@ -22,13 +22,13 @@ const ContactPage = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-  
+
     try {
       const token = localStorage.getItem('token');
       const apiUrl = process.env.REACT_APP_API_URL;
 
       const response = await axios.post(
-        `${apiUrl}/api/contact`,
+        `${apiUrl}/contact`, 
         formData,
         {
           headers: {
@@ -36,8 +36,7 @@ const ContactPage = () => {
           },
         }
       );
-      
-  
+
       setSuccessMessage(response.data.message); 
       setErrorMessage('');
       setFormData({ name: '', email: '', message: '' }); 
@@ -47,7 +46,6 @@ const ContactPage = () => {
       console.error(error);
     }
   };
-  
 
   return (
     <div className="contact-page">

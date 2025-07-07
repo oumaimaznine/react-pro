@@ -21,7 +21,7 @@ const Header = () => {
   // useEffect pour charger les catégories et récupérer l'utilisateur depuis localStorage
   useEffect(() => {
     // Charger les catégories depuis l’API Laravel
-    axios.get(`${process.env.REACT_APP_API_URL}/api/categories`)
+    axios.get(`${process.env.REACT_APP_API_URL}/categories`)
       .then(response => setCategories(response.data))
       .catch(error => console.error('Erreur lors du chargement des catégories:', error));
 
@@ -45,7 +45,7 @@ const Header = () => {
   // Fonction pour déconnexion
   const handleLogout = () => {
     const token = localStorage.getItem('token');
-    axios.post(`${process.env.REACT_APP_API_URL}/api/logout`, {}, {
+    axios.post(`${process.env.REACT_APP_API_URL}/logout`, {}, {
       headers: { Authorization: `Bearer ${token}` }
     }).then(() => {
       localStorage.removeItem('token');

@@ -186,11 +186,11 @@
 }
 
 .modal-button-group button:first-child:hover {
-  background-color: #3BD6F3;
+  background-color:  #5FC2D4;
 }
 
 .modal-button-group button:last-child {
-  background-color: #3BD6F3;
+  background-color:  #5FC2D4;
   color: white;
 }
 

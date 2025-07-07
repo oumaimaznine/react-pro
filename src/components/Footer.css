@@ -1,5 +1,5 @@
 .footer-section {
-  background-color: #3F3F3F;
+  background-color:#6A6A67;
   color: #FDF6ED;
   padding: 40px 20px 20px;
   font-family: 'Segoe UI', sans-serif;
@@ -49,7 +49,7 @@
 
 .newsletter-form button {
   padding: 10px 20px;
-  background-color: #3BD6F3;
+  background-color:  #5FC2D4;
   color: #FDF6ED;
   border: none;
   border-radius: 5px;
@@ -63,7 +63,7 @@
 
 .footer-link {
   display: inline-block;
-  color: #76c7f3;
+  color:  #5FC2D4;
   text-decoration: underline;
   margin-bottom: 5px;
 }

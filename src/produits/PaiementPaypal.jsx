@@ -41,7 +41,7 @@ function PaiementPaypal() {
 
     try {
       const response = await axios.post(
-      `${process.env.REACT_APP_API_URL}/api/payment/paypal/success`,
+      `${process.env.REACT_APP_API_URL}/payment/paypal/success`,
         payload,
         {
           headers: {

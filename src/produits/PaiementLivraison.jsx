@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import './PaiementLivraison.css';
+import { Link } from 'react-router-dom';
 
 function PaiementLivraison() {
   const [userAddress, setUserAddress] = useState({});
@@ -10,25 +11,26 @@ function PaiementLivraison() {
     const fetchAddress = async () => {
       try {
         const token = localStorage.getItem('token');
-        const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/address`, {
+        const response = await axios.get(`${process.env.REACT_APP_API_URL}/address`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         });
-        
+
         setUserAddress(response.data);
       } catch (error) {
-        console.error('Erreur lors du chargement de l’adresse:', error);
+       
       }
     };
 
     const cart = JSON.parse(localStorage.getItem('cartItems')) || [];
     let totalPrice = 0;
     cart.forEach(item => {
-      totalPrice += parseFloat(item.product.price) * item.quantity;
+      const unitPrice = item.variant?.price ?? item.price ?? item.product.price ?? 0;
+      totalPrice += parseFloat(unitPrice) * item.quantity;
     });
-    setTotal(totalPrice);
 
+    setTotal(totalPrice);
     fetchAddress();
   }, []);
 
@@ -39,25 +41,36 @@ function PaiementLivraison() {
         const cartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
 
         const payload = {
+          adresse: userAddress.address,
+          phone: userAddress.phone,
+          ville: userAddress.city,
+          code_postal: userAddress.postal_code,
+          region: userAddress.region,
+          country: userAddress.country,
           total: total,
-          items: cartItems,
-          shipping_address: `${userAddress.address}, ${userAddress.city}`,
-          payment_method: 'Paiement à la livraison'
+          payment_method: 'cod',
+          items: cartItems
         };
-        console.log('Payload envoyé :', payload);
-        await axios.post(`${process.env.REACT_APP_API_URL}/api/payment/cod`, payload, {
+
+       
+
+        await axios.post(`${process.env.REACT_APP_API_URL}/orders`, payload, {
           headers: { Authorization: `Bearer ${token}` }
         });
-        
 
-        console.log('Commande en livraison enregistrée !');
-       
       } catch (error) {
-        console.error('Erreur lors de l’enregistrement :', error.response?.data || error.message);
+  
       }
     };
 
-    if (userAddress.address && userAddress.city) {
+    if (
+      userAddress.address &&
+      userAddress.city &&
+      userAddress.postal_code &&
+      userAddress.region &&
+      userAddress.country &&
+      userAddress.phone
+    ) {
       envoyerCommande();
     }
   }, [userAddress, total]);
@@ -70,12 +83,12 @@ function PaiementLivraison() {
       <div className="commande-details">
         <p><strong>Mode de paiement :</strong> Paiement à la livraison</p>
         <p><strong>Total :</strong> {total.toFixed(2)} MAD</p>
-        <p><strong>Adresse de livraison :</strong> {userAddress.address}, {userAddress.city}</p>
+        <p><strong>Adresse de livraison :</strong> {userAddress.address}, {userAddress.city}, {userAddress.postal_code}, {userAddress.region}, {userAddress.country}, {userAddress.phone}</p>
         <p><strong>Date estimée de livraison :</strong> entre 2 et 4 jours ouvrables</p>
       </div>
 
       <div className="btns-livraison">
-        <a className="btn-secondary" href="/confirmation">Suivre ma commande</a>
+        <Link to="/confirmation" className="btn-secondary">Suivre ma commande</Link>
       </div>
     </div>
   );

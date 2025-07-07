@@ -13,8 +13,15 @@ const RecherchePage = () => {
 
   useEffect(() => {
     if (query) {
-      axios
-        .get(`/api/search?query=${query}&sort=${sortBy}&page=${currentPage}`)
+      
+      axios.get(`${process.env.REACT_APP_API_URL}/search`, {
+        params: {
+          query,
+          sort: sortBy,
+          page: currentPage,
+        },
+      })
+      
         .then((res) => {
           setResults(res.data.data);
           setLastPage(res.data.last_page);
@@ -65,7 +72,10 @@ const RecherchePage = () => {
             >
               {product.images?.[0]?.url && (
                 <img
-                  src={`${process.env.REACT_APP_API_URL}/${product.images[0].url}`}
+            
+                src={`${process.env.REACT_APP_IMAGE_URL}/${product.images[0].url}`}
+               
+              
                   alt={product.name}
                   className="product-image"
                 />

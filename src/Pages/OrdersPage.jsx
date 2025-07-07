@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import { FaCreditCard, FaPaypal, FaTruck } from 'react-icons/fa';
+/*import { FaCreditCard, FaPaypal, FaTruck } from 'react-icons/fa';*/
 import BeatLoader from "react-spinners/BeatLoader";
+import { FaTruck } from 'react-icons/fa'
 
 
 import 'react-phone-input-2/lib/style.css';
@@ -21,32 +22,52 @@ function OrdersPage() {
   const [adresseData, setAdresseData] = useState(null);
   const [cartStats, setCartStats] = useState({ totalItems: 0, totalPrice: 0 });
   const [cartItems, setCartItems] = useState([]);
-  const [showPaypalModal, setShowPaypalModal] = useState(false);
+  /*const [showPaypalModal, setShowPaypalModal] = useState(false);*/
   const [showCODModal, setShowCODModal] = useState(false);
   const [showAdresseModal, setShowAdresseModal] = useState(false);
   const [loading, setLoading] = useState(false);
   const [fieldErrors, setFieldErrors] = useState({});
-
-
-
   useEffect(() => {
-    const cart = JSON.parse(localStorage.getItem('cartItems')) || [];
-    let totalItems = 0;
-    let totalPrice = 0;
-    cart.forEach(item => {
-      totalItems += item.quantity;
-      totalPrice += parseFloat(item.product.price) * item.quantity;
-    });
-    setCartStats({ totalItems, totalPrice });
-    setCartItems(cart);
+    const fetchCartItems = async () => {
+      const token = localStorage.getItem('token');
+      if (!token) return;
+  
+      try {
+        const response = await axios.get(`${process.env.REACT_APP_API_URL}/cart`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            Accept: 'application/json'
+          }
+        });
+  
+        const items = response.data;
+        setCartItems(items);
+  
+        let totalItems = 0;
+        let totalPrice = 0;
+  
+        items.forEach(item => {
+          const quantity = item.quantity || 1;
+          const price = parseFloat(item.price || 0);
+          totalItems += quantity;
+          totalPrice += price * quantity;
+        });
+  
+        setCartStats({ totalItems, totalPrice });
+      } catch (err) {
+        console.error("Erreur lors du chargement du panier:", err);
+      }
+    };
+  
+    fetchCartItems();
   }, []);
-
+  
   useEffect(() => {
     const fetchAddress = async () => {
       setLoading(true);
       try {
         const token = localStorage.getItem('token');
-        const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/address`, {
+        const response = await axios.get(`${process.env.REACT_APP_API_URL}/address`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         
@@ -82,7 +103,7 @@ function OrdersPage() {
       };
       try {
        
-        await axios.post(`${process.env.REACT_APP_API_URL}/api/address`, payload, {
+        await axios.post(`${process.env.REACT_APP_API_URL}/address`, payload, {
           headers: { Authorization: `Bearer ${token}` }
         });
         
@@ -94,18 +115,15 @@ function OrdersPage() {
     saveAddressIfNeeded();
   }, );
 
-  useEffect(() => {
+ /* useEffect(() => {
     setShowPaypalModal(formData.paymentMethod === 'paypal');
-  }, [formData.paymentMethod]);
+  }, [formData.paymentMethod]);*/
 
   useEffect(() => {
     setShowCODModal(formData.paymentMethod === 'cod');
   }, [formData.paymentMethod]);
 
-  useEffect(() => {
-    setShowCODModal(formData.paymentMethod === 'cod');
-  }, [formData.paymentMethod]);
-  
+
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
   
@@ -125,6 +143,7 @@ if (!formData.email) errors.email = "Entrez un email";
       if (Object.keys(errors).length > 0 && !adresseExiste) {
         setFieldErrors(errors);
         window.scrollTo({ top: 0, behavior: 'smooth' });
+        
   
         return; 
       }
@@ -189,13 +208,14 @@ if (Object.keys(errors).length > 0) {
     };
     try {
       if (adresseExiste) {
-        await axios.put(`${process.env.REACT_APP_API_URL}/api/address`, payload, {
+        await axios.put(`${process.env.REACT_APP_API_URL}/address`, payload, {
           headers: { Authorization: `Bearer ${token}` }
         });
       } else {
-        await axios.post(`${process.env.REACT_APP_API_URL}/api/address`, payload, {
+        await axios.post(`${process.env.REACT_APP_API_URL}/address`, payload, {
           headers: { Authorization: `Bearer ${token}` }
         });
+        
       }
     
       //  mise à jour directe sans refresh
@@ -209,6 +229,8 @@ if (Object.keys(errors).length > 0) {
     }
     
   };
+  
+  
 
   return (
     <div className="order-container">
@@ -227,9 +249,9 @@ if (Object.keys(errors).length > 0) {
               <p>{adresseData.country}</p>
               <p>{adresseData.phone}</p>
             </div>
-            <button className="changer-adresse" onClick={() => setShowAdresseModal(true)}>
-              Modifier l'adresse
-            </button>
+      {/* <button className="changer-adresse" onClick={() => setShowAdresseModal(true)}>
+  Modifier l'adresse
+</button> */}
           </div>
         ) : (
           <div className="client-info-box">
@@ -331,9 +353,51 @@ if (Object.keys(errors).length > 0) {
         className={fieldErrors.ville ? 'input-error' : ''}
       >
         <option value="">Sélectionner</option>
-        <option value="Casablanca">Casablanca</option>
-        <option value="Mohammedia">Mohammedia</option>
-      </select>
+  <option value="Agadir">Agadir</option>
+  <option value="Al Hoceïma">Al Hoceïma</option>
+  <option value="Azilal">Azilal</option>
+  <option value="Beni Mellal">Beni Mellal</option>
+  <option value="Berkane">Berkane</option>
+  <option value="Berrechid">Berrechid</option>
+  <option value="Boujdour">Boujdour</option>
+  <option value="Casablanca">Casablanca</option>
+  <option value="Chefchaouen">Chefchaouen</option>
+  <option value="Dakhla">Dakhla</option>
+  <option value="El Jadida">El Jadida</option>
+  <option value="Errachidia">Errachidia</option>
+  <option value="Essaouira">Essaouira</option>
+  <option value="Fès">Fès</option>
+  <option value="Figuig">Figuig</option>
+  <option value="Guelmim">Guelmim</option>
+  <option value="Ifrane">Ifrane</option>
+  <option value="Kénitra">Kénitra</option>
+  <option value="Khémisset">Khémisset</option>
+  <option value="Khénifra">Khénifra</option>
+  <option value="Khouribga">Khouribga</option>
+  <option value="Laâyoune">Laâyoune</option>
+  <option value="Larache">Larache</option>
+  <option value="Marrakech">Marrakech</option>
+  <option value="Meknès">Meknès</option>
+  <option value="Mohammedia">Mohammedia</option>
+  <option value="Nador">Nador</option>
+  <option value="Ouarzazate">Ouarzazate</option>
+  <option value="Oujda">Oujda</option>
+  <option value="Rabat">Rabat</option>
+  <option value="Safi">Safi</option>
+  <option value="Salé">Salé</option>
+  <option value="Settat">Settat</option>
+  <option value="Sidi Kacem">Sidi Kacem</option>
+  <option value="Sidi Slimane">Sidi Slimane</option>
+  <option value="Tan-Tan">Tan-Tan</option>
+  <option value="Tanger">Tanger</option>
+  <option value="Taounate">Taounate</option>
+  <option value="Taroudant">Taroudant</option>
+  <option value="Taza">Taza</option>
+  <option value="Témara">Témara</option>
+  <option value="Tétouan">Tétouan</option>
+  <option value="Tinghir">Tinghir</option>
+  <option value="Tiznit">Tiznit</option>
+</select>
       {fieldErrors.ville && <p className="error-message">{fieldErrors.ville}</p>}
     </div>
   </div>
@@ -349,7 +413,6 @@ if (Object.keys(errors).length > 0) {
       />
       {fieldErrors.country && <p className="error-message">{fieldErrors.country}</p>}
     </div>
-
     <div className="form-group">
       <label>Code postal (facultatif)</label>
       <input
@@ -361,6 +424,10 @@ if (Object.keys(errors).length > 0) {
       {fieldErrors.code_postal && <p className="error-message">{fieldErrors.code_postal}</p>}
     </div>
   </div>
+
+    
+  
+
 
         <div className="checkbox-save-wrapper">
           <label className="checkbox-save">
@@ -383,14 +450,6 @@ if (Object.keys(errors).length > 0) {
         <h4>2. MÉTHODE DE PAIEMENT</h4>
         <div className="payment-options">
           <label>
-            <input type="radio" name="paymentMethod" value="card" onChange={handleChange} checked={formData.paymentMethod === 'card'} />
-            <FaCreditCard style={{ color: '#0070ba' }} /> Carte Bancaire
-          </label>
-          <label>
-            <input type="radio" name="paymentMethod" value="paypal" onChange={handleChange} checked={formData.paymentMethod === 'paypal'} />
-            <FaPaypal style={{ color: '#003087' }} /> PayPal
-          </label>
-          <label>
             <input type="radio" name="paymentMethod" value="cod" onChange={handleChange} checked={formData.paymentMethod === 'cod'} />
             <FaTruck style={{ color: '#555' }} /> Paiement à la livraison
           </label>
@@ -402,26 +461,36 @@ if (Object.keys(errors).length > 0) {
       <h3>Résumé de la commande :</h3>
       {cartItems.map((item, index) => (
         <div className="summary-item" key={index}>
-          <img
-            src={
-              item.product.images && item.product.images.length > 0
-                ? `${process.env.REACT_APP_API_URL}/${item.product.images[0].url}`
-                : 'https://via.placeholder.com/150'
-            }
-            alt={item.product.name}
-            
-            className="product-img"
-          />
+        <img
+  src={
+    item.image_url ||
+    (item.variant?.image
+      ? `${process.env.REACT_APP_IMAGE_URL}/${item.variant.image}`
+      : item.product.images?.[0]
+      ? `${process.env.REACT_APP_IMAGE_URL}/${item.product.images[0].url}`
+      : 'https://via.placeholder.com/150')
+  }
+  alt={item.product.name}
+  className="product-img"
+/>
+
+  
           <div className="summary-info">
             <span className="summary-title">{item.product?.name}</span>
-            <span className="summary-price">{parseFloat(item.product?.price || 0).toFixed(2)} MAD</span>
-          </div>
+            <span className="summary-price">
+  {parseFloat(item.variant?.price || item.product?.price || 0).toFixed(2)} MAD
+</span>
+</div>
         </div>
       ))}
-      <div className="promo-code">
-        <input type="text" placeholder="code de réduction" />
-        <button>Valider</button>
-      </div>
+     {/* 
+<div className="promo-code">
+  <input type="text" placeholder="code de réduction" />
+  <button>Valider</button>
+</div> 
+*/}
+
+     
       <div className="summary-line">
         <span>Sous-total · {cartItems.length} articles</span>
         <span>{cartStats.totalPrice.toFixed(2)} MAD</span>
@@ -469,8 +538,7 @@ if (Object.keys(errors).length > 0) {
               onChange={(e) => setFormData({ ...formData, country: e.target.value })}
             >
               <option value="Maroc">Maroc</option>
-              <option value="France">France</option>
-              <option value="USA">USA</option>
+          
             </select>
           </div>
           <div className="form-group">
@@ -531,6 +599,12 @@ if (Object.keys(errors).length > 0) {
         <div className="modal-actions horizontal">
           <button className="cancel-btn" onClick={() => setShowAdresseModal(false)}>Annuler</button>
           <button className="save-btn" onClick={handleSubmit}>Enregistrer</button>
+  
+  
+          
+
+
+
         </div>
       </div>
     </div></div>
@@ -538,27 +612,31 @@ if (Object.keys(errors).length > 0) {
     
     )}
 
-    {showPaypalModal && (
-      <div className="modal-overlay">
-        <div className="modal">
-          <h3>Paiement par PayPal</h3>
-          <p>Connectez-vous à votre compte PayPal.</p>
-          <button onClick={() => setShowPaypalModal(false)}>Fermer</button>
-          <a href="/PaiementPaypal">Continuer</a>
-        </div>
-      </div>
-    )}
-    {formData.paymentMethod === 'card' && (
+    {/* Désactivé : Paiement PayPal
+{showPaypalModal && (
+  <div className="modal-overlay">
+    <div className="modal">
+      <h3>Paiement par PayPal</h3>
+      <p>Connectez-vous à votre compte PayPal.</p>
+      <button onClick={() => setShowPaypalModal(false)}>Fermer</button>
+      <a href="/PaiementPaypal">Continuer</a>
+    </div>
+  </div>
+)} */}
+
+  
+ {/* Désactivé : Paiement Carte Bancaire
+{formData.paymentMethod === 'card' && (
   <div className="modal-overlay">
     <div className="modal">
       <h3>Paiement par Carte Bancaire</h3>
       <p>Vous allez être redirigé(e) vers la page de paiement sécurisé par carte.</p>
       <button onClick={() => setFormData({ ...formData, paymentMethod: '' })}>Annuler</button>
       <button onClick={() => navigate('/paiement-stripe')}>Payer maintenant</button>
-
     </div>
   </div>
-)}
+)} */}
+
     {showCODModal && (
       <div className="modal-overlay">
         <div className="modal">

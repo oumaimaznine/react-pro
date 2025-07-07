@@ -59,7 +59,6 @@
   color: #4b4f4b;
 }
 
-
 /* === Responsive: Mobile (2 produits par ligne) */
 @media (max-width: 768px) {
   .products-grid {
