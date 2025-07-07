@@ -1,45 +1,47 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import './RecommendedProducts.css';
+import './RecommendedProducts.css'; 
 
-const RecommendedProducts = ({ productId, cartItems = [], title = "Articles recommandés pour vous" }) => {
-  const [sameCategory, setSameCategory] = useState([]);
-  const [alsoBought, setAlsoBought] = useState([]);
+const RecentlyViewed = ({ title = "Produits récemment consultés" }) => {
+  const [recentlyViewed, setRecentlyViewed] = useState([]);
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (!productId) return;
+    const viewedIds = JSON.parse(localStorage.getItem('recentlyViewed')) || [];
 
-    axios.get(`${process.env.REACT_APP_API_URL}/recommendations/${productId}`)
-      .then((res) => {
-        setSameCategory(res.data.same_category || []);
-        setAlsoBought(res.data.also_bought || []);
+    if (viewedIds.length > 0) {
+      axios.get(`${process.env.REACT_APP_API_URL}/viewed-products`, {
+        params: { ids: viewedIds }
       })
-      .catch((err) => {
-        console.error('Erreur lors du chargement des recommandations:', err);
+      .then(res => {
+        setRecentlyViewed(res.data.recently_viewed || []);
+      })
+      .catch(err => {
+        console.error("Erreur lors du chargement des produits récemment consultés:", err);
       });
-  }, [productId]);
-
-  const cartProductIds = cartItems.map(item => item.product.id);
-
-  const mergedList = [...sameCategory, ...alsoBought].filter((product, index, self) =>
-    !cartProductIds.includes(product.id) &&
-    index === self.findIndex(p => p.id === product.id)
-  );
+    }
+  }, []);
 
   const handleClick = (id) => {
     navigate(`/product/${id}`);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
-  if (mergedList.length === 0) return null;
+  if (recentlyViewed.length === 0) {
+    return (
+      <div className="recommended-container">
+        <h3 className="recommend-title">{title}</h3>
+        <p>Aucun produit consulté récemment.</p>
+      </div>
+    );
+  }
 
   return (
     <div className="recommended-container">
       <h3 className="recommend-title">{title}</h3>
       <div className="recommended-list">
-        {mergedList.map((product) => (
+        {recentlyViewed.map(product => (
           <div
             key={product.id}
             className="recommended-card"
@@ -49,7 +51,6 @@ const RecommendedProducts = ({ productId, cartItems = [], title = "Articles reco
               loading="lazy"
               src={`${process.env.REACT_APP_IMAGE_URL}/${product.images?.[0]?.url}`}
               alt={product.name}
-              
             />
             {product.is_promo === 1 && (
               <span className="promo-label">Promotion</span>
@@ -68,4 +69,4 @@ const RecommendedProducts = ({ productId, cartItems = [], title = "Articles reco
   );
 };
 
-export default RecommendedProducts;
+export default RecentlyViewed;

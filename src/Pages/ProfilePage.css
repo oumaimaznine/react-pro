@@ -86,7 +86,7 @@
 }
 
 .logout-btn {
-  background-color: #3BD6F3;
+  background-color:  #5FC2D4;
   color: #fff;
   border: none;
   padding: 10px 28px;
@@ -238,7 +238,7 @@
 }
 
 .save-btn {
-  background-color: #3BD6F3;
+  background-color:  #5FC2D4;
   color: white;
   border: none;
   padding: 10px 20px;
@@ -405,7 +405,7 @@
 
 .alert-box button {
   padding: 8px 18px;
-  background-color: #3BD6F3;
+  background-color:  #5FC2D4;
   color: white;
   border: none;
   font-weight: bold;
@@ -443,7 +443,7 @@
     backdrop-filter: blur(1px);
   }
 
-  /* Contenu principal du modal */
+ 
   .profile-modal {
     width: 100%;
     max-width: 100%;
@@ -489,7 +489,7 @@
     cursor: pointer;
   }
 
-  /* Groupes de champs */
+ 
   .form-group {
     width: 100%;
     margin-bottom: 16px;
@@ -536,7 +536,7 @@
   }
 
   .modal-actions.horizontal .save-btn {
-    background-color: #3BD6F3;
+    background-color:  #5FC2D4;
     color: white;
     border: none;
   }

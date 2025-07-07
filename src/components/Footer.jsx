@@ -42,7 +42,7 @@ const Footer = () => {
         <div className="footer-block">
           <h3 className="footer-title">Contactez-nous</h3>
           <Link to="/contact" className="footer-link">contactez-nous</Link>
-          <p className="footer-text">Téléphone: +212 777036260</p>
+          <p className="footer-text">Téléphone: +212723128510</p>
         </div>
       </div>
 

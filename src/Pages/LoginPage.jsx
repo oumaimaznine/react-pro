@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import './LoginPage.css';
 import { useNavigate, useLocation } from 'react-router-dom';
-
+import { Link } from "react-router-dom";
 function LoginPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -17,7 +17,7 @@ function LoginPage() {
     setError('');
 
     try {
-      const response = await axios.post(`${process.env.REACT_APP_API_URL}/api/login`, {
+      const response = await axios.post(`${process.env.REACT_APP_API_URL}/login`, {
         email,
         password,
       });
@@ -26,8 +26,7 @@ function LoginPage() {
       if (response.data.token && response.data.user) {
         localStorage.setItem('token', response.data.token);
         localStorage.setItem('user', JSON.stringify(response.data.user));
-        console.log("oken saved:", response.data.token);
-        console.log("User saved:", response.data.user);
+       
 
         const manualRedirect = localStorage.getItem("redirectAfterLogin");
         localStorage.removeItem("redirectAfterLogin");
@@ -43,12 +42,11 @@ function LoginPage() {
     }
   };
 
-  const loginWithFacebook = () => {
-    window.location.href = 'http://127.0.0.1:8000/api/login/facebook';
-  };
+ 
 
   const loginWithGoogle = () => {
-    window.location.href = 'http://127.0.0.1:8000/api/auth/google';
+    window.location.href = `${process.env.REACT_APP_API_URL}/auth/google`;
+
   };
 
   return (
@@ -83,28 +81,24 @@ function LoginPage() {
         </div>
 
         <div className="social-login">
-          <button
-            type="button"
-            className="social-btn facebook"
-            onClick={loginWithFacebook}
-          >
-            <img src="/icons/facebook.png" alt="Facebook" />
-            Continuer avec Facebook
-          </button>
+
 
           <button
             type="button"
             className="social-btn google"
             onClick={loginWithGoogle}
           >
-            <img src="/icons/google.png" alt="Google" />
+      <img src={`${process.env.PUBLIC_URL}/icons/google.png`} alt="Google" />
+
+
             Continuer avec Google
           </button>
         </div>
 
         <p className="register-link">
-          Vous n’avez pas de compte ?{' '}
-          <a href="/register">Inscrivez-vous</a>
+  Vous n’avez pas de compte ? <Link to="/register">Inscrivez-vous</Link>
+
+
         </p>
       </form>
     </div>

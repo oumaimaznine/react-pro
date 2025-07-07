@@ -13,7 +13,6 @@ import { useNavigate } from "react-router-dom";
 import "./PaiementStripe.css";
 
 const stripePromise = loadStripe("pk_test_51ROfS92eggJY7CwO3QJrelFVFNGlMECpFbRJBqiRoHYLMZTUgnpVILCkIn1ebnDdmKP40Y62aKpoAA31vXYSV8A600Bx9uY8S7");
-
 const CheckoutForm = () => {
   const stripe = useStripe();
   const elements = useElements();
@@ -27,7 +26,10 @@ const CheckoutForm = () => {
   useEffect(() => {
     const cart = JSON.parse(localStorage.getItem("cartItems")) || [];
     setCartItems(cart);
-    const total = cart.reduce((acc, item) => acc + item.quantity * item.product.price, 0);
+    const total = cart.reduce(
+      (acc, item) => acc + item.quantity * item.product.price,
+      0
+    );
     setTotalPrice(total.toFixed(2));
   }, []);
 
@@ -47,7 +49,7 @@ const CheckoutForm = () => {
 
       //  Créer PaymentIntent
       const res = await axios.post(
-        `${process.env.REACT_APP_API_URL}/api/payment/stripe`,
+        `${process.env.REACT_APP_API_URL}/payment/stripe`,
         { amount: Math.round(totalPrice * 100) },
         {
           headers: {
@@ -55,10 +57,8 @@ const CheckoutForm = () => {
           },
         }
       );
-      
-        
 
-      //  Confirmer le paiement avec Stripe
+      // 2. Confirmer le paiement avec Stripe
       const result = await stripe.confirmCardPayment(res.data.clientSecret, {
         payment_method: {
           card: elements.getElement(CardNumberElement),
@@ -66,13 +66,13 @@ const CheckoutForm = () => {
       });
 
       if (result.error) {
-        setMessage( + result.error.message);
+        setMessage("Erreur: " + result.error.message);
       } else if (result.paymentIntent.status === "succeeded") {
-        setMessage(" Paiement réussi !");
+        setMessage("Paiement réussi !");
 
-        //  Enregistrer la commande côté Laravel
+        // 3. Enregistrer la commande
         await axios.post(
-          "http://localhost:8000/api/payment/stripe/success",
+          `${process.env.REACT_APP_API_URL}/payment/stripe/success`,
           {
             items: cartItems,
             total: totalPrice,
@@ -84,9 +84,7 @@ const CheckoutForm = () => {
             },
           }
         );
-        
 
-        // Nettoyage
         localStorage.removeItem("cartItems");
         setTimeout(() => navigate("/confirmation"), 2000);
       }

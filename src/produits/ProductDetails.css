@@ -1,24 +1,32 @@
+body, html, #root, .App {
+  overflow: visible !important;
+}
 
 .product-details-container {
   display: flex;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
   gap: 60px;
   padding: 50px;
   max-width: 1200px;
   margin: auto;
   background-color: #fff;
+  overflow: visible !important;
 
 }
 /* === Section Image === */
 .detail-image-section {
-  flex: 1;
+  flex: 0 0 450px;
   position: sticky;
   top: 100px;
   align-self: flex-start;
   display: flex;
   flex-direction: column;
   align-items: center;
+  z-index: 3;
+
+  height: fit-content; 
 }
+
 
 .detail-image {
   width: 100%;
@@ -64,7 +72,7 @@
 }
 
 .product-title {
-  font-size: 28px !important; 
+  font-size: 25px !important; 
   font-weight: 700;
   color: #2d2f2f;
   margin-bottom: 9px;
@@ -135,7 +143,7 @@
 }
 
 .buy-now {
-  background-color: #3BD6F3; 
+  background-color:  #5FC2D4; 
   color: white;
   border: none;
   font-weight: bold;
@@ -277,7 +285,7 @@
 
 .popup-btn-full {
   padding: 10px;
-  background-color: #3BD6F3;
+  background-color:  #5FC2D4;
   color: white;
   border: none;
   border-radius: 8px;
@@ -296,10 +304,18 @@
   cursor: pointer;
   padding: 12px 8px;
 }
+.popup-actions {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  margin-top: 20px;
+}
+
 
 .popup-link {
   text-align: center;
-  color: #3BD6F3;
+  color:  #5FC2D4;
   background: none;
   border: none;
   font-size: 14px;
@@ -384,6 +400,128 @@ font-weight: 400;
   font-size: 14px;
   color: #444;
 }
+/* Ligne des ventes */
+.sold-info {
+  color: #e53935; /* rouge doux */
+  font-weight: 500;
+  font-size: 15px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 12px;
+}
+
+/* Disponibilité */
+.stock-info {
+  font-size: 16px;
+  margin: 10px 0;
+  font-weight: 500;
+}
+
+.in-stock {
+  color: #070807; /* vert */
+  font-weight: 600;
+}
+
+.out-of-stock {
+  color: #e53935;
+  font-weight: 600;
+}
+
+/* Alerte de stock faible */
+.stock-alert {
+  color: #e53935;
+  font-size: 15px;
+  font-weight: 600;
+  margin-top: 10px;
+  margin-bottom: 5px;
+}
+
+
+/* Barre de stock (barre colorée dessous) */
+.stock-bar-container {
+  height: 6px;
+  width: 100%;
+  max-width: 400px; 
+  background-color: #eee;
+  border-radius: 4px;
+  overflow: hidden;
+  margin-top: 5px;
+  margin-bottom: 20px;
+}
+
+
+.stock-bar {
+  height: 100%;
+  background: linear-gradient(to right, #e53935, #8bc34a); /* rouge ↔ vert */
+  width: 30%; 
+}
+/* --- Couleur & Taille --- */
+.color-section h4,
+.taille-section h4 {
+  margin-bottom: 8px;
+  font-weight: 600;
+  color: #333;
+}
+
+.color-options,
+.taille-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.color-btn,
+.taille-btn {
+  padding: 8px 16px;
+  border: 1px solid #ccc;
+  background-color: #f9f9f9;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  font-weight: 500;
+  color: #333;
+}
+
+.color-btn:hover,
+.taille-btn:hover {
+  background-color: #e0e0e0;
+}
+
+.color-btn.selected,
+.taille-btn.selected {      
+  font-weight: bold;
+  color: #000;
+}
+
+.product-images-scroll {
+  display: flex;
+  overflow-x: auto;
+  gap: 10px;
+  padding: 10px 0;
+  scroll-snap-type: x mandatory;
+}
+
+.product-thumbnail {
+  width: 120px;
+  height: auto;
+  object-fit: contain;
+  scroll-snap-align: start;
+  flex-shrink: 0;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+}
+
+/* Cacher la scrollbar */
+.product-images-scroll::-webkit-scrollbar {
+  display: none;
+}
+.product-images-scroll {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
 
 
 
@@ -511,4 +649,27 @@ font-weight: 400;
       display: block;
     }
   }
-   
+  .table-wrapper {
+    overflow-x: auto;
+    max-width: 100%;
+  }
+  
+  .table-wrapper table {
+    width: 100%;
+    min-width: 600px; /* adjust si bghiti */
+    border-collapse: collapse;
+  }
+  
+  .table-wrapper th, .table-wrapper td {
+    padding: 8px;
+    border: 1px solid #ccc;
+    text-align: left;
+  }
+  
+  @media (max-width: 768px) {
+    .table-wrapper table {
+      font-size: 14px;
+      min-width: 500px;
+    }
+  }
+  

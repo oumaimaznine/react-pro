@@ -15,7 +15,7 @@ function ProfilePage() {
   const [showModal, setShowModal] = useState(false);
   const [showAddressModal, setShowAddressModal] = useState(false);
   const [showUpdateAddressModal, setShowUpdateAddressModal] = useState(false);
-  const [showDeleteConfirmModal, setShowDeleteConfirmModal] = useState(false);
+
   const [showUpdateSuccessAlert, setShowUpdateSuccessAlert] = useState(false);
   const [showAddSuccessAlert, setShowAddSuccessAlert] = useState(false);
   const [errors, setErrors] = useState({});
@@ -41,19 +41,17 @@ function ProfilePage() {
         if (!token) return navigate('/connexion');
 
 
-        const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/user`, {
+        const response = await axios.get(`${process.env.REACT_APP_API_URL}/user`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         
-        console.log("Données du profil:", response.data);
-
+     
         setProfile(response.data);
         const [prenom, nom] = response.data.name.split(' ');
         setFirstName(prenom || '');
         setLastName(nom || '');
       } catch (error) {
-        console.error(" Erreur récupération profil:", error);
-        console.error("Erreur:", error);
+        
       
      
       }
@@ -62,7 +60,7 @@ function ProfilePage() {
     const fetchAddress = async () => {
       try {
         const token = localStorage.getItem('token');
-        const res = await axios.get(`${process.env.REACT_APP_API_URL}/api/address`, {
+        const res = await axios.get(`${process.env.REACT_APP_API_URL}/address`, {
           headers: { Authorization: `Bearer ${token}` }
         });
         
@@ -99,7 +97,7 @@ function ProfilePage() {
       const token = localStorage.getItem('token');
       const updatedName = `${firstName} ${lastName}`;
   
-      await axios.put(`${process.env.REACT_APP_API_URL}/api/user`, {
+      await axios.put(`${process.env.REACT_APP_API_URL}/user`, {
         name: updatedName,
         email: profile.email,
       }, {
@@ -150,7 +148,7 @@ function ProfilePage() {
     try {
       const token = localStorage.getItem('token');
   
-      await axios.post(`${process.env.REACT_APP_API_URL}/api/address`, {
+      await axios.post(`${process.env.REACT_APP_API_URL}/address`, {
         first_name: prenom,
         last_name: nom,
         address: adresse,
@@ -166,7 +164,7 @@ function ProfilePage() {
       setShowAddSuccessAlert(true);
       setErrors({});
     } catch (error) {
-      console.error("Erreur axios complète:", error);
+    
     }
   };
   
@@ -203,7 +201,7 @@ function ProfilePage() {
   
     try {
       const token = localStorage.getItem('token');
-      await axios.put(`${process.env.REACT_APP_API_URL}/api/address`, {
+      await axios.put(`${process.env.REACT_APP_API_URL}/address`, {
         first_name: prenom,
         last_name: nom,
         address: adresse,
@@ -219,30 +217,27 @@ function ProfilePage() {
       setShowUpdateSuccessAlert(true);
       setErrors({}); 
     } catch (error) {
-      console.error("Erreur mise à jour adresse:", error);
+     
       alert("Erreur: " + (error.response?.data?.message || error.message));
     }
   };
   
 
 
-const handleDeleteAddress = () => {
-  setShowDeleteConfirmModal(true); 
-};
 
 const handleDeleteAddressConfirmed = async () => {
   try {
     const token = localStorage.getItem("token");
-    await axios.delete(`${process.env.REACT_APP_API_URL}/api/address`, {
+    await axios.delete(`${process.env.REACT_APP_API_URL}/address`, {
       headers: { Authorization: `Bearer ${token}` },
     });
 
    
     setUserAddress(null);
     setShowUpdateAddressModal(false);
-    setShowDeleteConfirmModal(false); 
+    
   } catch (error) {
-    console.error("Erreur suppression adresse:", error);
+    
     alert("Erreur: " + (error.response?.data?.message || error.message));
   }
 };
@@ -284,10 +279,7 @@ const handleDeleteAddressConfirmed = async () => {
     <label>Pays</label>
     <select value={country} onChange={(e) => setCountry(e.target.value)}>
       <option value="ma">Maroc</option>
-      <option value="fr">France</option>
-      <option value="us">États-Unis</option>
-      <option value="dz">Algérie</option>
-      <option value="tn">Tunisie</option>
+      
     </select>
   </div>
   <div className="form-group">
@@ -361,16 +353,20 @@ const handleDeleteAddressConfirmed = async () => {
     {errors.ville && <small className="error-message">{errors.ville}</small>}
   </div>
 </div>
-
 <div className="modal-actions spaced-between">
   <div>
-    <button className="delete-btn" onClick={handleDeleteAddress}>Supprimer</button>
+    {showDelete && (
+      <button className="delete-btnn" onClick={handleDeleteAddressConfirmed}>
+        Supprimer
+      </button>
+    )}
   </div>
   <div>
     <button className="cancel-btn" onClick={handleClose}>Annuler</button>
     <button className="save-btn" onClick={handleSubmit}>Enregistrer</button>
   </div>
 </div>
+
 
 
     </>
@@ -531,19 +527,6 @@ const handleDeleteAddressConfirmed = async () => {
   </div>
 )}
 
-{showDeleteConfirmModal && (
-  <div className="modal-backdropp">
-    <div className="delete-confirm-modall">
-      <button className="close-btnn" onClick={() => setShowDeleteConfirmModal(false)}>×</button>
-      <h3>Supprimer l’adresse ?</h3>
-      <p className="subtext">Voulez-vous vraiment supprimer cette adresse ?</p>
-      <div className="modal-actions horizontall">
-        <button className="cancel-linkk" onClick={() => setShowDeleteConfirmModal(false)}>Retour</button>
-        <button className="delete-btnn" onClick={handleDeleteAddressConfirmed}>Supprimer l’adresse</button>
-      </div>
-    </div>
-  </div>
-)}
 
 
           {showUpdateAddressModal && (

@@ -72,7 +72,7 @@
   
   .form-group input:focus,
   .form-group textarea:focus {
-    border: 1px solid #3BD6F3;
+    border: 1px solid  #5FC2D4;
   }
   
   /* Textarea spécifique */
@@ -83,7 +83,7 @@
   
   /* Bouton envoyer */
   .submit-btn {
-    background-color: #3BD6F3;
+    background-color:  #5FC2D4;
     color: #fff;
     border: none;
     padding: 10px 20px;

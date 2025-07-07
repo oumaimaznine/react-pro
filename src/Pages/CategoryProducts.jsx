@@ -11,9 +11,10 @@ function CategoryProducts() {
   const [sortBy, setSortBy] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
   const [lastPage, setLastPage] = useState(1);
+  
 
   useEffect(() => {
-    axios.get(`${process.env.REACT_APP_API_URL}/api/category/${cleanId}/products?page=${currentPage}&sort=${sortBy}`)
+    axios.get(`${process.env.REACT_APP_API_URL}/category/${cleanId}/products?page=${currentPage}&sort=${sortBy}`)
       .then((response) => {
         setProducts(response.data.data);
         setLastPage(response.data.last_page);
@@ -57,7 +58,7 @@ function CategoryProducts() {
               {/* Image */}
               {product.images?.[0]?.url && (
                 <img
-                  src={`${process.env.REACT_APP_API_URL}/${product.images[0].url}`}
+                src={`${process.env.REACT_APP_IMAGE_URL}/${product.images[0].url}`}
                   alt={product.name}
                   className="product-image"
                 />
@@ -85,22 +86,22 @@ function CategoryProducts() {
                 )}
               </div>
 
-              {/* Étoiles si avis existants */}
               {product.reviews_count > 0 && (
-                <div className="product-rating">
-                  {Array.from({ length: 5 }).map((_, index) => (
-                    <i
-                      key={index}
-                      className={
-                        index < Math.round(product.reviews_avg_rating)
-                          ? 'fas fa-star star-filled'
-                          : 'far fa-star star-empty'
-                      }
-                    />
-                  ))}
-                  <span className="rating-count">({product.reviews_count})</span>
-                </div>
-              )}
+  <div className="product-rating">
+    {Array.from({ length: 5 }).map((_, index) => (
+      <i
+        key={index}
+        className={
+          index < product.reviews_avg_rating
+            ? 'fas fa-star star-filled'
+            : 'far fa-star star-empty'
+        }
+      />
+    ))}
+    <span className="rating-count">({product.reviews_count})</span>
+  </div>
+)}
+
 
             </Link>
           ))

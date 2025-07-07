@@ -4,6 +4,7 @@ import axios from 'axios';
 import './ProductDetails.css';
 import RecommendedProducts from './RecommendedProducts';
 import ProductReview from '../components/ProductReview';
+import RecentlyViewed from './RecentlyViewed';
 
 const ProductDetails = () => {
   const { id } = useParams();
@@ -12,127 +13,266 @@ const ProductDetails = () => {
   const [quantity, setQuantity] = useState(1);
   const [showPopup, setShowPopup] = useState(false);
   const [popupProduct, setPopupProduct] = useState(null);
+  const [selectedColor, setSelectedColor] = useState('');
+  const [selectedSize, setSelectedSize] = useState('');
+  const [selectedVariant, setSelectedVariant] = useState(null);
   const navigate = useNavigate();
 
-
   useEffect(() => {
-    axios.defaults.withCredentials = true;
-    axios.defaults.baseURL = process.env.REACT_APP_API_URL;
-
     const fetchProduct = async () => {
       try {
-        const response = await axios.get(`/api/products/${id}`);
+        axios.defaults.baseURL = process.env.REACT_APP_API_URL;
+        const response = await axios.get(`/products/${id}`);
         const data = response.data;
         setProduct(data);
+        const viewed = JSON.parse(localStorage.getItem('recentlyViewed')) || [];
+        if (!viewed.includes(data.id)) {
+          viewed.push(data.id);
+          localStorage.setItem('recentlyViewed', JSON.stringify(viewed.slice(-20)));
+        }
 
-        if (data.images && data.images.length > 0) {
-          setMainImage(`${process.env.REACT_APP_API_URL}/${data.images[0].url}`);
+        if (data.images?.length > 0) {
+          setMainImage(`${process.env.REACT_APP_IMAGE_URL}/${data.images[0].url}`);
+        }
+
+        const token = localStorage.getItem('token');
+        if (token) {
+          await axios.post(`/product-view/${id}`, {}, {
+            headers: { Authorization: `Bearer ${token}` }
+          });
         }
       } catch (error) {
-        console.error('Erreur lors du chargement du produit:', error);
+     
       }
     };
 
     fetchProduct();
   }, [id]);
 
-  const addToCart = async () => {
-    const token = localStorage.getItem('token');
-  
-    if (!token) {
-      //  Système localStorage
-      const existingCart = JSON.parse(localStorage.getItem('cart')) || [];
-  
-      const existingItemIndex = existingCart.findIndex(
-        item => item.id === product.id
-      );
-  
-      if (existingItemIndex !== -1) {
-    
-        existingCart[existingItemIndex].quantity += quantity;
-      } else {
-      
-        existingCart.push({ ...product, quantity });
+  useEffect(() => {
+    if (!product || !product.variants) return;
+
+    const variant = product.variants.find(v =>
+      (!v.couleur || v.couleur === selectedColor) &&
+      (!v.taille || v.taille === selectedSize)
+    );
+
+    if (variant) {
+      setSelectedVariant(variant);
+      if (variant.image) {
+        setMainImage(`${process.env.REACT_APP_IMAGE_URL}/${variant.image}`);
       }
+    }
+  }, [selectedColor, selectedSize, product]);
+
+  const couleursDispo = [...new Set(product?.variants?.map(v => v.couleur))].filter(Boolean);
+  const taillesDispo = [...new Set(product?.variants?.map(v => v.taille))].filter(Boolean);
+
+  const addToCart = async () => {
+
+
+    if (product?.variants?.length > 0) {
+      const requireColor = product.variants.some(v => v.couleur);
+      const requireSize = product.variants.some(v => v.taille);
+      if ((requireColor && !selectedColor) || (requireSize && !selectedSize)) {
+        alert("Veuillez choisir une couleur ou une taille.");
+        return;
+      }
+    }
+
+    const token = localStorage.getItem('token');
+    const finalVariant = product.variants?.find(v =>
+      (v.couleur ? v.couleur === selectedColor : true) &&
+      (v.taille ? v.taille === selectedSize : true)
+    );
+    
+    const variantImage = finalVariant?.image
+      ? `${process.env.REACT_APP_IMAGE_URL}/${finalVariant.image}`
+      : (product.images[0] ? `${process.env.REACT_APP_IMAGE_URL}/${product.images[0].url}` : '');
+
+    const variantPrice = finalVariant?.price || product.price;
+
+    if (!token) {
+      const cart = JSON.parse(localStorage.getItem('cart')) || [];
+      const index = cart.findIndex(item =>
+        item.id === product.id &&
+        item.selectedColor === selectedColor &&
+        item.selectedSize === selectedSize
+      );
+
+      if (index !== -1) {
+        cart[index].quantity += quantity;
+      } else {
+        cart.push({
+          id: product.id,
+          name: product.name,
+          quantity,
+          selectedColor,
+          selectedSize,
+          image: variantImage,
+          variantId: finalVariant?.id || null,
+          price: variantPrice, 
+          variant: {
+            taille: selectedSize,
+            prix: variantPrice
+          }
+        });
+        
+
+      }
+
+      localStorage.setItem('cart', JSON.stringify(cart));
+    } else {
+      try {
+        await axios.post('/cart/items', {
+          product_id: product.id,
+          quantity,
+          selected_size: selectedSize,
+          selected_color: selectedColor,
+          variant_id: finalVariant?.id || null,
+        }, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            Accept: 'application/json'
+          },
+        });
+        
+      } catch (err) {
+   
+        alert("Erreur lors de l'ajout au panier.");
+        return;
+      }
+    }
+
+    setPopupProduct({
+      name: product.name,
+      size: selectedSize,
+      color: selectedColor,
+      price: variantPrice,
+      image: variantImage,
+    });
+
+    setShowPopup(true);
+  };
   
-      localStorage.setItem('cart', JSON.stringify(existingCart));
-  
-      // Popup
-      setPopupProduct({
-        name: product.name,
-        size: product.size,
-        image: product.images[0] ? `${process.env.REACT_APP_API_URL}/${product.images[0].url}` : '',
-      });
-      setShowPopup(true);
-      return;
+  const handleAcheterMaintenant = async () => {
+    if (product?.variants?.length > 0) {
+      const requireColor = product.variants.some(v => v.couleur);
+      const requireSize = product.variants.some(v => v.taille);
+      if ((requireColor && !selectedColor) || (requireSize && !selectedSize)) {
+        alert("Veuillez choisir une couleur ou une taille.");
+        return;
+      }
     }
   
-    //  Si utilisateur connecté, envoyer au backend
-    try {
-      await axios.post('/api/cart/items', {
-        product_id: product.id,
-        quantity,
-      }, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          Accept: 'application/json',
-        },
-      });
+    const finalVariant = product.variants?.find(v =>
+      (v.couleur ? v.couleur === selectedColor : true) &&
+      (v.taille ? v.taille === selectedSize : true)
+    );
   
-      setPopupProduct({
-        name: product.name,
-        size: product.size,
-        image: product.images[0] ? `${process.env.REACT_APP_API_URL}/${product.images[0].url}` : '',
-      });
-      setShowPopup(true);
-    } catch (error) {
-      console.error("Erreur lors de l'ajout au panier:", error);
-      alert("Erreur lors de l'ajout au panier.");
+    const variantImage = finalVariant?.image
+      ? `${process.env.REACT_APP_IMAGE_URL}/${finalVariant.image}`
+      : (product.images[0] ? `${process.env.REACT_APP_IMAGE_URL}/${product.images[0].url}` : '');
+  
+    const variantPrice = finalVariant?.price || product.price;
+  
+    const produit = {
+      id: product.id,
+      name: product.name,
+      quantity,
+      selectedColor,
+      selectedSize,
+      image: variantImage,
+      variantId: finalVariant?.id || null,
+      price: variantPrice,
+    };
+  
+    let acheterMaintenantListRaw = localStorage.getItem('acheterMaintenant');
+    let acheterMaintenantList = [];
+  
+    try {
+      acheterMaintenantList = JSON.parse(acheterMaintenantListRaw);
+      if (!Array.isArray(acheterMaintenantList)) {
+        acheterMaintenantList = [];
+      }
+    } catch {
+      acheterMaintenantList = [];
+    }
+  
+    const exists = acheterMaintenantList.some(item =>
+      item.id === produit.id &&
+      item.selectedColor === produit.selectedColor &&
+      item.selectedSize === produit.selectedSize
+    );
+  
+    if (!exists) {
+      acheterMaintenantList.push(produit);
+    }
+  
+    localStorage.setItem('acheterMaintenant', JSON.stringify(acheterMaintenantList));
+  
+    const token = localStorage.getItem('token');
+    if (token) {
+      try {
+        await axios.post('/cart/items', {
+          product_id: product.id,
+          quantity,
+          selected_size: selectedSize,
+          selected_color: selectedColor,
+          variant_id: finalVariant?.id || null,
+        }, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            Accept: 'application/json'
+          }
+        });
+      } catch (err) {
+       
+        alert("Erreur lors de l'ajout au panier.");
+        return;
+      }
+    }
+  
+    navigate('/orders');
+  };
+  
+  if (!product) return <div className="empty-message">Produit introuvable</div>;
+  const handleVoirPanier = () => {
+    const token = localStorage.getItem('token');
+    if (!token) {
+      navigate('/connexion'); 
+    } else {
+      navigate('/panier');
+    }
+  };
+  
+  const handleCommander = () => {
+    const token = localStorage.getItem('token');
+    if (!token) {
+      navigate('/connexion'); 
+    } else {
+      navigate('/orders');
     }
   };
   
 
-  if (!product) {
-    return <div className="empty-message">Produit introuvable</div>;
-  }
-
   return (
     <>
-      <script type="application/ld+json">
-        {JSON.stringify({
-          "@context": "https://schema.org",
-          "@type": "Product",
-          name: product.name,
-          image: [`${process.env.REACT_APP_API_URL}/${product.images?.[0]?.url}`],
-          description: product.description || "Produit pour animaux",
-          sku: product.id,
-          brand: {
-            "@type": "Brand",
-            name: "Nourritures des Fidèles"
-          },
-          offers: {
-            "@type": "Offer",
-            priceCurrency: "MAD",
-            price: parseFloat(product.price).toFixed(2),
-            availability: product.stock > 0 ? "https://schema.org/InStock" : "https://schema.org/OutOfStock"
-          },
-        })}
-      </script>
+    
 
       <div className="product-details-container">
         <div className="detail-image-section">
           {mainImage && <img src={mainImage} alt={product.name} className="detail-image" />}
-
           <div className="image-gallery">
-            {product.images && product.images.map((img, idx) => {
-              const imageUrl = `${process.env.REACT_APP_API_URL}/${img.url}`;
+            {product.images?.map((img, idx) => {
+              const url = `${process.env.REACT_APP_IMAGE_URL}/${img.url}`;
               return (
                 <img
                   key={idx}
-                  src={imageUrl}
-                  alt={`thumbnail-${idx}`}
-                  className={`thumb ${mainImage === imageUrl ? 'active' : ''}`}
-                  onClick={() => setMainImage(imageUrl)}
+                  src={url}
+                  alt={`thumb-${idx}`}
+                  className={`thumb ${mainImage === url ? 'active' : ''}`}
+                  onClick={() => setMainImage(url)}
                 />
               );
             })}
@@ -140,19 +280,46 @@ const ProductDetails = () => {
         </div>
 
         <div className="detail-info">
-          <h2 className="product-title">{product.name}</h2>
-
+          <h2>{product.name}</h2>
           <div className="price-promo-wrap">
-            {product.is_promo === 1 && product.old_price ? (
-              <>
-                <span className="old-priceee">{parseFloat(product.old_price).toFixed(2)} Dhs</span>
-                <span className="new-priceee">{parseFloat(product.price).toFixed(2)} Dhs</span>
-                <span className="promo-badge">Promotion</span>
-              </>
-            ) : (
-              <span className="new-priceee">{parseFloat(product.price).toFixed(2)} Dhs</span>
-            )}
+            <span className="new-priceee">
+              {parseFloat(selectedVariant?.price || product.price || 0).toFixed(2)} Dhs
+            </span>
           </div>
+
+          {couleursDispo.length > 0 && (
+            <div className="color-section">
+              <h4>Couleur :</h4>
+              <div className="color-options">
+                {couleursDispo.map((color, i) => (
+                  <button
+                    key={i}
+                    className={`color-btn ${selectedColor === color ? 'selected' : ''}`}
+                    onClick={() => setSelectedColor(color)}
+                  >
+                    {color}
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {taillesDispo.length > 0 && (
+            <div className="taille-section">
+              <h4>Taille :</h4>
+              <div className="taille-options">
+                {taillesDispo.map((taille, i) => (
+                  <button
+                    key={i}
+                    className={`taille-btn ${selectedSize === taille ? 'selected' : ''}`}
+                    onClick={() => setSelectedSize(taille)}
+                  >
+                    {taille}
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
 
           <div className="quantity-section">
             <span>Quantité</span>
@@ -163,72 +330,65 @@ const ProductDetails = () => {
             </div>
           </div>
 
-          {product.reviews_count > 0 && (
-            <div className="product-rating-detail">
-              {Array.from({ length: 5 }).map((_, index) => (
-                <i
-                  key={index}
-                  className={
-                    index < Math.round(product.reviews_avg_rating)
-                      ? 'fas fa-star star-filled'
-                      : 'far fa-star star-empty'
-                  }
-                />
-              ))}
-              <span className="rating-count-detail">({product.reviews_count})</span>
-            </div>
-          )}
+          <div className="stock-info">
+            <span className={product.stock > 0 ? 'in-stock' : 'out-of-stock'}>
+              Disponibilité : {product.stock > 0 ? 'En stock' : 'Rupture de stock'}
+            </span>
+          </div>
 
+          {product.stock > 0 && product.stock <= 5 && (
+            <>
+              <div className="stock-alert">
+                Dépêchez-vous ! Plus que <strong>{product.stock}</strong> en stock
+              </div>
+              <div className="stock-bar-container">
+                <div className="stock-bar" style={{ width: `${Math.min((product.stock / 10) * 100, 100)}%` }}></div>
+              </div>
+            </>
+          )}
 
           <div className="button-actions">
             <button className="add-to-cart" onClick={addToCart}>Ajouter au panier</button>
-            <button className="buy-now" onClick={() => navigate('/orders')}>Acheter maintenant</button>
+            <button className="buy-now" onClick={handleAcheterMaintenant}>Acheter maintenant</button>
+
           </div>
 
           <div className="product-description">
             <h3>Description :</h3>
-            <div
-              className="product-description-content"
-              dangerouslySetInnerHTML={{ __html: product.description || "Aucune description disponible." }}
-            ></div>
+            <div className="product-description-content" dangerouslySetInnerHTML={{ __html: product.description || "Aucune description disponible." }} />
           </div>
         </div>
       </div>
 
-      {/* Popup Panier */}
       {showPopup && popupProduct && (
         <>
           <div className="cart-popup-backdrop" onClick={() => setShowPopup(false)}></div>
           <div className="cart-popup-large">
             <span className="close-btn" onClick={() => setShowPopup(false)}>×</span>
             <p className="popup-title">Article ajouté au panier</p>
-
             <div className="popup-row">
               <img src={popupProduct.image} alt={popupProduct.name} className="popup-image-large" />
               <div className="popup-info">
                 <strong>{popupProduct.name}</strong>
-                <p>Taille: {popupProduct.size || "Standard"}</p>
+                {popupProduct.color && <p>Couleur: {popupProduct.color}</p>}
+                {popupProduct.size && <p>Taille: {popupProduct.size}</p>}
+                <p>Prix: {parseFloat(popupProduct.price || 0).toFixed(2)} Dhs</p>
               </div>
             </div>
+            <div className="popup-actions">
+            <button onClick={handleVoirPanier} className="popup-btn-full">Voir le panier</button>
 
-            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '16px', width: '100%' }}>
-              <button className="popup-btn-full" onClick={() => navigate('/panier')}>
-                Voir le panier
-              </button>
-              <button className="popup-btn-secondary" onClick={() => navigate('/orders')}>
-                Procéder au paiement
-              </button>
+            <button onClick={handleCommander} className="popup-btn-secondary">Procéder au paiement</button>
+
             </div>
-
-            <button className="popup-link" onClick={() => setShowPopup(false)}>
-              Continuer les achats
-            </button>
+            <button className="popup-link" onClick={() => setShowPopup(false)}>Continuer les achats</button>
           </div>
         </>
       )}
 
       <ProductReview productId={id} />
-      <RecommendedProducts productId={product.id} title="Articles également consultés" />
+      <RecommendedProducts productId={product.id} title="Produits similaires" />
+      <RecentlyViewed title="Articles également consultés" />
     </>
   );
 };

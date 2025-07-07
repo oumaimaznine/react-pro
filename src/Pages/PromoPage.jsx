@@ -15,7 +15,7 @@ function PromoPage() {
     setLoading(true);
 
     axios
-      .get(`${process.env.REACT_APP_API_URL}/api/products`, {
+      .get(`${process.env.REACT_APP_API_URL}/products`, {
         params: {
           promo: 1,
           sort: sortBy,
@@ -78,11 +78,12 @@ function PromoPage() {
               >
                 <div className="product-image-wrapper">
                   {product.images?.[0]?.url && (
-                    <img
-                    src={`${process.env.REACT_APP_API_URL}/${product.images[0].url}`}
-                      alt={product.name}
-                      className="product-image"
-                    />
+                  <img
+                  src={`${process.env.REACT_APP_IMAGE_URL}/${product.images[0].url}`}
+                  alt={product.name}
+                  className="product-image"
+                />
+                
                   )}
                 </div>
 

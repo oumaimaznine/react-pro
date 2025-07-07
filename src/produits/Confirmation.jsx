@@ -10,18 +10,19 @@ function Confirmation() {
     const fetchOrders = async () => {
       try {
         const token = localStorage.getItem('token');
-        console.log(' Token:', token);
+       
 
-        const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/orders`, {
+        const response = await axios.get(`${process.env.REACT_APP_API_URL}/orders`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         });
 
-        console.log(' Commandes reçues:', response.data);
+      
         setOrders(response.data);
+        
       } catch (error) {
-        console.error(' Erreur lors du chargement des commandes:', error);
+    
       } finally {
         setLoading(false);
       }
@@ -45,8 +46,11 @@ function Confirmation() {
           orders.map((order) => (
             <div key={order.id} className="order-card">
               <div className="order-header">
-                <span><strong>Commande N°:</strong> {order.id}</span>
-                <span><strong>Date:</strong> {new Date(order.created_at).toLocaleString()}</span>
+              <div className="order-header">
+  <p><strong>Commande N°:</strong> {order.id}</p>
+  <p><strong>Date:</strong> {new Date(order.created_at).toLocaleString()}</p>
+</div>
+
               </div>
               <div className="order-body">
                 <p><strong>Total:</strong> {order.total} MAD</p>
@@ -59,9 +63,11 @@ function Confirmation() {
                 <strong>Produits :</strong>
                 <ul>
                   {order.items.map((item) => (
-                    <li key={item.id}>
-                      {item.product?.name} — {item.quantity} x {item.price} MAD
-                    </li>
+                  <li key={item.id}>
+                  {item.product?.name} — {item.quantity} x {Number(item.variant?.price ?? item.price ?? item.product?.price ?? 0).toFixed(2)} MAD
+                </li>
+                
+               
                   ))}
                 </ul>
               </div>

@@ -28,7 +28,7 @@ function RegisterPage() {
 
     try {
       // Requête POST vers l'API Laravel pour créer un nouvel utilisateur
-      const response = await axios.post(`${process.env.REACT_APP_API_URL}/api/register`, {
+      const response = await axios.post(`${process.env.REACT_APP_API_URL}/register`, {
         name,
         email,
         password,
